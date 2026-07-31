@@ -54,7 +54,7 @@ $save_percent = round((($original_price - $price) / $original_price) * 100);
     <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
 
     <!-- Master CSS -->
-    <link rel="stylesheet" href="styles.css?v=1.4">
+    <link rel="stylesheet" href="styles.css?v=1.5">
 </head>
 <body data-page-slug="<?php echo htmlspecialchars($slug); ?>">
 

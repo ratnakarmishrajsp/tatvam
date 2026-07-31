@@ -1258,9 +1258,6 @@ a {
 }
 
 @media (max-width: 768px) {
-    .nav-links {
-        display: none;
-    }
     .floating-checkout-card {
         display: none !important; /* Hide corner card on mobile, use sticky bottom bar */
     }
@@ -1272,6 +1269,11 @@ a {
     .toast {
         width: 100%;
     }
+}
+
+/* Push header down if ticker banner is present to avoid overlap */
+.ticker-banner ~ .header {
+    top: calc(var(--space-sm) + 26px) !important;
 }
 
 /* ==========================================================================
