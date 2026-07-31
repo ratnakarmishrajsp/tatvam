@@ -217,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const locations = ['Delhi', 'Mumbai', 'Bangalore', 'Pune', 'Jaipur', 'Lucknow', 'Ahmedabad', 'Indore', 'Patna', 'Ranchi', 'Kolkata', 'Chennai', 'Bhopal', 'Surat'];
         const products = ['मन की शांति', 'चिंता मुक्ति', 'अनुशासन क्रांति', 'समृद्धि सूत्र', 'Mega Mindset Bundle'];
         const productCovers = {
-            'मन की शांति': 'assets/calm-cover.jpg',
+            'मन की शांति': 'assets/calm-cover.jpg?v=1.1',
             'चिंता मुक्ति': 'assets/anxiety-cover.jpg',
             'अनुशासन क्रांति': 'assets/discipline-cover.jpg',
             'समृद्धि सूत्र': 'assets/wealth-cover.jpg',
