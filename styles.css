@@ -1646,3 +1646,16 @@ a {
         font-size: 1.65rem !important;
     }
 }
+
+/* Lock mobile layout to viewport width and prevent any horizontal sliding */
+html, body {
+    overflow-x: hidden !important;
+    width: 100% !important;
+    position: relative;
+    max-width: 100% !important;
+}
+section, main {
+    overflow: hidden !important;
+    width: 100% !important;
+    max-width: 100% !important;
+}

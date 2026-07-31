@@ -34,7 +34,7 @@ function getProductUrl($slug) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>E-Book Library | TATVAM Digital Bookstore</title>
     <meta name="description" content="Browse our luxury digital library. Find guides on positive thinking, discipline, anxiety relief, and wealth frameworks.">
     
@@ -47,7 +47,7 @@ function getProductUrl($slug) {
     <script src="https://unpkg.com/lucide@latest" defer></script>
 
     <!-- Master CSS -->
-    <link rel="stylesheet" href="styles.css?v=2.0">
+    <link rel="stylesheet" href="styles.css?v=2.1">
     
     <style>
         /* Specific Bookstore styling extensions */
