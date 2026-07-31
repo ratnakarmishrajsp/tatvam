@@ -14,14 +14,43 @@
     <script src="https://unpkg.com/lucide@latest" defer></script>
 
     <!-- Master CSS -->
-    <link rel="stylesheet" href="styles.css?v=1.7">
+    <link rel="stylesheet" href="styles.css?v=1.8">
 </head>
 <body data-page-slug="contact">
 
     <!-- HEADER -->
-    <header class="header">
-        <div class="nav-glass" style="justify-content: center;">
+    <header class="header scrolled">
+        <div class="nav-glass">
             <a href="index.html" class="logo">TATVAM<span>.</span></a>
+            <!-- Hamburger Button -->
+            <button class="mobile-menu-btn" aria-label="Toggle Menu">&#9776;</button>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <div class="nav-dropdown">
+                    <a href="library.php" class="nav-link dropdown-trigger">E-Books <i data-lucide="chevron-down" class="dropdown-icon"></i></a>
+                    <div class="dropdown-menu">
+                        <a href="library.php" class="dropdown-item">All E-Books</a>
+                        <a href="positive-thinking.html" class="dropdown-item">मन की शांति (Calm)</a>
+                        <a href="stress-worry.html" class="dropdown-item">चिंता मुक्ति (Anxiety)</a>
+                        <a href="habit-freedom.html" class="dropdown-item">अनुशासन क्रांति (Discipline)</a>
+                        <a href="wealth-mindset.html" class="dropdown-item">समृद्धि सूत्र (Wealth)</a>
+                    </div>
+                </div>
+                <a href="bundle.html" class="nav-link">Bundles</a>
+                <a href="index.html#faq" class="nav-link">About</a>
+                <div class="nav-dropdown">
+                    <span class="nav-link dropdown-trigger" style="color: var(--color-gold);">Policies & Help <i data-lucide="chevron-down" class="dropdown-icon" style="color: var(--color-gold); opacity: 1;"></i></span>
+                    <div class="dropdown-menu">
+                        <a href="contact-us.html" class="dropdown-item active">Contact Us</a>
+                        <a href="privacy.html" class="dropdown-item">Privacy Policy</a>
+                        <a href="refund-policy.html" class="dropdown-item">Refund Policy</a>
+                        <a href="terms-conditions.html" class="dropdown-item">Terms & Conditions</a>
+                    </div>
+                </div>
+                <a href="#" id="open-wishlist-btn" class="nav-link" style="display: flex; align-items: center; gap: 6px;">
+                    <i data-lucide="heart" style="width: 18px; height: 18px;"></i> Wishlist
+                </a>
+            </nav>
         </div>
     </header>
 
