@@ -54,13 +54,18 @@ $save_percent = round((($original_price - $price) / $original_price) * 100);
     <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
 
     <!-- Master CSS -->
-    <link rel="stylesheet" href="styles.css?v=1.3">
+    <link rel="stylesheet" href="styles.css?v=1.4">
 </head>
 <body data-page-slug="<?php echo htmlspecialchars($slug); ?>">
 
-    <!-- STATIC LOW STOCK BANNER -->
-    <div style="background: linear-gradient(90deg, #b45309, #d97706); text-align: center; color: white; padding: 0.5rem 0; font-size: 0.85rem; font-weight: 700; position: relative; z-index: 1001; letter-spacing: 0.05em; text-transform: uppercase;">
-        ⚡ SPECIAL LAUNCH OFFER – GET <?php echo $save_percent; ?>% OFF TODAY!
+    <!-- INFINITE SCROLLING TICKER BANNER -->
+    <div class="ticker-banner">
+        <div class="ticker-text-wrapper">
+            <div class="ticker-item">⚡ SPECIAL LAUNCH OFFER – GET <?php echo $save_percent; ?>% OFF TODAY!</div>
+            <div class="ticker-item">⚡ SPECIAL LAUNCH OFFER – GET <?php echo $save_percent; ?>% OFF TODAY!</div>
+            <div class="ticker-item">⚡ SPECIAL LAUNCH OFFER – GET <?php echo $save_percent; ?>% OFF TODAY!</div>
+            <div class="ticker-item">⚡ SPECIAL LAUNCH OFFER – GET <?php echo $save_percent; ?>% OFF TODAY!</div>
+        </div>
     </div>
 
     <!-- BACKGROUND CANVAS -->

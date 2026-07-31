@@ -1455,4 +1455,51 @@ a {
     }
 }
 
+/* Infinite Scrolling Ticker Banner */
+.ticker-banner {
+    background: linear-gradient(90deg, #b45309, #d97706);
+    overflow: hidden;
+    position: relative;
+    z-index: 1001;
+    padding: 0.38rem 0; /* Compact vertical size */
+    width: 100%;
+}
+
+/* Modifier for purple theme */
+.ticker-banner.ticker-purple {
+    background: linear-gradient(90deg, var(--color-bg-2), var(--color-bg-1)) !important;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.ticker-banner.ticker-purple .ticker-item {
+    color: var(--color-primary);
+}
+
+.ticker-text-wrapper {
+    display: flex;
+    white-space: nowrap;
+    width: max-content;
+    animation: ticker-slide 22s linear infinite;
+}
+
+.ticker-item {
+    font-size: 0.74rem; /* Small and neat */
+    font-weight: 700;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding-right: 6rem; /* Wide gap between repetitions */
+    display: inline-block;
+    white-space: nowrap;
+}
+
+@keyframes ticker-slide {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+    100% {
+        transform: translate3d(-25%, 0, 0); /* Move by exactly one item length */
+    }
+}
+
 
