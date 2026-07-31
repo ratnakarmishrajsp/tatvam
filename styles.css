@@ -404,6 +404,30 @@ a {
     background: rgba(251, 191, 36, 0.05);
 }
 
+/* Mobile Menu Toggle Button (hidden on desktop) */
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--color-text-white);
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 1010;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border-light);
+    background: rgba(255, 255, 255, 0.03);
+    transition: all 0.25s ease;
+}
+
+.mobile-menu-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
 /* Responsive adjustments for headers */
 @media (max-width: 992px) {
     .nav-links {
@@ -412,29 +436,104 @@ a {
 }
 
 @media (max-width: 768px) {
+    .mobile-menu-btn {
+        display: flex;
+    }
+    
     .nav-glass {
-        flex-direction: column;
-        gap: var(--space-xs);
-        border-radius: var(--radius-md) !important;
-        padding: 1rem !important;
+        padding: 0.75rem 1.25rem !important;
+        flex-direction: row !important; /* Keep logo and hamburger inline! */
+        justify-content: space-between !important;
+        border-radius: var(--radius-full) !important;
+        width: calc(100% - var(--space-sm) * 2) !important;
     }
+
     .nav-links {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: var(--space-xs) var(--space-sm);
+        position: fixed;
+        top: 0;
+        right: -100%; /* Hidden off-screen by default */
+        width: 280px;
+        height: 100vh;
+        background: rgba(6, 10, 20, 0.98);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border-left: 1px solid var(--border-light);
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        justify-content: flex-start !important;
+        padding: 80px 24px 40px 24px !important;
+        gap: 10px !important;
+        transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        z-index: 1005;
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
     }
+
+    .nav-links.active {
+        right: 0; /* Slide in! */
+    }
+
     .nav-link {
-        font-size: 0.85rem;
+        font-size: 1.05rem !important;
+        width: 100%;
+        padding: 10px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
     }
+
+    .nav-dropdown {
+        width: 100%;
+    }
+
+    .dropdown-trigger {
+        width: 100%;
+        justify-content: space-between;
+        font-size: 1.05rem;
+        padding: 10px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        color: var(--color-text-slate);
+    }
+
     .dropdown-menu {
-        position: absolute;
-        top: 100%;
-        left: 50%;
-        transform: translateX(-50%) translateY(10px);
-        width: 260px;
+        position: static !important; /* Sits inline under trigger */
+        transform: none !important;
+        background: rgba(255, 255, 255, 0.02) !important;
+        border: none !important;
+        border-left: 2px solid var(--color-primary) !important;
+        border-radius: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin-top: 5px;
+        box-shadow: none !important;
+        opacity: 0;
+        visibility: hidden;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease, opacity 0.3s ease;
     }
-    .nav-dropdown:hover .dropdown-menu {
-        transform: translateX(-50%) translateY(4px);
+
+    /* Toggle visibility in mobile accordion */
+    .nav-dropdown.active .dropdown-menu {
+        opacity: 1;
+        visibility: visible;
+        max-height: 300px;
+    }
+
+    .nav-dropdown.active .dropdown-icon {
+        transform: rotate(180deg) !important;
+    }
+
+    .dropdown-item {
+        font-size: 0.9rem !important;
+        padding: 10px 15px !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+    }
+
+    /* Make the CTA button full-width in the drawer */
+    .nav-links .btn-primary, .nav-links #open-wishlist-btn {
+        width: 100% !important;
+        margin-top: var(--space-xs);
+        padding: 0.85rem 1.5rem !important;
+        justify-content: center;
     }
 }
 

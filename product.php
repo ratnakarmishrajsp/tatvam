@@ -71,6 +71,10 @@ $save_percent = round((($original_price - $price) / $original_price) * 100);
     <header class="header scrolled">
         <div class="nav-glass">
             <a href="index.html" class="logo">TATVAM<span>.</span></a>
+            <!-- Hamburger Button -->
+            <button class="mobile-menu-btn" aria-label="Toggle Menu">
+                <i data-lucide="menu"></i>
+            </button>
             <nav class="nav-links">
                 <a href="index.html" class="nav-link">Home</a>
                 <div class="nav-dropdown">
