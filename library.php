@@ -47,7 +47,7 @@ function getProductUrl($slug) {
     <script src="https://unpkg.com/lucide@latest" defer></script>
 
     <!-- Master CSS -->
-    <link rel="stylesheet" href="styles.css?v=1.9">
+    <link rel="stylesheet" href="styles.css?v=2.0">
     
     <style>
         /* Specific Bookstore styling extensions */

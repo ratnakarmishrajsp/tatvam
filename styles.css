@@ -1532,3 +1532,65 @@ a {
 }
 
 
+
+/* ==========================================================================
+   Mobile-Friendly Responsive Adjustments (Featured Release & Headings)
+   ========================================================================== */
+.featured-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: var(--space-lg);
+    align-items: center;
+}
+.featured-title {
+    font-size: 2.5rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+.hero-title {
+    font-size: 3.5rem;
+    line-height: 1.15;
+    font-weight: 800;
+    color: var(--color-secondary);
+}
+.bottom-cta-title {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    text-align: left;
+}
+.bottom-cta-content {
+    text-align: left;
+}
+
+@media (max-width: 768px) {
+    .featured-grid {
+        grid-template-columns: 1fr !important;
+        text-align: center;
+        gap: var(--space-md);
+    }
+    .featured-grid .showcase-wrapper {
+        justify-self: center;
+        margin-bottom: var(--space-sm);
+    }
+    .featured-title {
+        font-size: 1.8rem !important;
+    }
+    .hero-title {
+        font-size: 2.1rem !important;
+        line-height: 1.25 !important;
+    }
+    .bottom-cta-title {
+        font-size: 1.8rem !important;
+        text-align: center !important;
+    }
+    .bottom-cta-content {
+        text-align: center !important;
+    }
+    .bottom-cta-content .hero-trust-bullets {
+        justify-content: center !important;
+    }
+    .bottom-cta-content .checkout-trigger {
+        margin: 0 auto !important;
+    }
+}
