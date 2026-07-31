@@ -1,0 +1,9 @@
+# Local SQLite Database
+tatvam.db
+
+# Windows Local PHP Binary (Not needed on Hostinger Linux server)
+php-bin/
+
+# OS generated files
+.DS_Store
+Thumbs.db

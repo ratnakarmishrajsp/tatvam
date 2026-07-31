@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refund Policy | TATVAM</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+
+    <!-- Master CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page-slug="refund">
+
+    <!-- HEADER -->
+    <header class="header scrolled">
+        <div class="nav-glass">
+            <a href="index.html" class="logo">TATVAM<span>.</span></a>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="library.php" class="nav-link">E-Books</a>
+                <a href="bundle.html" class="nav-link">Bundles</a>
+                <a href="index.html#faq" class="nav-link">About</a>
+                <a href="contact-us.html" class="nav-link">Contact</a>
+                <a href="#" id="open-wishlist-btn" class="nav-link" style="display: flex; align-items: center; gap: 6px;">
+                    <i data-lucide="heart" style="width: 18px; height: 18px;"></i> Wishlist
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN LEGAL PAGE -->
+    <main class="legal-page" style="padding-top: 150px; padding-bottom: 100px; min-height: 80vh;">
+        <div class="container">
+            <div class="glass-card" style="padding: var(--space-md); border-color: rgba(255,255,255,0.08);">
+                <h1 class="gradient-gold" style="font-size: 2.5rem; margin-bottom: 0.5rem;">Refund Policy</h1>
+                <p style="margin-bottom: var(--space-md);">Last updated: July 29, 2026</p>
+                
+                <div style="display: flex; flex-direction: column; gap: var(--space-md); text-align: left;">
+                    <section>
+                        <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--color-gold);">1. Digital Products Nature</h2>
+                        <p>Due to the immediate access nature of digital items (specifically ebooks, PDFs, checklists, and templates), <strong>all sales made on tatvam.shop are final</strong>. Once your transaction is finalized, the download link is instantly dispatched, rendering the item non-returnable.</p>
+                    </section>
+                    
+                    <section>
+                        <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--color-gold);">2. Exceptional Circumstances</h2>
+                        <p>We want our readers to have a seamless experience. We will issue replacements or investigate refund claims in the following situations:</p>
+                        <ul style="margin-left: 20px; margin-top: 10px; list-style-type: disc;">
+                            <li>The product file is corrupted or cannot be opened/accessed.</li>
+                            <li>You were charged multiple times for a single order due to payment gateway lag. (Duplicate transactions will be refunded within 5-7 business days).</li>
+                        </ul>
+                    </section>
+                    
+                    <section>
+                        <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--color-gold);">3. File Access Support</h2>
+                        <p>If you fail to receive your download email or encounter problems rendering the PDF on your specific mobile device, please forward your order details directly to our support desk. We will manually deliver alternative links or target formats within 24 hours.</p>
+                    </section>
+                    
+                    <section>
+                        <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--color-gold);">4. Support Contacts</h2>
+                        <p>For support enquiries regarding purchase issues, contact: <a href="mailto:support@tatvam.shop" style="color: var(--color-gold); font-weight: 500;">support@tatvam.shop</a>.</p>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer style="background: #03050c; color: var(--color-text-slate); padding: var(--space-md) 0; border-top: var(--glass-border) 1px solid; text-align: center; font-size: 0.85rem; position: relative; z-index: 2;">
+        <div class="container">
+            <p>&copy; 2026 tatvam.shop. All rights reserved. Support Desk: support@tatvam.shop</p>
+        </div>
+    </footer>
+
+    <!-- WISHLIST SIDEBAR DRAWER -->
+    <div class="wishlist-sidebar">
+        <div class="wishlist-header">
+            <h3><i data-lucide="heart" style="color: #EF4444; fill: #EF4444; vertical-align: middle; margin-right: 6px;"></i> My Wishlist</h3>
+            <button class="wishlist-close" aria-label="Close Wishlist">&times;</button>
+        </div>
+        <div class="wishlist-items" id="wishlist-items-container">
+            <!-- Renders dynamically -->
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('load', () => {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+    </script>
+    <script src="script.js" defer></script>
+</body>
+</html>

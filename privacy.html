@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy | TATVAM</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+
+    <!-- Master CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page-slug="privacy">
+
+    <!-- HEADER -->
+    <header class="header scrolled">
+        <div class="nav-glass">
+            <a href="index.html" class="logo">TATVAM<span>.</span></a>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="library.php" class="nav-link">E-Books</a>
+                <a href="bundle.html" class="nav-link">Bundles</a>
+                <a href="index.html#faq" class="nav-link">About</a>
+                <a href="contact-us.html" class="nav-link">Contact</a>
+                <a href="#" id="open-wishlist-btn" class="nav-link" style="display: flex; align-items: center; gap: 6px;">
+                    <i data-lucide="heart" style="width: 18px; height: 18px;"></i> Wishlist
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN LEGAL PAGE -->
+    <main class="legal-page" style="padding-top: 150px; padding-bottom: 100px; min-height: 80vh;">
+        <div class="container">
+            <div class="glass-card" style="padding: var(--space-md); border-color: rgba(255,255,255,0.08);">
+                <h1 class="gradient-gold" style="font-size: 2.5rem; margin-bottom: 0.5rem;">Privacy Policy</h1>
+                <p style="margin-bottom: var(--space-md);">Last updated: July 29, 2026</p>
+                
+                <div style="display: flex; flex-direction: column; gap: var(--space-md); text-align: left;">
+                    <section>
+                        <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--color-gold);">1. Information We Collect</h2>
+                        <p>We collect information to provide better services to our users. This includes:</p>
+                        <ul style="margin-left: 20px; margin-top: 10px; list-style-type: disc;">
+                            <li><strong>Personal Information:</strong> Name, email address, and phone number when you make a purchase or subscribe to our newsletter.</li>
+                            <li><strong>Transactional Data:</strong> Payment processing tokens and billing details collected securely via our payment gateways. We do not store raw credit/debit card numbers on our servers.</li>
+                        </ul>
+                    </section>
+                    
+                    <section>
+                        <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--color-gold);">2. How We Use Information</h2>
+                        <p>Your information is used to process secure transactions, deliver your purchased digital products instantly via email, and provide ongoing user support.</p>
+                    </section>
+                    
+                    <section>
+                        <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--color-gold);">3. Information Security</h2>
+                        <p>We employ modern encryption protocols (SSL/HTTPS) across all operations to safeguard customer personal identifiers. Your digital download link security is validated on every server request.</p>
+                    </section>
+
+                    <section>
+                        <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--color-gold);">4. Cookies & Trackers</h2>
+                        <p>We use essential cookies to maintain your shopping cart state and checkout flow, alongside anonymous marketing tags to monitor page conversion metrics.</p>
+                    </section>
+                    
+                    <section>
+                        <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--color-gold);">5. Contact Us</h2>
+                        <p>If you have any questions about this Privacy Policy, please contact us at <a href="mailto:support@tatvam.shop" style="color: var(--color-gold); font-weight: 500;">support@tatvam.shop</a>.</p>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer style="background: #03050c; color: var(--color-text-slate); padding: var(--space-md) 0; border-top: var(--glass-border) 1px solid; text-align: center; font-size: 0.85rem; position: relative; z-index: 2;">
+        <div class="container">
+            <p>&copy; 2026 tatvam.shop. All rights reserved. Support Desk: support@tatvam.shop</p>
+        </div>
+    </footer>
+
+    <!-- WISHLIST SIDEBAR DRAWER -->
+    <div class="wishlist-sidebar">
+        <div class="wishlist-header">
+            <h3><i data-lucide="heart" style="color: #EF4444; fill: #EF4444; vertical-align: middle; margin-right: 6px;"></i> My Wishlist</h3>
+            <button class="wishlist-close" aria-label="Close Wishlist">&times;</button>
+        </div>
+        <div class="wishlist-items" id="wishlist-items-container">
+            <!-- Renders dynamically -->
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('load', () => {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+    </script>
+    <script src="script.js" defer></script>
+</body>
+</html>

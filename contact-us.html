@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | TATVAM Store Support</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+
+    <!-- Master CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page-slug="contact">
+
+    <!-- HEADER -->
+    <header class="header scrolled">
+        <div class="nav-glass">
+            <a href="index.html" class="logo">TATVAM<span>.</span></a>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="library.php" class="nav-link">E-Books</a>
+                <a href="bundle.html" class="nav-link">Bundles</a>
+                <a href="index.html#faq" class="nav-link">About</a>
+                <a href="contact-us.html" class="nav-link">Contact</a>
+                <a href="#" id="open-wishlist-btn" class="nav-link" style="display: flex; align-items: center; gap: 6px;">
+                    <i data-lucide="heart" style="width: 18px; height: 18px;"></i> Wishlist
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN SUPPORT PAGE -->
+    <main class="legal-page" style="padding-top: 150px; padding-bottom: 100px; min-height: 80vh; display: flex; align-items: center; justify-content: center;">
+        <div class="container" style="max-width: 600px;">
+            <div class="glass-card" style="padding: var(--space-md); border-color: rgba(251, 191, 36, 0.4); box-shadow: var(--shadow-glow-gold); z-index: 2; position: relative;">
+                <h1 class="gradient-gold" style="font-size: 2rem; margin-bottom: var(--space-xs); text-align: center;">Contact TATVAM Support</h1>
+                <p style="text-align: center; margin-bottom: var(--space-md);">Aapke pass digital download link or purchases se related koi sawal hai? Niche fill karein.</p>
+                
+                <form action="mailto:support@tatvam.shop" method="POST" enctype="text/plain">
+                    <div class="form-group">
+                        <input type="text" name="name" id="c-name" class="form-input" placeholder=" " required>
+                        <label for="c-name" class="form-label">Your Name</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" name="email" id="c-email" class="form-input" placeholder=" " required>
+                        <label for="c-email" class="form-label">Email Address</label>
+                    </div>
+                    <div class="form-group">
+                        <textarea name="message" id="c-msg" class="form-input" rows="5" placeholder=" " required style="resize: none; padding-top: 1rem;"></textarea>
+                        <label for="c-msg" class="form-label" style="top: 0.6rem;">Message / Query Details</label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        Submit Support Ticket <i data-lucide="mail"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer style="background: #03050c; color: var(--color-text-slate); padding: var(--space-md) 0; border-top: var(--glass-border) 1px solid; text-align: center; font-size: 0.85rem; position: relative; z-index: 2;">
+        <div class="container">
+            <p>&copy; 2026 tatvam.shop. All rights reserved. Support Desk: support@tatvam.shop</p>
+        </div>
+    </footer>
+
+    <!-- WISHLIST SIDEBAR DRAWER -->
+    <div class="wishlist-sidebar">
+        <div class="wishlist-header">
+            <h3><i data-lucide="heart" style="color: #EF4444; fill: #EF4444; vertical-align: middle; margin-right: 6px;"></i> My Wishlist</h3>
+            <button class="wishlist-close" aria-label="Close Wishlist">&times;</button>
+        </div>
+        <div class="wishlist-items" id="wishlist-items-container">
+            <!-- Renders dynamically -->
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('load', () => {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+    </script>
+    <script src="script.js" defer></script>
+</body>
+</html>
