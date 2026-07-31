@@ -1135,20 +1135,21 @@ a {
 }
 
 .toast {
-    background: rgba(4, 7, 15, 0.45) !important; /* Extremely translucent background */
-    backdrop-filter: blur(30px) saturate(180%) !important; /* Maximum blur */
-    -webkit-backdrop-filter: blur(30px) saturate(180%) !important;
+    background: rgba(8, 13, 26, 0.8) !important;
+    backdrop-filter: blur(25px) saturate(160%) !important;
+    -webkit-backdrop-filter: blur(25px) saturate(160%) !important;
     border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    padding: 0.5rem 0.75rem !important; /* Thin and compact */
-    border-radius: var(--radius-sm) !important;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
-    display: flex;
-    align-items: center;
-    gap: 10px !important;
+    padding: 10px 14px !important; /* Perfect box padding */
+    border-radius: 10px !important; /* Elegant rounded box */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4) !important;
+    display: flex !important;
+    align-items: center !important; /* Vertically center everything! */
+    gap: 12px !important;
     transform: translate3d(-100px, 0, 0);
     opacity: 0;
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
-    max-width: 310px;
+    max-width: 330px;
+    width: 100%;
 }
 
 .toast.show {
@@ -1158,12 +1159,12 @@ a {
 
 .toast-img-wrapper {
     flex-shrink: 0;
-    width: 28px !important; /* Very tiny book cover */
-    height: 36px !important;
-    border-radius: 3px !important;
+    width: 38px !important; /* Balanced book cover size */
+    height: 48px !important;
+    border-radius: 4px !important;
     overflow: hidden;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .toast-img-wrapper img {
@@ -1175,14 +1176,48 @@ a {
 .toast-content {
     display: flex;
     flex-direction: column;
-    gap: 1px !important;
+    gap: 4px !important; /* Neat space between header row and text */
     text-align: left;
+    flex-grow: 1;
+}
+
+.toast-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.verified-badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: #10B981;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    background: rgba(16, 185, 129, 0.08);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid rgba(16, 185, 129, 0.15);
+}
+
+.verified-icon {
+    width: 8px;
+    height: 8px;
+}
+
+.toast-time {
+    font-size: 0.68rem;
+    color: var(--color-text-slate);
+    font-weight: 500;
 }
 
 .toast-text {
-    font-size: 0.78rem !important; /* Small, professional text size */
+    font-size: 0.8rem;
     color: var(--color-text-gray);
-    line-height: 1.25;
+    line-height: 1.35;
 }
 
 .toast-text span {
@@ -1193,38 +1228,6 @@ a {
 .toast-text .highlight {
     color: var(--color-gold);
     font-weight: 700;
-}
-
-.toast-meta {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.65rem;
-    color: var(--color-text-slate);
-}
-
-.verified-badge-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 3px;
-    font-size: 0.62rem;
-    font-weight: 700;
-    color: #10B981;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-}
-
-.verified-icon {
-    width: 8px;
-    height: 8px;
-}
-
-.bullet-sep {
-    color: rgba(255, 255, 255, 0.15);
-}
-
-.toast-time {
-    font-weight: 500;
 }
 
 /* ==========================================================================
