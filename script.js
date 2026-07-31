@@ -209,11 +209,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const buyerNameSpan = document.getElementById('toast-buyer-name');
     const buyerLocationSpan = document.getElementById('toast-buyer-location');
     const toastProductSpan = document.getElementById('toast-product-name');
+    const toastProductImg = document.getElementById('toast-product-img');
+    const toastTimeSpan = document.getElementById('toast-time-val');
 
     if (toast) {
-        const names = ['Amit', 'Rahul', 'Sneha', 'Vikram', 'Aditya', 'Priya', 'Pooja', 'Nikhil', 'Siddharth', 'Karan'];
-        const locations = ['Delhi', 'Mumbai', 'Bangalore', 'Pune', 'Jaipur', 'Lucknow', 'Ahmedabad', 'Indore', 'Patna', 'Ranchi'];
+        const names = ['Amit', 'Rahul', 'Sneha', 'Vikram', 'Aditya', 'Priya', 'Pooja', 'Nikhil', 'Siddharth', 'Karan', 'Deepak', 'Anjali', 'Neha', 'Rohan', 'Manish'];
+        const locations = ['Delhi', 'Mumbai', 'Bangalore', 'Pune', 'Jaipur', 'Lucknow', 'Ahmedabad', 'Indore', 'Patna', 'Ranchi', 'Kolkata', 'Chennai', 'Bhopal', 'Surat'];
         const products = ['मन की शांति', 'चिंता मुक्ति', 'अनुशासन क्रांति', 'समृद्धि सूत्र', 'Mega Mindset Bundle'];
+        const productCovers = {
+            'मन की शांति': 'assets/calm-cover.jpg',
+            'चिंता मुक्ति': 'assets/anxiety-cover.jpg',
+            'अनुशासन क्रांति': 'assets/discipline-cover.jpg',
+            'समृद्धि सूत्र': 'assets/wealth-cover.jpg',
+            'Mega Mindset Bundle': 'assets/bundle-cover.jpg'
+        };
+        const times = ['just now', '1m ago', '2m ago', '3m ago', '4m ago'];
 
         const triggerActivityAlert = () => {
             if (document.hidden) return;
@@ -221,10 +231,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const name = names[Math.floor(Math.random() * names.length)];
             const location = locations[Math.floor(Math.random() * locations.length)];
             const product = products[Math.floor(Math.random() * products.length)];
+            const timeVal = times[Math.floor(Math.random() * times.length)];
 
             if (buyerNameSpan) buyerNameSpan.innerText = name;
             if (buyerLocationSpan) buyerLocationSpan.innerText = location;
             if (toastProductSpan) toastProductSpan.innerText = product;
+            if (toastTimeSpan) toastTimeSpan.innerText = timeVal;
+            if (toastProductImg && productCovers[product]) {
+                toastProductImg.src = productCovers[product];
+                toastProductImg.alt = product;
+            }
 
             toast.classList.add('show');
 

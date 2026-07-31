@@ -594,13 +594,23 @@
 
     <!-- LIVE PURCHASE ACTIVITY TOAST -->
     <div class="toast-container">
-        <div class="toast">
-            <div class="toast-green-dot"></div>
-            <div>
-                <span id="toast-buyer-name" style="font-weight: bold; color: var(--color-text-white);">Amit</span> from 
-                <span id="toast-buyer-location" style="font-weight: bold; color: var(--color-text-white);">Delhi</span> bought 
-                <span id="toast-product-name" style="color: var(--color-gold); font-weight: bold;">मन की शांति</span> 
-                <span>2m ago</span>
+        <div class="toast" id="purchase-toast">
+            <div class="toast-img-wrapper">
+                <img src="assets/calm-cover.jpg" id="toast-product-img" alt="Product Cover">
+            </div>
+            <div class="toast-content">
+                <div class="toast-verified">
+                    <span class="verified-badge">
+                        <svg class="verified-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        Verified Purchase
+                    </span>
+                    <span id="toast-time-val" class="toast-time">2m ago</span>
+                </div>
+                <div class="toast-text">
+                    <span id="toast-buyer-name">Amit</span> from <span id="toast-buyer-location">Delhi</span> bought <strong id="toast-product-name" class="highlight">मन की शांति</strong>
+                </div>
             </div>
         </div>
     </div>
