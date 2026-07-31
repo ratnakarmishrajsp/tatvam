@@ -276,7 +276,7 @@ a {
    Header Navigation
    ========================================================================== */
 .header {
-    position: fixed;
+    position: absolute;
     top: var(--space-sm);
     left: 0;
     width: 100%;
