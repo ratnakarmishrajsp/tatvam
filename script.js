@@ -416,17 +416,11 @@ document.addEventListener('DOMContentLoaded', () => {
             e.stopPropagation();
             navLinks.classList.toggle('active');
             
-            // Toggle icon between 'menu' and 'x'
-            const menuIcon = mobileMenuBtn.querySelector('i');
-            if (menuIcon) {
-                if (navLinks.classList.contains('active')) {
-                    menuIcon.setAttribute('data-lucide', 'x');
-                } else {
-                    menuIcon.setAttribute('data-lucide', 'menu');
-                }
-                if (typeof lucide !== 'undefined') {
-                    lucide.createIcons();
-                }
+            // Toggle icon between '☰' and '✖'
+            if (navLinks.classList.contains('active')) {
+                mobileMenuBtn.innerHTML = '&#10006;'; // ✖ (Cross)
+            } else {
+                mobileMenuBtn.innerHTML = '&#9776;'; // ☰ (Hamburger)
             }
         });
 
@@ -434,13 +428,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.addEventListener('click', (e) => {
             if (navLinks.classList.contains('active') && !navLinks.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
                 navLinks.classList.remove('active');
-                const menuIcon = mobileMenuBtn.querySelector('i');
-                if (menuIcon) {
-                    menuIcon.setAttribute('data-lucide', 'menu');
-                    if (typeof lucide !== 'undefined') {
-                        lucide.createIcons();
-                    }
-                }
+                mobileMenuBtn.innerHTML = '&#9776;'; // ☰ (Hamburger)
             }
         });
     }
