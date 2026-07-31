@@ -1594,3 +1594,55 @@ a {
         margin: 0 auto !important;
     }
 }
+
+/* ==========================================================================
+   Global Mobile-Friendly Layout & Typography Extensions
+   ========================================================================== */
+.legal-page h1 {
+    font-size: 2.5rem;
+}
+.legal-page h2 {
+    font-size: 1.5rem;
+}
+.library-title {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+}
+.thank-you-card {
+    width: 90%;
+    max-width: 580px;
+    text-align: center;
+    padding: var(--space-lg);
+}
+.thank-you-card h1 {
+    font-size: 2.25rem;
+    margin-bottom: var(--space-xs);
+}
+
+@media (max-width: 768px) {
+    .legal-page {
+        padding-top: 110px !important;
+        padding-bottom: 50px !important;
+    }
+    .legal-page .glass-card {
+        padding: var(--space-sm) !important;
+    }
+    .legal-page h1 {
+        font-size: 1.8rem !important;
+    }
+    .legal-page h2 {
+        font-size: 1.25rem !important;
+    }
+    .library-title {
+        font-size: 2rem !important;
+    }
+    .library-hero {
+        padding: 110px 0 40px !important;
+    }
+    .thank-you-card {
+        padding: var(--space-md) !important;
+    }
+    .thank-you-card h1 {
+        font-size: 1.65rem !important;
+    }
+}

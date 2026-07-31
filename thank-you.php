@@ -96,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" defer></script>
 
     <!-- Master CSS -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=2.0">
 </head>
 <body style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at center, var(--color-bg-2) 0%, var(--color-bg-1) 100%); overflow-x: hidden;">
 
@@ -106,12 +106,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="aurora aurora-2" style="opacity: 0.15;"></div>
     </div>
 
-    <div class="glass-card" style="width: 90%; max-width: 580px; text-align: center; padding: var(--space-lg); border-color: rgba(251, 191, 36, 0.4); box-shadow: var(--shadow-glow-gold); position: relative; z-index: 10;">
+    <div class="glass-card thank-you-card" style="border-color: rgba(251, 191, 36, 0.4); box-shadow: var(--shadow-glow-gold); position: relative; z-index: 10;">
         <?php if ($payment_verified): ?>
             <div style="font-size: 3.5rem; color: var(--color-gold); margin-bottom: var(--space-sm);">
                 <i data-lucide="check-circle" style="width: 64px; height: 64px; filter: drop-shadow(0 0 15px var(--color-gold));"></i>
             </div>
-            <h1 class="gradient-gold" style="font-size: 2.25rem; margin-bottom: var(--space-xs);">Payment Successful!</h1>
+            <h1 class="gradient-gold">Payment Successful!</h1>
             <p style="font-size: 1.1rem; margin-bottom: var(--space-md); color: var(--color-text-white);">Dhanyawad, <strong><?php echo htmlspecialchars($customer_name); ?></strong>! Aapka order update ho gaya hai.</p>
             
             <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: var(--space-md); text-align: left;">
@@ -130,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div style="font-size: 3.5rem; color: #EF4444; margin-bottom: var(--space-sm);">
                 <i data-lucide="alert-triangle" style="width: 64px; height: 64px; filter: drop-shadow(0 0 15px #EF4444);"></i>
             </div>
-            <h1 style="font-size: 2.25rem; margin-bottom: var(--space-xs); color: #EF4444;">Verification Failed</h1>
+            <h1 style="color: #EF4444;">Verification Failed</h1>
             <p style="font-size: 1.1rem; margin-bottom: var(--space-md); color: var(--color-text-slate);">Aapke payment details properly verify nahi ho sake. Agar aapka bank account se money deduct ho chuki hai, to please support desk par issue notify karein.</p>
             
             <div style="display: flex; flex-direction: column; gap: var(--space-sm);">

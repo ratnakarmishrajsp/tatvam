@@ -211,7 +211,7 @@ function getProductUrl($slug) {
                 <i data-lucide="book-open"></i>
                 <span>Mindset & Discipline Library</span>
             </div>
-            <h1 style="font-size: 3rem; margin-bottom: 0.5rem;">Explore Premium E-Books</h1>
+            <h1 class="library-title">Explore Premium E-Books</h1>
             <p style="color: var(--color-text-slate); max-width: 600px; margin: 0 auto 2rem;">Read simple guides written in Hinglish to rewire your thinking models, eliminate stress, and rebuild daily motivation.</p>
             
             <!-- Search Bar -->
