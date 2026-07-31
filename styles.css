@@ -1135,20 +1135,20 @@ a {
 }
 
 .toast {
-    background: rgba(8, 13, 26, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    padding: 0.75rem 1rem;
-    border-radius: var(--radius-sm);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    background: rgba(4, 7, 15, 0.45) !important; /* Extremely translucent background */
+    backdrop-filter: blur(30px) saturate(180%) !important; /* Maximum blur */
+    -webkit-backdrop-filter: blur(30px) saturate(180%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    padding: 0.5rem 0.75rem !important; /* Thin and compact */
+    border-radius: var(--radius-sm) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px !important;
     transform: translate3d(-100px, 0, 0);
     opacity: 0;
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
-    max-width: 340px;
+    max-width: 310px;
 }
 
 .toast.show {
@@ -1158,12 +1158,12 @@ a {
 
 .toast-img-wrapper {
     flex-shrink: 0;
-    width: 42px;
-    height: 52px;
-    border-radius: 4px;
+    width: 28px !important; /* Very tiny book cover */
+    height: 36px !important;
+    border-radius: 3px !important;
     overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .toast-img-wrapper img {
@@ -1175,47 +1175,14 @@ a {
 .toast-content {
     display: flex;
     flex-direction: column;
-    gap: 2px;
-}
-
-.toast-verified {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-}
-
-.verified-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 0.62rem;
-    font-weight: 700;
-    color: #10B981; /* green */
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    background: rgba(16, 185, 129, 0.08);
-    padding: 2px 6px;
-    border-radius: var(--radius-full);
-    border: 1px solid rgba(16, 185, 129, 0.15);
-}
-
-.verified-icon {
-    width: 8px;
-    height: 8px;
-}
-
-.toast-time {
-    font-size: 0.7rem;
-    color: var(--color-text-slate);
-    font-weight: 500;
+    gap: 1px !important;
+    text-align: left;
 }
 
 .toast-text {
-    font-size: 0.82rem;
+    font-size: 0.78rem !important; /* Small, professional text size */
     color: var(--color-text-gray);
-    line-height: 1.3;
-    text-align: left;
+    line-height: 1.25;
 }
 
 .toast-text span {
@@ -1226,6 +1193,38 @@ a {
 .toast-text .highlight {
     color: var(--color-gold);
     font-weight: 700;
+}
+
+.toast-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.65rem;
+    color: var(--color-text-slate);
+}
+
+.verified-badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: #10B981;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.verified-icon {
+    width: 8px;
+    height: 8px;
+}
+
+.bullet-sep {
+    color: rgba(255, 255, 255, 0.15);
+}
+
+.toast-time {
+    font-weight: 500;
 }
 
 /* ==========================================================================
