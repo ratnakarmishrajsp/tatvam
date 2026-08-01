@@ -47,6 +47,6 @@ define('SMTP_PASS', 'your-app-password');
 define('SMTP_FROM_NAME', 'TATVAM Support Desk');
 
 // Meta Conversion API (CAPI) & Pixel Configurations
-define('META_PIXEL_ID', '123456789012345');
-define('META_CAPI_ACCESS_TOKEN', 'EAAB...YOUR_ACCESS_TOKEN');
+define('META_PIXEL_ID', '1300320535510896');
+define('META_CAPI_ACCESS_TOKEN', 'EAAkpjFZAtNEEBSJj3fz2I0ytF4BROgqpU2iXo0A1DeyBXGNBRHZCUeij2X68X4ZAUfyTnqV1vXixY4AztrOwkDRFToPaMpc1p0vNg1fIDVll8rh5j61h1hGmipAJJzOFFHxDAZCW08flaAZB3NtSb7fCoMy76u7s5sT1FEDnMtVvxTqPMtVMvqjvj1jV1hgZDZD');
 define('META_CAPI_TEST_CODE', 'TEST12345');
