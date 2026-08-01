@@ -1,8 +1,7 @@
 <?php
 /**
  * TATVAM - Configuration Settings
- * Contains Site Constants and Database configurations.
- * All sensitive credentials are loaded from config.secret.php (gitignored).
+ * Contains API Credentials, Site Constants, and Database configurations
  */
 
 // Debugging (Set to false in production)
@@ -34,22 +33,20 @@ define('MYSQL_USER', 'root');
 define('MYSQL_PASS', '');
 define('MYSQL_DB', 'tatvam');
 
-// Load secret credentials from gitignored file
-$secret_file = __DIR__ . '/config.secret.php';
-if (file_exists($secret_file)) {
-    require_once $secret_file;
-} else {
-    // Fallback placeholders if secret file missing (will disable payment/email/CAPI)
-    define('CASHFREE_APP_ID', '');
-    define('CASHFREE_SECRET_KEY', '');
-    define('CASHFREE_ENV', 'TEST');
-    define('SMTP_HOST', 'smtp.gmail.com');
-    define('SMTP_PORT', 587);
-    define('SMTP_SECURE', 'tls');
-    define('SMTP_USER', '');
-    define('SMTP_PASS', '');
-    define('SMTP_FROM_NAME', 'TATVAM Support Desk');
-    define('META_PIXEL_ID', '');
-    define('META_CAPI_ACCESS_TOKEN', '');
-    define('META_CAPI_TEST_CODE', '');
-}
+// Cashfree Payment Gateway Credentials
+define('CASHFREE_APP_ID', '13547397d3e30d5de7d3d1a22179374531');
+define('CASHFREE_SECRET_KEY', 'cfsk_ma_prod_403c547114acb5ce4db767d374712a00_36752f6a');
+define('CASHFREE_ENV', 'PRODUCTION'); // 'TEST' for sandbox, 'PRODUCTION' for live
+
+// SMTP Credentials (For sending ebook delivery emails)
+define('SMTP_HOST', 'smtp.gmail.com');
+define('SMTP_PORT', 587);
+define('SMTP_SECURE', 'tls');
+define('SMTP_USER', 'your-email@gmail.com');
+define('SMTP_PASS', 'your-app-password');
+define('SMTP_FROM_NAME', 'TATVAM Support Desk');
+
+// Meta Conversion API (CAPI) & Pixel Configurations
+define('META_PIXEL_ID', '123456789012345');
+define('META_CAPI_ACCESS_TOKEN', 'EAAB...YOUR_ACCESS_TOKEN');
+define('META_CAPI_TEST_CODE', 'TEST12345');
