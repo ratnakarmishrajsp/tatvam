@@ -315,9 +315,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (checkoutForm) {
-        checkoutForm.addEventListener('submit', (e) => {
+        checkoutForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             const submitBtn = checkoutForm.querySelector('button[type="submit"]');
             const originalText = submitBtn.innerHTML;
             submitBtn.innerHTML = `<i data-lucide="loader" class="animate-spin" style="width: 18px; height: 18px; display: inline-block;"></i> Processing Checkout...`;
@@ -326,98 +326,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const formData = new FormData(checkoutForm);
 
-            fetch('create-order.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    if (data.sandbox) {
-                        submitBtn.innerHTML = `<i data-lucide="check"></i> Sandbox Success! Redirecting...`;
-                        if (typeof lucide !== 'undefined') lucide.createIcons();
-                        
-                        setTimeout(() => {
-                            const successForm = document.createElement('form');
-                            successForm.method = 'POST';
-                            successForm.action = 'thank-you.php';
+            try {
+                const res = await fetch('create-order.php', {
+                    method: 'POST',
+                    body: formData,
+                });
+                const data = await res.json();
 
-                            const inputs = {
-                                'razorpay_order_id': data.razorpay_order_id,
-                                'razorpay_payment_id': 'pay_sim_' + Math.random().toString(36).substr(2, 9),
-                                'sandbox': 'true'
-                            };
-
-                            for (const [key, val] of Object.entries(inputs)) {
-                                const input = document.createElement('input');
-                                input.type = 'hidden';
-                                input.name = key;
-                                input.value = val;
-                                successForm.appendChild(input);
-                            }
-
-                            document.body.appendChild(successForm);
-                            successForm.submit();
-                        }, 1200);
-                    } else {
-                        // LIVE RAZORPAY PAYMENT GATEWAY POPUP
-                        const options = {
-                            "key": data.key,
-                            "amount": data.amount,
-                            "currency": "INR",
-                            "name": "TATVAM Store",
-                            "description": "Payment for " + data.product_name,
-                            "image": data.cover_image || "./assets/bundle-cover.jpg",
-                            "order_id": data.razorpay_order_id,
-                            "handler": function (response) {
-                                const form = document.createElement('form');
-                                form.method = 'POST';
-                                form.action = 'thank-you.php';
-
-                                const params = {
-                                    'razorpay_order_id': response.razorpay_order_id,
-                                    'razorpay_payment_id': response.razorpay_payment_id,
-                                    'razorpay_signature': response.razorpay_signature
-                                };
-
-                                for (const [key, value] of Object.entries(params)) {
-                                    const hiddenField = document.createElement('input');
-                                    hiddenField.type = 'hidden';
-                                    hiddenField.name = key;
-                                    hiddenField.value = value;
-                                    form.appendChild(hiddenField);
-                                }
-
-                                document.body.appendChild(form);
-                                form.submit();
-                            },
-                            "prefill": {
-                                "name": data.customer_name,
-                                "email": data.customer_email,
-                                "contact": data.customer_phone
-                            },
-                            "theme": {
-                                "color": "#8b5cf6"
-                            }
-                        };
-                        const rzp = new Razorpay(options);
-                        rzp.open();
-                        closeCheckoutModal();
-                        submitBtn.innerHTML = originalText;
-                        submitBtn.disabled = false;
-                    }
-                } else {
-                    alert("Error: " + data.message);
+                if (!data.success) {
+                    alert('Error: ' + data.message);
                     submitBtn.innerHTML = originalText;
                     submitBtn.disabled = false;
+                    return;
                 }
-            })
-            .catch(err => {
+
+                // Determine Cashfree mode
+                const cfMode = data.environment === 'PRODUCTION' ? 'production' : 'sandbox';
+
+                // Initialize Cashfree JS SDK
+                const cashfree = Cashfree({ mode: cfMode });
+
+                closeCheckoutModal();
+
+                // Launch Cashfree Drop checkout
+                // Cashfree will redirect to thank-you.php?order_id=xxx on payment finish
+                cashfree.checkout({
+                    paymentSessionId: data.payment_session_id,
+                    redirectTarget: '_self', // redirect in same tab
+                });
+
+            } catch (err) {
                 console.error(err);
-                alert("Checkout communication error. Please try again.");
+                alert('Checkout error. Please try again.');
                 submitBtn.innerHTML = originalText;
                 submitBtn.disabled = false;
-            });
+            }
         });
     }
 

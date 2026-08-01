@@ -7,3 +7,6 @@ php-bin/
 # OS generated files
 .DS_Store
 Thumbs.db
+
+# Secret credentials — NEVER commit this file
+config.secret.php
