@@ -9,7 +9,7 @@ require_once __DIR__ . '/../db.php';
 
 // Simple Administrative Login Session Gate
 define('ADMIN_USER', 'admin');
-define('ADMIN_PASS', 'TATVAMAdmin108'); // Rebranded secure default password
+define('ADMIN_PASS', 'Tatvam@2025');
 
 $authenticated = false;
 
@@ -18,8 +18,8 @@ if (isset($_SESSION['admin_auth']) && $_SESSION['admin_auth'] === true) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'login') {
-    $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_SPECIAL_CHARS);
-    $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS);
+    $username = trim($_POST['username'] ?? '');
+    $password = trim($_POST['password'] ?? '');
 
     if ($username === ADMIN_USER && $password === ADMIN_PASS) {
         $_SESSION['admin_auth'] = true;
