@@ -20,7 +20,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASS }}
-          port: 22
+          port: ${{ secrets.SSH_PORT }}
           script: |
             # 1. Pull latest code from GitHub
             cd ${{ secrets.DEPLOY_PATH }}
