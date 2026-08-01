@@ -89,6 +89,71 @@ if ($authenticated && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['act
     }
 }
 
+// Handle editing an existing product
+if ($authenticated && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'edit_product') {
+    $edit_id    = (int)($_POST['edit_id'] ?? 0);
+    $title      = trim($_POST['title'] ?? '');
+    $slug       = trim($_POST['slug'] ?? '');
+    $category   = trim($_POST['category'] ?? '');
+    $description= trim($_POST['description'] ?? '');
+    $price      = (float)($_POST['price'] ?? 0);
+    $original_price = (float)($_POST['original_price'] ?? 0);
+
+    // Optional: replace cover image
+    $cover_sql = '';
+    $cover_val = [];
+    if (isset($_FILES['cover_image']) && $_FILES['cover_image']['error'] === UPLOAD_ERR_OK) {
+        $img_ext = strtolower(pathinfo($_FILES['cover_image']['name'], PATHINFO_EXTENSION));
+        if (in_array($img_ext, ['jpg','jpeg','png','webp'])) {
+            $dest_dir = __DIR__ . '/../assets/uploads/';
+            if (!file_exists($dest_dir)) mkdir($dest_dir, 0755, true);
+            $new_name = uniqid('cover_', true) . '.' . $img_ext;
+            if (move_uploaded_file($_FILES['cover_image']['tmp_name'], $dest_dir . $new_name)) {
+                $cover_sql = ', cover_image = ?';
+                $cover_val[] = 'assets/uploads/' . $new_name;
+            }
+        }
+    }
+
+    // Optional: replace PDF/ZIP file
+    $file_sql = '';
+    $file_val = [];
+    if (isset($_FILES['ebook_file']) && $_FILES['ebook_file']['error'] === UPLOAD_ERR_OK) {
+        $file_ext = strtolower(pathinfo($_FILES['ebook_file']['name'], PATHINFO_EXTENSION));
+        if (in_array($file_ext, ['pdf','zip'])) {
+            $dest_dir = __DIR__ . '/../files/uploads/';
+            if (!file_exists($dest_dir)) mkdir($dest_dir, 0755, true);
+            $new_name = uniqid('ebook_', true) . '.' . $file_ext;
+            if (move_uploaded_file($_FILES['ebook_file']['tmp_name'], $dest_dir . $new_name)) {
+                $file_sql = ', file_path = ?';
+                $file_val[] = 'files/uploads/' . $new_name;
+            }
+        }
+    }
+
+    if ($edit_id > 0 && !empty($title) && !empty($slug)) {
+        try {
+            $params = array_merge(
+                [$title, $slug, $price, $original_price, $category, $description],
+                $cover_val,
+                $file_val,
+                [$edit_id]
+            );
+            $sql = "UPDATE products SET title=?, slug=?, price=?, original_price=?, category=?, description=?{$cover_sql}{$file_sql} WHERE id=?";
+            $stmt = $db->prepare($sql);
+            $stmt->execute($params);
+            $product_success = "E-Book updated successfully!";
+            // Refresh product list
+            $products_stmt = $db->query("SELECT * FROM products ORDER BY id DESC");
+            $all_products = $products_stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            $product_error = "Error updating product: " . $e->getMessage();
+        }
+    } else {
+        $product_error = "Title and Slug are required to update.";
+    }
+}
+
 // Handle deleting a product
 if ($authenticated && isset($_GET['action']) && $_GET['action'] === 'delete_product' && isset($_GET['id'])) {
     $prod_id = (int)$_GET['id'];
@@ -382,9 +447,14 @@ if ($authenticated) {
                                             INR <?php echo $prod['price']; ?> <del style="font-weight: normal; font-size: 0.75rem; color: var(--color-text-slate); margin-left: 4px;">INR <?php echo $prod['original_price']; ?></del>
                                         </div>
                                     </div>
-                                    <a href="?action=delete_product&id=<?php echo $prod['id']; ?>" onclick="return confirm('Are you sure you want to delete this product?');" style="color: #EF4444; padding: 8px; border: 1px solid rgba(239,68,68,0.2); border-radius: var(--radius-sm); display: inline-flex;" title="Delete Product">
-                                        <i data-lucide="trash-2" style="width: 16px; height: 16px;"></i>
-                                    </a>
+                                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                                        <button onclick="openEditModal(<?php echo htmlspecialchars(json_encode($prod)); ?>)" style="color: var(--color-gold); padding: 8px; border: 1px solid rgba(212,175,55,0.3); border-radius: var(--radius-sm); background: rgba(212,175,55,0.08); display: inline-flex; cursor: pointer;" title="Edit E-Book">
+                                            <i data-lucide="pencil" style="width: 16px; height: 16px;"></i>
+                                        </button>
+                                        <a href="?action=delete_product&id=<?php echo $prod['id']; ?>" onclick="return confirm('Are you sure you want to delete this product?');" style="color: #EF4444; padding: 8px; border: 1px solid rgba(239,68,68,0.2); border-radius: var(--radius-sm); display: inline-flex;" title="Delete Product">
+                                            <i data-lucide="trash-2" style="width: 16px; height: 16px;"></i>
+                                        </a>
+                                    </div>
                                 </div>
                             <?php endforeach; ?>
                         </div>
@@ -393,6 +463,66 @@ if ($authenticated) {
             </div>
 
         </main>
+
+        <!-- EDIT E-BOOK MODAL -->
+        <div id="edit-modal-overlay" onclick="closeEditModal()" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:1000; align-items:center; justify-content:center; padding:1rem;">
+            <div onclick="event.stopPropagation()" style="background:#0b132b; border:1px solid rgba(212,175,55,0.35); border-radius:16px; width:100%; max-width:580px; max-height:90vh; overflow-y:auto; padding:2rem; position:relative;">
+                <button onclick="closeEditModal()" style="position:absolute; top:1rem; right:1rem; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#fff; width:36px; height:36px; border-radius:50%; font-size:1.2rem; cursor:pointer; display:flex; align-items:center; justify-content:center;">&times;</button>
+                
+                <h3 style="font-size:1.4rem; color:var(--color-gold); margin-bottom:1.5rem;">✏️ Edit E-Book</h3>
+
+                <form method="POST" enctype="multipart/form-data" id="edit-ebook-form">
+                    <input type="hidden" name="action" value="edit_product">
+                    <input type="hidden" name="edit_id" id="edit-id">
+
+                    <div class="form-group">
+                        <input type="text" name="title" id="edit-title" class="form-input" required placeholder=" ">
+                        <label for="edit-title" class="form-label">E-Book Title</label>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" name="slug" id="edit-slug" class="form-input" required placeholder=" ">
+                        <label for="edit-slug" class="form-label">URL Slug</label>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:var(--space-sm);">
+                        <div class="form-group">
+                            <input type="number" step="0.01" name="price" id="edit-price" class="form-input" required placeholder=" ">
+                            <label for="edit-price" class="form-label">Price (INR)</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="number" step="0.01" name="original_price" id="edit-orig-price" class="form-input" required placeholder=" ">
+                            <label for="edit-orig-price" class="form-label">Original Price (INR)</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" name="category" id="edit-category" class="form-input" required placeholder=" ">
+                        <label for="edit-category" class="form-label">Category</label>
+                    </div>
+
+                    <div class="form-group">
+                        <textarea name="description" id="edit-description" class="form-input" rows="3" placeholder=" " style="resize:none; padding-top:1rem;"></textarea>
+                        <label for="edit-description" class="form-label" style="top:0.6rem;">Description</label>
+                    </div>
+
+                    <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-light); padding:var(--space-sm); border-radius:var(--radius-sm); margin-bottom:var(--space-sm);">
+                        <label style="display:block; font-size:0.8rem; color:var(--color-gold); margin-bottom:6px;">🖼️ Replace Cover Image (optional — JPG/PNG)</label>
+                        <input type="file" name="cover_image" accept="image/*" style="font-size:0.9rem; color:var(--color-text-slate);">
+                    </div>
+
+                    <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-light); padding:var(--space-sm); border-radius:var(--radius-sm); margin-bottom:1.5rem;">
+                        <label style="display:block; font-size:0.8rem; color:var(--color-gold); margin-bottom:6px;">📄 Replace PDF/ZIP File (optional)</label>
+                        <input type="file" name="ebook_file" accept=".pdf,.zip" style="font-size:0.9rem; color:var(--color-text-slate);">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width:100%;">
+                        Save Changes &nbsp;<i data-lucide="save" style="display:inline; vertical-align:middle;"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
     <?php endif; ?>
 
     <script>
@@ -401,6 +531,28 @@ if ($authenticated) {
                 lucide.createIcons();
             }
         });
+
+        function openEditModal(prod) {
+            document.getElementById('edit-id').value          = prod.id;
+            document.getElementById('edit-title').value       = prod.title;
+            document.getElementById('edit-slug').value        = prod.slug;
+            document.getElementById('edit-price').value       = prod.price;
+            document.getElementById('edit-orig-price').value  = prod.original_price;
+            document.getElementById('edit-category').value    = prod.category;
+            document.getElementById('edit-description').value = prod.description;
+
+            var overlay = document.getElementById('edit-modal-overlay');
+            overlay.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+
+            // Reinit icons inside modal
+            setTimeout(() => { if (typeof lucide !== 'undefined') lucide.createIcons(); }, 100);
+        }
+
+        function closeEditModal() {
+            document.getElementById('edit-modal-overlay').style.display = 'none';
+            document.body.style.overflow = '';
+        }
 
         function switchTab(tabId) {
             document.getElementById('orders-tab').style.display = tabId === 'orders-tab' ? 'block' : 'none';
