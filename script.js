@@ -28,6 +28,29 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Dynamic Product Details & Price Sync from Database
+    const currentSlug = document.body.getAttribute('data-page-slug') || 'positive-thinking';
+    fetch(`get-product.php?slug=${encodeURIComponent(currentSlug)}`)
+        .then(res => res.json())
+        .then(prod => {
+            if (prod && prod.success && prod.price) {
+                const livePrice = Math.round(prod.price);
+                const origPrice = Math.round(prod.original_price || (livePrice * 5));
+
+                // Update all price tags on the landing page dynamically
+                document.querySelectorAll('.dynamic-price-val').forEach(el => {
+                    el.textContent = '₹' + livePrice;
+                });
+                document.querySelectorAll('.dynamic-orig-price-val').forEach(el => {
+                    el.textContent = '₹' + origPrice;
+                });
+                document.querySelectorAll('.dynamic-buy-btn-text').forEach(el => {
+                    el.innerHTML = `🛒 Buy Now – ₹${livePrice}`;
+                });
+            }
+        })
+        .catch(err => console.log('Dynamic price sync fallback to default HTML values.'));
+
     // ==========================================================================
     // 1. DUAL-MODE STICKY BUY WIDGET VISIBILITY CONTROLLER
     // ==========================================================================

@@ -79,8 +79,6 @@ try {
 
         // Overwrite title and description for positive-thinking product in existing database
         $db->exec("UPDATE products SET title = 'Positive Thinking (नकारात्मक सोच से बाहर निकलें)', description = 'नकारात्मक सोच से बाहर निकलें और सकारात्मक, शांत एवं आत्मविश्वासी जीवन की ओर बढ़ें।' WHERE slug = 'positive-thinking'");
-        // Overwrite price of all products in existing database to 199.00
-        $db->exec("UPDATE products SET price = 199.00");
 
     } else {
         // Initialize MySQL Connection
