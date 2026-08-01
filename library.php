@@ -38,6 +38,14 @@ function getProductUrl($slug) {
     <title>E-Book Library | TATVAM Digital Bookstore</title>
     <meta name="description" content="Browse our luxury digital library. Find guides on positive thinking, discipline, anxiety relief, and wealth frameworks.">
     
+    <!-- Meta Pixel Code -->
+    <?php include_once __DIR__ . '/includes/meta-pixel-header.php'; ?>
+    <script>
+        if (typeof fbq === 'function') {
+            fbq('track', 'ViewContent', { content_name: 'E-Book Library', content_category: 'Catalog' });
+        }
+    </script>
+    
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

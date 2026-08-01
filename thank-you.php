@@ -112,6 +112,19 @@ if (!empty($_GET['order_id']) || !empty($_POST['cf_order_id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Order Confirmed | TATVAM</title>
     
+    <?php include_once __DIR__ . '/includes/meta-pixel-header.php'; ?>
+    <?php if ($payment_verified): ?>
+    <script>
+        if (typeof fbq === 'function') {
+            fbq('track', 'Purchase', {
+                value: <?php echo (float)($order['amount'] ?? 199.00); ?>,
+                currency: 'INR',
+                content_name: '<?php echo addslashes($product_title); ?>'
+            });
+        }
+    </script>
+    <?php endif; ?>
+
     <!-- Premium Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
