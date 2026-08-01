@@ -6,58 +6,13 @@ on:
       - main
 
 jobs:
-  inject-secrets:
+  notify:
     runs-on: ubuntu-latest
-    name: Upload config.secret.php via FTP
-
+    name: Deployment Notice
     steps:
-      - name: Generate config.secret.php
-        env:
-          CASHFREE_APP_ID: ${{ secrets.CASHFREE_APP_ID }}
-          CASHFREE_SECRET_KEY: ${{ secrets.CASHFREE_SECRET_KEY }}
-          CASHFREE_ENV: ${{ secrets.CASHFREE_ENV }}
-          SMTP_HOST: ${{ secrets.SMTP_HOST }}
-          SMTP_PORT: ${{ secrets.SMTP_PORT }}
-          SMTP_SECURE: ${{ secrets.SMTP_SECURE }}
-          SMTP_USER: ${{ secrets.SMTP_USER }}
-          SMTP_PASS: ${{ secrets.SMTP_PASS }}
-          META_PIXEL_ID: ${{ secrets.META_PIXEL_ID }}
-          META_CAPI_ACCESS_TOKEN: ${{ secrets.META_CAPI_ACCESS_TOKEN }}
-          META_CAPI_TEST_CODE: ${{ secrets.META_CAPI_TEST_CODE }}
+      - name: Code deployed via Hostinger Git Integration
         run: |
-          cat > config.secret.php << PHPEOF
-          <?php
-          define('CASHFREE_APP_ID', '${CASHFREE_APP_ID}');
-          define('CASHFREE_SECRET_KEY', '${CASHFREE_SECRET_KEY}');
-          define('CASHFREE_ENV', '${CASHFREE_ENV}');
-          define('SMTP_HOST', '${SMTP_HOST}');
-          define('SMTP_PORT', ${SMTP_PORT});
-          define('SMTP_SECURE', '${SMTP_SECURE}');
-          define('SMTP_USER', '${SMTP_USER}');
-          define('SMTP_PASS', '${SMTP_PASS}');
-          define('SMTP_FROM_NAME', 'TATVAM Support Desk');
-          define('META_PIXEL_ID', '${META_PIXEL_ID}');
-          define('META_CAPI_ACCESS_TOKEN', '${META_CAPI_ACCESS_TOKEN}');
-          define('META_CAPI_TEST_CODE', '${META_CAPI_TEST_CODE}');
-          PHPEOF
-          echo "✅ config.secret.php generated"
-
-      - name: Upload via FTP (curl)
-        env:
-          FTP_HOST: ${{ secrets.SSH_HOST }}
-          FTP_USER: ${{ secrets.SSH_USER }}
-          FTP_PASS: ${{ secrets.SSH_PASS }}
-          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
-        run: |
-          # Convert absolute path to FTP-relative path
-          # Hostinger FTP root = /home/username, so strip that prefix
-          FTP_RELATIVE=$(echo "$DEPLOY_PATH" | sed 's|/home/[^/]*/||')
-          echo "FTP relative path: $FTP_RELATIVE"
-
-          curl --ftp-create-dirs \
-               --silent --show-error \
-               -T config.secret.php \
-               "ftp://${FTP_HOST}/${FTP_RELATIVE}/config.secret.php" \
-               --user "${FTP_USER}:${FTP_PASS}"
-
-          echo "✅ config.secret.php uploaded via FTP!"
+          echo "✅ Code pushed to GitHub main branch."
+          echo "📦 Hostinger Git Version Control will auto-pull this commit."
+          echo "🔑 config.secret.php is managed separately on server (gitignored, persistent)."
+          echo "ℹ️  To update secrets: edit config.secret.php directly via Hostinger File Manager."
