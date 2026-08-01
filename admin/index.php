@@ -1,13 +1,11 @@
 <?php
 /**
- * TATVAM - Comprehensive SaaS Admin Dashboard
- * Features:
- * 1. KPI Metrics (Revenue, Paid Orders, Pending, Failed, AOV)
- * 2. Interactive Date Range & Chart.js Financial Analytics
- * 3. Daily Profit & Loss (P&L) Calculator & Meta/Google Ad Spend Tracker
- * 4. Order Management with Search, Filters, Auto-Sync Cashfree Status, Manual Mark-as-Paid & Resend Email
- * 5. E-Book Content Management with Multi-PDF Upload & Live AJAX Progress Bar
- * 6. Customer CSV Export
+ * TATVAM - Refined Modular SaaS Admin Dashboard
+ * Modules / Tabs:
+ * 1. 📊 Executive Overview (KPIs & Sales Chart)
+ * 2. 💰 Financial P&L Tracker (Manual Date Add/Edit, Daily Ad Spend, Net Profit & ROAS)
+ * 3. 🛍️ Order Pipeline (Search, Filters, Direct WhatsApp Recovery & Thank-You Link Buttons)
+ * 4. 📦 Manage E-Books (Dynamic product creator & Multi-PDF upload)
  */
 
 session_start();
@@ -46,12 +44,8 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
     exit;
 }
 
-if (!$authenticated && $_SERVER['REQUEST_METHOD'] !== 'POST') {
-    // Render login page below
-}
-
 // -------------------------------------------------------------
-// 2. DAILY P&L / AD SPEND SAVER (AJAX / POST)
+// 2. DAILY P&L / AD SPEND SAVER (MANUAL DATE ENTRY & UPDATE)
 // -------------------------------------------------------------
 if ($authenticated && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'save_ad_spend') {
     header('Content-Type: application/json');
@@ -64,76 +58,19 @@ if ($authenticated && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['act
             $stmt = $db->prepare("INSERT INTO daily_calculations (calc_date, ad_spend, notes) VALUES (?, ?, ?)
                                   ON CONFLICT(calc_date) DO UPDATE SET ad_spend = EXCLUDED.ad_spend, notes = EXCLUDED.notes");
             $stmt->execute([$date, $ad_spend, $notes]);
-            echo json_encode(['success' => true, 'message' => 'Ad spend updated successfully!']);
+            echo json_encode(['success' => true, 'message' => 'Record saved successfully!']);
         } catch (Exception $e) {
             echo json_encode(['success' => false, 'message' => 'DB Error: ' . $e->getMessage()]);
         }
     } else {
-        echo json_encode(['success' => false, 'message' => 'Date is required.']);
+        echo json_encode(['success' => false, 'message' => 'Valid date is required.']);
     }
     exit;
 }
 
 // -------------------------------------------------------------
-// 3. ORDER SYNC WITH CASHFREE API & MANUAL MARK AS PAID
+// 3. MANUAL RESEND / RECOVERY EMAIL HANDLER
 // -------------------------------------------------------------
-if ($authenticated && isset($_GET['action']) && $_GET['action'] === 'sync_order' && isset($_GET['id'])) {
-    $order_id = (int)$_GET['id'];
-    $stmt = $db->prepare("SELECT orders.*, products.title FROM orders JOIN products ON orders.product_id = products.id WHERE orders.id = ?");
-    $stmt->execute([$order_id]);
-    $order = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if ($order) {
-        $cf_order_id = $order['razorpay_order_id'];
-        $payment_verified = false;
-        $cf_payment_id = null;
-
-        if ($cf_order_id) {
-            $api_base = (CASHFREE_ENV === 'TEST') ? 'https://sandbox.cashfree.com/pg' : 'https://api.cashfree.com/pg';
-            $ch = curl_init($api_base . '/orders/' . $cf_order_id . '/payments');
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                'x-client-id: ' . CASHFREE_APP_ID,
-                'x-client-secret: ' . CASHFREE_SECRET_KEY,
-                'x-api-version: 2023-08-01',
-            ]);
-            $response = curl_exec($ch);
-            $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            curl_close($ch);
-
-            if ($http_code === 200) {
-                $payments = json_decode($response, true);
-                foreach ((array)$payments as $p) {
-                    if (($p['payment_status'] ?? '') === 'SUCCESS') {
-                        $payment_verified = true;
-                        $cf_payment_id = $p['cf_payment_id'] ?? null;
-                        break;
-                    }
-                }
-            }
-        }
-
-        if ($payment_verified) {
-            $download_token = bin2hex(random_bytes(16));
-            $token_expiry   = date('Y-m-d H:i:s', strtotime('+7 days'));
-
-            $u_stmt = $db->prepare("UPDATE orders SET payment_status = 'paid', razorpay_payment_id = ?, download_token = ?, token_expiry = ? WHERE id = ?");
-            $u_stmt->execute([$cf_payment_id ?? ('cf_sync_' . bin2hex(random_bytes(4))), $download_token, $token_expiry, $order['id']]);
-
-            $download_link = SITE_URL . "/download.php?token=" . $download_token;
-            sendEbookEmail($order['customer_email'], $order['customer_name'], $order['title'], $download_link);
-            sendMetaCapiEvent('Purchase', ['email' => $order['customer_email'], 'phone' => $order['customer_phone'], 'name' => $order['customer_name'], 'value' => $order['amount'], 'currency' => 'INR']);
-
-            header('Location: index.php?msg=sync_success');
-            exit;
-        } else {
-            header('Location: index.php?msg=sync_no_payment');
-            exit;
-        }
-    }
-}
-
-// Manual Resend Link or Mark Paid
 if ($authenticated && isset($_GET['action']) && $_GET['action'] === 'resend_email' && isset($_GET['id'])) {
     $order_id = (int)$_GET['id'];
     $stmt = $db->prepare("SELECT orders.*, products.title FROM orders JOIN products ON orders.product_id = products.id WHERE orders.id = ?");
@@ -149,7 +86,7 @@ if ($authenticated && isset($_GET['action']) && $_GET['action'] === 'resend_emai
         }
         $link = SITE_URL . "/download.php?token=" . $token;
         sendEbookEmail($order['customer_email'], $order['customer_name'], $order['title'], $link);
-        header('Location: index.php?msg=email_sent');
+        header('Location: index.php?tab=orders-tab&msg=email_sent');
         exit;
     }
 }
@@ -202,12 +139,11 @@ if ($authenticated && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['act
         try {
             $stmt = $db->prepare("INSERT INTO products (title, slug, price, original_price, file_path, category, description, cover_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             $stmt->execute([$title, $slug, $price, $original_price, $file_path_str, $category, $description, $cover_image_path]);
-            $product_success = "Product added successfully!";
+            header('Location: index.php?tab=products-tab&msg=added');
+            exit;
         } catch (Exception $e) {
             $product_error = "Error adding product: " . $e->getMessage();
         }
-    } else {
-        $product_error = "Title and slug are required.";
     }
 }
 
@@ -308,7 +244,7 @@ if ($authenticated && isset($_GET['export']) && $_GET['export'] === 'csv') {
 }
 
 // -------------------------------------------------------------
-// 6. METRICS & P&L DATA AGGREGATION
+// 6. METRICS & DATA AGGREGATION FOR ALL MODULES
 // -------------------------------------------------------------
 $total_revenue       = 0.00;
 $total_paid_orders   = 0;
@@ -358,22 +294,32 @@ if ($authenticated) {
 
         $all_products = $db->query("SELECT * FROM products ORDER BY id DESC")->fetchAll(PDO::FETCH_ASSOC);
 
-        // Fetch Daily Financial Calculation (Last 14 Days)
+        // Fetch Financial P&L Records (All saved dates + Last 14 Days)
+        $pnl_stmt = $db->query("SELECT * FROM daily_calculations ORDER BY calc_date DESC LIMIT 30");
+        $saved_pnl = $pnl_stmt->fetchAll(PDO::FETCH_ASSOC);
+        $saved_dates = array_column($saved_pnl, 'calc_date');
+
         $daily_pnl = [];
+        // Combine last 14 days and any saved custom dates
+        $date_list = [];
         for ($i = 0; $i < 14; $i++) {
-            $d = date('Y-m-d', strtotime("-$i days"));
-            // Fetch gross revenue for date
+            $date_list[] = date('Y-m-d', strtotime("-$i days"));
+        }
+        foreach ($saved_dates as $sd) {
+            if (!in_array($sd, $date_list)) $date_list[] = $sd;
+        }
+        rsort($date_list);
+
+        foreach ($date_list as $d) {
             $rev_stmt = $db->prepare("SELECT SUM(amount), COUNT(*) FROM orders WHERE payment_status = 'paid' AND date(created_at) = ?");
             $rev_stmt->execute([$d]);
             $row = $rev_stmt->fetch(PDO::FETCH_NUM);
             $day_gross = (float)($row[0] ?? 0);
             $day_orders= (int)($row[1] ?? 0);
 
-            // Gateway fees (2.36% Cashfree / Razorpay standard with GST)
-            $pg_fee = $day_gross * 0.0236;
+            $pg_fee = $day_gross * 0.0236; // 2.36% Cashfree + GST
             $net_remittance = $day_gross - $pg_fee;
 
-            // Fetch ad spend from daily_calculations table
             $ad_stmt = $db->prepare("SELECT ad_spend, notes FROM daily_calculations WHERE calc_date = ?");
             $ad_stmt->execute([$d]);
             $calc_row = $ad_stmt->fetch(PDO::FETCH_ASSOC);
@@ -414,10 +360,14 @@ if ($authenticated) {
     <link rel="stylesheet" href="../styles.css?v=2.4">
     <style>
         .pnl-table th, .pnl-table td { padding: 0.75rem 0.6rem; text-align: left; font-size: 0.85rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .pnl-table input { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); color: #fff; border-radius: 4px; padding: 4px 8px; width: 90px; font-size: 0.85rem; }
+        .pnl-table input { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); color: #fff; border-radius: 4px; padding: 4px 8px; width: 95px; font-size: 0.85rem; }
         .badge-paid { background: rgba(16,185,129,0.15); color: #10B981; border: 1px solid rgba(16,185,129,0.3); padding: 3px 10px; border-radius: 12px; font-weight: 600; font-size: 0.78rem; }
         .badge-pending { background: rgba(245,158,11,0.15); color: #F59E0B; border: 1px solid rgba(245,158,11,0.3); padding: 3px 10px; border-radius: 12px; font-weight: 600; font-size: 0.78rem; }
         .badge-failed { background: rgba(239,68,68,0.15); color: #EF4444; border: 1px solid rgba(239,68,68,0.3); padding: 3px 10px; border-radius: 12px; font-weight: 600; font-size: 0.78rem; }
+        .btn-whatsapp-recover { background: #25D366; color: #000 !important; font-weight: 700; border-radius: 6px; padding: 5px 12px; font-size: 0.78rem; display: inline-flex; align-items: center; gap: 4px; text-decoration: none; box-shadow: 0 4px 10px rgba(37,211,102,0.25); }
+        .btn-whatsapp-recover:hover { background: #1EBE5D; transform: scale(1.02); }
+        .btn-whatsapp-thankyou { background: rgba(37,211,102,0.12); color: #25D366 !important; border: 1px solid rgba(37,211,102,0.3); border-radius: 6px; padding: 5px 12px; font-size: 0.78rem; display: inline-flex; align-items: center; gap: 4px; text-decoration: none; }
+        .btn-whatsapp-thankyou:hover { background: rgba(37,211,102,0.25); }
     </style>
 </head>
 <body class="admin-wrapper" style="padding-top: 0; background: var(--color-bg-1);">
@@ -460,7 +410,7 @@ if ($authenticated) {
         <!-- AUTHENTICATED SaaS DASHBOARD VIEW -->
         <header class="admin-header" style="position: relative; z-index: 10; padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,0.06); background: rgba(3,5,12,0.85); backdrop-filter: blur(10px);">
             <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
-                <h1 class="admin-logo" style="font-size: 1.5rem;">TATVAM<span>.</span> <span style="font-size: 0.9rem; font-weight: 400; color: var(--color-gold); margin-left: 0.5rem; background: rgba(251,191,36,0.1); padding: 2px 10px; border-radius: 12px; border: 1px solid rgba(251,191,36,0.2);">Executive SaaS Dashboard</span></h1>
+                <h1 class="admin-logo" style="font-size: 1.5rem;">TATVAM<span>.</span> <span style="font-size: 0.85rem; font-weight: 400; color: var(--color-gold); margin-left: 0.5rem; background: rgba(251,191,36,0.1); padding: 2px 10px; border-radius: 12px; border: 1px solid rgba(251,191,36,0.2);">Executive SaaS Panel</span></h1>
                 <div style="display: flex; gap: 0.75rem; align-items: center;">
                     <a href="?export=csv" class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, #FFE082 0%, var(--color-gold) 100%); color: #000 !important; box-shadow: none; font-weight: 700;"><i data-lucide="download"></i> Export Orders (CSV)</a>
                     <a href="?action=logout" class="btn btn-secondary btn-sm" style="background: transparent; color: #EF4444; border-color: rgba(239,68,68,0.2);"><i data-lucide="log-out"></i> Logout</a>
@@ -474,23 +424,23 @@ if ($authenticated) {
             <?php if (isset($_GET['msg'])): ?>
                 <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: #10B981; padding: 0.85rem 1.2rem; border-radius: 8px; margin-bottom: 1.5rem; font-weight: 500; font-size: 0.9rem;">
                     <?php 
-                        if ($_GET['msg'] === 'sync_success') echo '✅ Payment Status Verified & Download Email Dispatched to Customer!';
-                        elseif ($_GET['msg'] === 'sync_no_payment') echo '⚠️ Payment status is still pending or not completed on Cashfree.';
-                        elseif ($_GET['msg'] === 'email_sent') echo '📩 Download link email resent successfully!';
+                        if ($_GET['msg'] === 'email_sent') echo '📩 E-Book download email resent successfully!';
+                        elseif ($_GET['msg'] === 'added') echo '✨ New E-Book product created successfully!';
                         elseif ($_GET['msg'] === 'deleted') echo '🗑️ E-Book product deleted.';
                     ?>
                 </div>
             <?php endif; ?>
 
-            <!-- Admin Navigation Tabs -->
-            <div style="display: flex; gap: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 0.75rem; margin-bottom: 1.5rem;">
-                <button class="tab-btn active" id="btn-pnl" onclick="switchTab('pnl-tab')" style="background: none; border: none; color: var(--color-gold); font-family: var(--font-heading); font-size: 1.1rem; font-weight: 700; cursor: pointer; padding-bottom: 0.5rem; border-bottom: 2px solid var(--color-gold);">📊 Analytics & P&L</button>
-                <button class="tab-btn" id="btn-orders" onclick="switchTab('orders-tab')" style="background: none; border: none; color: var(--color-text-slate); font-family: var(--font-heading); font-size: 1.1rem; font-weight: 700; cursor: pointer; padding-bottom: 0.5rem; border-bottom: 2px solid transparent;">🛍️ Order Pipeline</button>
-                <button class="tab-btn" id="btn-products" onclick="switchTab('products-tab')" style="background: none; border: none; color: var(--color-text-slate); font-family: var(--font-heading); font-size: 1.1rem; font-weight: 700; cursor: pointer; padding-bottom: 0.5rem; border-bottom: 2px solid transparent;">📦 Manage E-Books</button>
+            <!-- DISTINCT MODULAR TABS -->
+            <div style="display: flex; gap: 1rem; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 0.75rem; margin-bottom: 1.5rem; overflow-x: auto;">
+                <button class="tab-btn active" id="btn-overview" onclick="switchTab('overview-tab')" style="background: none; border: none; color: var(--color-gold); font-family: var(--font-heading); font-size: 1.05rem; font-weight: 700; cursor: pointer; padding: 0.4rem 0.8rem; border-bottom: 2px solid var(--color-gold); white-space: nowrap;">📊 Overview & Charts</button>
+                <button class="tab-btn" id="btn-pnl" onclick="switchTab('pnl-tab')" style="background: none; border: none; color: var(--color-text-slate); font-family: var(--font-heading); font-size: 1.05rem; font-weight: 700; cursor: pointer; padding: 0.4rem 0.8rem; border-bottom: 2px solid transparent; white-space: nowrap;">💰 Financial P&L Tracker</button>
+                <button class="tab-btn" id="btn-orders" onclick="switchTab('orders-tab')" style="background: none; border: none; color: var(--color-text-slate); font-family: var(--font-heading); font-size: 1.05rem; font-weight: 700; cursor: pointer; padding: 0.4rem 0.8rem; border-bottom: 2px solid transparent; white-space: nowrap;">🛍️ Order Pipeline & WhatsApp</button>
+                <button class="tab-btn" id="btn-products" onclick="switchTab('products-tab')" style="background: none; border: none; color: var(--color-text-slate); font-family: var(--font-heading); font-size: 1.05rem; font-weight: 700; cursor: pointer; padding: 0.4rem 0.8rem; border-bottom: 2px solid transparent; white-space: nowrap;">📦 Manage E-Books</button>
             </div>
 
-            <!-- TAB 1: ANALYTICS & P&L CALCULATOR -->
-            <div id="pnl-tab">
+            <!-- MODULE 1: OVERVIEW & CHARTS -->
+            <div id="overview-tab">
                 <!-- KPI CARDS OVERVIEW -->
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
                     <div class="glass-card" style="padding: 1.25rem;">
@@ -512,27 +462,46 @@ if ($authenticated) {
                 </div>
 
                 <!-- CHART & ANALYTICS VISUALIZER -->
-                <div class="glass-card" style="padding: 1.5rem; margin-bottom: 2rem;">
-                    <h3 style="font-size: 1.2rem; color: var(--color-gold); margin-bottom: 1rem;">📈 14-Day Sales & Remittance Trend</h3>
-                    <div style="height: 260px; width: 100%;">
+                <div class="glass-card" style="padding: 1.5rem;">
+                    <h3 style="font-size: 1.2rem; color: var(--color-gold); margin-bottom: 1rem;">📈 14-Day Sales & Remittance Trend Graph</h3>
+                    <div style="height: 320px; width: 100%;">
                         <canvas id="salesChart"></canvas>
                     </div>
+                </div>
+            </div>
+
+            <!-- MODULE 2: FINANCIAL P&L TRACKER (SEPARATE TAB WITH MANUAL DATE ADDITION) -->
+            <div id="pnl-tab" style="display: none;">
+                <!-- MANUAL DATE & AD SPEND ADDITION FORM -->
+                <div class="glass-card" style="padding: 1.25rem; margin-bottom: 1.5rem; border-color: rgba(251,191,36,0.3);">
+                    <h3 style="font-size: 1.15rem; color: var(--color-gold); margin-bottom: 0.75rem;">➕ Add / Update Manual Date Record</h3>
+                    <form id="manual-pnl-form" onsubmit="saveManualAdSpend(event)" style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end;">
+                        <div>
+                            <label style="display: block; font-size: 0.78rem; color: var(--color-text-slate); margin-bottom: 4px;">Select Date</label>
+                            <input type="date" id="manual-date" class="form-input" required value="<?php echo date('Y-m-d'); ?>" style="padding: 0.5rem 0.8rem; font-size: 0.85rem; color: #fff; background: rgba(255,255,255,0.05);">
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 0.78rem; color: var(--color-text-slate); margin-bottom: 4px;">Ad Spend (₹)</label>
+                            <input type="number" step="0.01" id="manual-spend" class="form-input" placeholder="e.g. 500" style="padding: 0.5rem 0.8rem; font-size: 0.85rem; width: 130px;">
+                        </div>
+                        <div style="flex: 1; min-width: 180px;">
+                            <label style="display: block; font-size: 0.78rem; color: var(--color-text-slate); margin-bottom: 4px;">Notes / Campaign Info</label>
+                            <input type="text" id="manual-notes" class="form-input" placeholder="e.g. FB Campaign #1" style="padding: 0.5rem 0.8rem; font-size: 0.85rem;">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-sm" style="color: #000 !important; font-weight: 700; padding: 0.6rem 1.2rem;">Save Date Record</button>
+                    </form>
                 </div>
 
                 <!-- P&L CALCULATOR TABLE -->
                 <div class="glass-card" style="padding: 1.5rem; overflow-x: auto;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 10px;">
-                        <div>
-                            <h3 style="font-size: 1.25rem; color: #fff; margin: 0;">💰 Daily Financial & P&L Tracker</h3>
-                            <p style="font-size: 0.82rem; color: var(--color-text-slate); margin-top: 2px;">Enter daily Meta/Google Ad Spend to calculate Net Profit & ROAS in real-time.</p>
-                        </div>
-                    </div>
+                    <h3 style="font-size: 1.25rem; color: #fff; margin-bottom: 0.25rem;">💰 Financial Profit & Loss (P&L) Ledger</h3>
+                    <p style="font-size: 0.82rem; color: var(--color-text-slate); margin-bottom: 1rem;">Calculates Gross Revenue, PG Fee (2.36%), Net Remittance, Net Profit, and ROAS per date.</p>
 
                     <table class="pnl-table" style="width: 100%; border-collapse: collapse;">
                         <thead>
                             <tr style="color: var(--color-gold); font-size: 0.8rem; border-bottom: 1px solid var(--border-light);">
                                 <th>Date</th>
-                                <th>Orders</th>
+                                <th>Paid Orders</th>
                                 <th>Gross Revenue</th>
                                 <th>PG Fee (2.36%)</th>
                                 <th>Net Remittance</th>
@@ -570,14 +539,14 @@ if ($authenticated) {
                 </div>
             </div>
 
-            <!-- TAB 2: ORDER PIPELINE & RECOVERY -->
+            <!-- MODULE 3: ORDER PIPELINE & DIRECT WHATSAPP RECOVERY -->
             <div id="orders-tab" style="display: none;">
                 <!-- SEARCH & FILTER BAR -->
                 <div class="glass-card" style="padding: 1rem; margin-bottom: 1.5rem;">
                     <form method="GET" style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;">
                         <input type="hidden" name="tab" value="orders-tab">
                         <div style="flex: 1; min-width: 200px;">
-                            <input type="text" name="search" class="form-input" value="<?php echo htmlspecialchars($search_query); ?>" placeholder="Search by Order ID, Name, Email or Phone..." style="padding: 0.6rem 1rem; font-size: 0.85rem;">
+                            <input type="text" name="search" class="form-input" value="<?php echo htmlspecialchars($search_query); ?>" placeholder="Search Order ID, Name, Email or Phone..." style="padding: 0.6rem 1rem; font-size: 0.85rem;">
                         </div>
                         <select name="status" class="form-input" style="width: 140px; padding: 0.6rem 0.8rem; font-size: 0.85rem; color: #fff; background: rgba(255,255,255,0.05);">
                             <option value="" style="background:#0b132b;">All Statuses</option>
@@ -595,7 +564,7 @@ if ($authenticated) {
                     </form>
                 </div>
 
-                <!-- ORDERS PIPELINE TABLE -->
+                <!-- ORDERS PIPELINE TABLE WITH AUTOMATED WHATSAPP BUTTONS -->
                 <div class="admin-table-container" style="background: var(--panel-bg); border: 1px solid var(--border-light); border-radius: var(--radius-md); overflow-x: auto;">
                     <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem;">
                         <thead>
@@ -606,12 +575,29 @@ if ($authenticated) {
                                 <th style="padding: 1rem;">Amount</th>
                                 <th style="padding: 1rem;">Status</th>
                                 <th style="padding: 1rem;">Date & Time</th>
-                                <th style="padding: 1rem;">Cashfree Sync / Recovery Actions</th>
+                                <th style="padding: 1rem;">Automated WhatsApp Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php if (count($recent_orders) > 0): ?>
                                 <?php foreach ($recent_orders as $order): ?>
+                                    <?php 
+                                        // Clean phone number for WhatsApp
+                                        $clean_phone = preg_replace('/[^0-9]/', '', $order['customer_phone']);
+                                        if (strlen($clean_phone) == 10) $clean_phone = '91' . $clean_phone; // add India country code if omitted
+
+                                        // Prepare Automated WhatsApp Messages
+                                        if ($order['payment_status'] === 'pending') {
+                                            $wa_msg = "Namaste " . $order['customer_name'] . " ji! AAPKA TATVAM Order #" . $order['id'] . " (" . $order['title'] . ") checkout incomplete reh gaya tha. Complete karne ke liye yahan click karein: https://tatvam.shop/positive-thinking.html - Koi help chahiye to hume batayein!";
+                                            $wa_url = "https://api.whatsapp.com/send?phone=" . $clean_phone . "&text=" . urlencode($wa_msg);
+                                        } else {
+                                            // Paid Order: Thank-You & Download Access Link
+                                            $token = $order['download_token'];
+                                            $download_url = SITE_URL . "/download.php?token=" . $token;
+                                            $wa_msg = "Dhanyawad " . $order['customer_name'] . " ji! AAPKA TATVAM Order #" . $order['id'] . " (" . $order['title'] . ") confirmed hai. Aapka instant download link yahan hai: " . $download_url . " - TATVAM se judne ke liye dhanyawad!";
+                                            $wa_url = "https://api.whatsapp.com/send?phone=" . $clean_phone . "&text=" . urlencode($wa_msg);
+                                        }
+                                    ?>
                                     <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
                                         <td style="padding: 1rem; font-weight: 600;">#<?php echo $order['id']; ?></td>
                                         <td style="padding: 1rem;">
@@ -630,9 +616,15 @@ if ($authenticated) {
                                         <td style="padding: 1rem; color: rgba(255,255,255,0.6); font-size: 0.8rem;"><?php echo date('M d, Y h:i A', strtotime($order['created_at'])); ?></td>
                                         <td style="padding: 1rem;">
                                             <?php if ($order['payment_status'] === 'pending'): ?>
-                                                <a href="?action=sync_order&id=<?php echo $order['id']; ?>" class="btn btn-primary btn-sm" style="font-size: 0.75rem; padding: 4px 10px; color: #000 !important;" title="Verify with Cashfree API">🔄 Sync Cashfree API</a>
+                                                <!-- WhatsApp Pending Order Recovery Button -->
+                                                <a href="<?php echo $wa_url; ?>" target="_blank" class="btn-whatsapp-recover" title="Send WhatsApp Recovery Message">
+                                                    💬 Recover on WhatsApp
+                                                </a>
                                             <?php else: ?>
-                                                <a href="?action=resend_email&id=<?php echo $order['id']; ?>" class="btn btn-secondary btn-sm" style="font-size: 0.75rem; padding: 4px 10px;" title="Resend download link to customer email">📩 Resend Email Link</a>
+                                                <!-- WhatsApp Paid Order Thank-You & Download Link Button -->
+                                                <a href="<?php echo $wa_url; ?>" target="_blank" class="btn-whatsapp-thankyou" title="Send Thank-You & Download Link on WhatsApp">
+                                                    💬 Send Thank-You & Link
+                                                </a>
                                             <?php endif; ?>
                                         </td>
                                     </tr>
@@ -647,7 +639,7 @@ if ($authenticated) {
                 </div>
             </div>
 
-            <!-- TAB 3: MANAGE EBOOKS -->
+            <!-- MODULE 4: MANAGE E-BOOKS -->
             <div id="products-tab" style="display: none;">
                 <div style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 1.5rem; align-items: start;">
                     <!-- Add Product Card -->
@@ -826,7 +818,6 @@ if ($authenticated) {
             const pnlData = <?php echo json_encode(array_reverse($daily_pnl ?? [])); ?>;
             const labels = pnlData.map(d => d.date);
             const grossData = pnlData.map(d => d.gross_revenue);
-            const netData   = pnlData.map(d => d.net_remittance);
             const profitData= pnlData.map(d => d.net_profit);
 
             new Chart(ctx, {
@@ -866,7 +857,34 @@ if ($authenticated) {
             });
         }
 
-        // AJAX Ad Spend Saver
+        // Save Manual Date Ad Spend Record
+        function saveManualAdSpend(e) {
+            e.preventDefault();
+            const dateVal  = document.getElementById('manual-date').value;
+            const spendVal = document.getElementById('manual-spend').value;
+            const notesVal = document.getElementById('manual-notes').value;
+
+            if (!dateVal) { alert('Please select a date.'); return; }
+
+            const formData = new FormData();
+            formData.append('action', 'save_ad_spend');
+            formData.append('calc_date', dateVal);
+            formData.append('ad_spend', spendVal || 0);
+            formData.append('notes', notesVal || '');
+
+            fetch('index.php', { method: 'POST', body: formData })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = 'index.php?tab=pnl-tab';
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch(err => alert('Save failed. Connection error.'));
+        }
+
+        // AJAX Ad Spend Saver for Table
         function saveAdSpend(dateStr) {
             const spendInput = document.getElementById('adspend-' + dateStr);
             const notesInput = document.getElementById('notes-' + dateStr);
@@ -882,7 +900,7 @@ if ($authenticated) {
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
-                    window.location.reload();
+                    window.location.href = 'index.php?tab=pnl-tab';
                 } else {
                     alert('Error: ' + data.message);
                 }
@@ -966,17 +984,20 @@ if ($authenticated) {
         }
 
         function switchTab(tabId) {
+            document.getElementById('overview-tab').style.display = tabId === 'overview-tab' ? 'block' : 'none';
             document.getElementById('pnl-tab').style.display      = tabId === 'pnl-tab' ? 'block' : 'none';
             document.getElementById('orders-tab').style.display   = tabId === 'orders-tab' ? 'block' : 'none';
             document.getElementById('products-tab').style.display = tabId === 'products-tab' ? 'block' : 'none';
             
-            document.getElementById('btn-pnl').style.color      = tabId === 'pnl-tab' ? 'var(--color-gold)' : 'var(--color-text-slate)';
-            document.getElementById('btn-orders').style.color   = tabId === 'orders-tab' ? 'var(--color-gold)' : 'var(--color-text-slate)';
-            document.getElementById('btn-products').style.color = tabId === 'products-tab' ? 'var(--color-gold)' : 'var(--color-text-slate)';
+            document.getElementById('btn-overview').style.color  = tabId === 'overview-tab' ? 'var(--color-gold)' : 'var(--color-text-slate)';
+            document.getElementById('btn-pnl').style.color       = tabId === 'pnl-tab' ? 'var(--color-gold)' : 'var(--color-text-slate)';
+            document.getElementById('btn-orders').style.color    = tabId === 'orders-tab' ? 'var(--color-gold)' : 'var(--color-text-slate)';
+            document.getElementById('btn-products').style.color  = tabId === 'products-tab' ? 'var(--color-gold)' : 'var(--color-text-slate)';
 
-            document.getElementById('btn-pnl').style.borderBottomColor      = tabId === 'pnl-tab' ? 'var(--color-gold)' : 'transparent';
-            document.getElementById('btn-orders').style.borderBottomColor   = tabId === 'orders-tab' ? 'var(--color-gold)' : 'transparent';
-            document.getElementById('btn-products').style.borderBottomColor = tabId === 'products-tab' ? 'var(--color-gold)' : 'transparent';
+            document.getElementById('btn-overview').style.borderBottomColor  = tabId === 'overview-tab' ? 'var(--color-gold)' : 'transparent';
+            document.getElementById('btn-pnl').style.borderBottomColor       = tabId === 'pnl-tab' ? 'var(--color-gold)' : 'transparent';
+            document.getElementById('btn-orders').style.borderBottomColor    = tabId === 'orders-tab' ? 'var(--color-gold)' : 'transparent';
+            document.getElementById('btn-products').style.borderBottomColor  = tabId === 'products-tab' ? 'var(--color-gold)' : 'transparent';
         }
     </script>
 </body>
