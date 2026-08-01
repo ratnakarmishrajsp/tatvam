@@ -115,19 +115,45 @@ if ($authenticated && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['act
         }
     }
 
-    // Optional: replace PDF/ZIP file
+    // Optional: add more PDF/ZIP files (multiple allowed)
+    // Fetch existing file paths for this product so we can APPEND new ones
     $file_sql = '';
     $file_val = [];
-    if (isset($_FILES['ebook_file']) && $_FILES['ebook_file']['error'] === UPLOAD_ERR_OK) {
-        $file_ext = strtolower(pathinfo($_FILES['ebook_file']['name'], PATHINFO_EXTENSION));
-        if (in_array($file_ext, ['pdf','zip'])) {
-            $dest_dir = __DIR__ . '/../files/uploads/';
-            if (!file_exists($dest_dir)) mkdir($dest_dir, 0755, true);
-            $new_name = uniqid('ebook_', true) . '.' . $file_ext;
-            if (move_uploaded_file($_FILES['ebook_file']['tmp_name'], $dest_dir . $new_name)) {
-                $file_sql = ', file_path = ?';
-                $file_val[] = 'files/uploads/' . $new_name;
+    if (!empty($_FILES['ebook_file']['name'][0])) {
+        // Fetch existing paths first
+        $existing_stmt = $db->prepare("SELECT file_path FROM products WHERE id = ?");
+        $existing_stmt->execute([$edit_id]);
+        $existing_row = $existing_stmt->fetch(PDO::FETCH_ASSOC);
+        $existing_paths = [];
+        if ($existing_row && !empty($existing_row['file_path'])) {
+            $decoded = json_decode($existing_row['file_path'], true);
+            if (is_array($decoded)) {
+                $existing_paths = $decoded;
+            } else {
+                // Legacy single string — wrap it
+                $existing_paths = [$existing_row['file_path']];
             }
+        }
+
+        $dest_dir = __DIR__ . '/../files/uploads/';
+        if (!file_exists($dest_dir)) mkdir($dest_dir, 0755, true);
+
+        // Loop through each uploaded file
+        foreach ($_FILES['ebook_file']['tmp_name'] as $i => $tmp) {
+            if ($_FILES['ebook_file']['error'][$i] === UPLOAD_ERR_OK) {
+                $file_ext = strtolower(pathinfo($_FILES['ebook_file']['name'][$i], PATHINFO_EXTENSION));
+                if (in_array($file_ext, ['pdf', 'zip'])) {
+                    $new_name = uniqid('ebook_', true) . '.' . $file_ext;
+                    if (move_uploaded_file($tmp, $dest_dir . $new_name)) {
+                        $existing_paths[] = 'files/uploads/' . $new_name;
+                    }
+                }
+            }
+        }
+
+        if (!empty($existing_paths)) {
+            $file_sql = ', file_path = ?';
+            $file_val[] = json_encode($existing_paths);
         }
     }
 
@@ -512,11 +538,24 @@ if ($authenticated) {
                     </div>
 
                     <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-light); padding:var(--space-sm); border-radius:var(--radius-sm); margin-bottom:1.5rem;">
-                        <label style="display:block; font-size:0.8rem; color:var(--color-gold); margin-bottom:6px;">📄 Replace PDF/ZIP File (optional)</label>
-                        <input type="file" name="ebook_file" accept=".pdf,.zip" style="font-size:0.9rem; color:var(--color-text-slate);">
+                        <label style="display:block; font-size:0.8rem; color:var(--color-gold); margin-bottom:4px;">📄 Add PDF/ZIP Files (Main & Bonus PDFs)</label>
+                        <p id="edit-existing-files" style="font-size:0.75rem; color:rgba(255,255,255,0.5); margin-bottom:8px;"></p>
+                        <input type="file" name="ebook_file[]" id="edit-ebook-files" accept=".pdf,.zip" multiple style="font-size:0.9rem; color:var(--color-text-slate);">
+                        <p style="font-size:0.72rem; color:rgba(255,255,255,0.35); margin-top:6px;">💡 Bonus PDF ऐड करने के लिए Ctrl+Click (Windows) या Cmd+Click (Mac) दबाकर एक साथ multiple PDF/ZIP सिलेक्ट करें</p>
                     </div>
 
-                    <button type="submit" class="btn btn-primary" style="width:100%;">
+                    <!-- Progress bar container -->
+                    <div id="upload-progress-box" style="display:none; margin-bottom:1.5rem; background:rgba(255,255,255,0.04); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:1rem;">
+                        <div style="display:flex; justify-content:space-between; font-size:0.85rem; color:var(--color-gold); margin-bottom:6px;">
+                            <span id="upload-status-text">Uploading files...</span>
+                            <span id="upload-percent-text">0%</span>
+                        </div>
+                        <div style="width:100%; height:8px; background:rgba(255,255,255,0.1); border-radius:4px; overflow:hidden;">
+                            <div id="upload-progress-bar" style="width:0%; height:100%; background:linear-gradient(90deg, #FBBF24, #10B981); transition:width 0.15s ease;"></div>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="edit-submit-btn" class="btn btn-primary" style="width:100%;">
                         Save Changes &nbsp;<i data-lucide="save" style="display:inline; vertical-align:middle;"></i>
                     </button>
                 </form>
@@ -541,12 +580,81 @@ if ($authenticated) {
             document.getElementById('edit-category').value    = prod.category;
             document.getElementById('edit-description').value = prod.description;
 
+            // Show existing file count
+            var existingEl = document.getElementById('edit-existing-files');
+            try {
+                var paths = JSON.parse(prod.file_path);
+                if (Array.isArray(paths)) {
+                    existingEl.textContent = '📂 Currently ' + paths.length + ' file(s) attached: ' + paths.map(function(p){ return p.split('/').pop(); }).join(', ');
+                } else {
+                    existingEl.textContent = prod.file_path ? ('📂 Currently 1 file attached: ' + prod.file_path.split('/').pop()) : '📂 No files attached yet';
+                }
+            } catch(e) {
+                existingEl.textContent = prod.file_path ? ('📂 Currently 1 file attached: ' + prod.file_path.split('/').pop()) : '📂 No files attached yet';
+            }
+
             var overlay = document.getElementById('edit-modal-overlay');
             overlay.style.display = 'flex';
             document.body.style.overflow = 'hidden';
 
             // Reinit icons inside modal
             setTimeout(() => { if (typeof lucide !== 'undefined') lucide.createIcons(); }, 100);
+        }
+
+        // AJAX Form Submit with Smooth Progress Bar
+        const editForm = document.getElementById('edit-ebook-form');
+        if (editForm) {
+            editForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const formData = new FormData(editForm);
+                const xhr = new XMLHttpRequest();
+
+                const progressBox = document.getElementById('upload-progress-box');
+                const progressBar = document.getElementById('upload-progress-bar');
+                const percentText = document.getElementById('upload-percent-text');
+                const statusText  = document.getElementById('upload-status-text');
+                const submitBtn   = document.getElementById('edit-submit-btn');
+
+                progressBox.style.display = 'block';
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = '0.5';
+
+                xhr.upload.addEventListener('progress', function(event) {
+                    if (event.lengthComputable) {
+                        const percent = Math.round((event.loaded / event.total) * 100);
+                        progressBar.style.width = percent + '%';
+                        percentText.textContent = percent + '%';
+                        statusText.textContent = percent < 100 ? 'Uploading Files...' : 'Processing & Saving...';
+                    }
+                });
+
+                xhr.addEventListener('load', function() {
+                    if (xhr.status === 200) {
+                        progressBar.style.width = '100%';
+                        percentText.textContent = '100%';
+                        statusText.textContent = '✅ Save Complete!';
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 500);
+                    } else {
+                        alert('Upload failed: Server error ' + xhr.status);
+                        submitBtn.disabled = false;
+                        submitBtn.style.opacity = '1';
+                        progressBox.style.display = 'none';
+                    }
+                });
+
+                xhr.addEventListener('error', function() {
+                    alert('Upload failed: Network connection error.');
+                    submitBtn.disabled = false;
+                    submitBtn.style.opacity = '1';
+                    progressBox.style.display = 'none';
+                });
+
+                xhr.open('POST', 'index.php', true);
+                xhr.send(formData);
+            });
         }
 
         function closeEditModal() {

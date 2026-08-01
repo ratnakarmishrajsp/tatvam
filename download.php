@@ -2,11 +2,13 @@
 /**
  * TATVAM - Secure Token-Guarded Ebook Download Engine
  * Validates expiration limits, increments access counters, and pipes file bytes securely
+ * Supports both single file_path (legacy) and JSON array of multiple files
  */
 
 require_once __DIR__ . '/db.php';
 
 $token = filter_input(INPUT_GET, 'token', FILTER_SANITIZE_SPECIAL_CHARS);
+$file_index = isset($_GET['file']) ? (int)$_GET['file'] : -1; // -1 = show list
 
 if (!$token) {
     die("Error: No download token provided.");
@@ -33,82 +35,107 @@ try {
         die("Error: This download link has expired (7 days usage limit exceeded). Please contact support@tatvam.shop to request a renewal.");
     }
 
-    // 4. Update download metrics
-    $update_stmt = $db->prepare("UPDATE orders SET download_count = download_count + 1 WHERE id = ?");
-    $update_stmt->execute([$order['id']]);
+    // 4. Resolve file paths (support legacy single string + JSON array)
+    $raw_path = $order['file_path'];
+    $decoded = json_decode($raw_path, true);
+    if (is_array($decoded)) {
+        $file_paths = $decoded;
+    } else {
+        $file_paths = [$raw_path]; // legacy single file
+    }
 
-    // 5. Expose Ebook File Bytes securely
-    $relative_file_path = $order['file_path'];
-    $full_file_path = __DIR__ . '/' . $relative_file_path;
+    // 5. If a specific file index is requested, serve that file directly
+    if ($file_index >= 0 && isset($file_paths[$file_index])) {
+        // Update download count
+        $update_stmt = $db->prepare("UPDATE orders SET download_count = download_count + 1 WHERE id = ?");
+        $update_stmt->execute([$order['id']]);
 
-    if (!file_exists($full_file_path)) {
-        // Localhost Sandboxed Sandbox Helper: Display a beautiful HTML page instead of raw PDF stream
-        // This prevents the browser from showing raw text code when error reporting is enabled on local environments.
-        $file_name = basename($relative_file_path);
-        ?>
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-            <title>Download Sandbox Success | TATVAM</title>
-            <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
-            <script src="https://unpkg.com/lucide@latest" defer></script>
-            <link rel="stylesheet" href="styles.css">
-        </head>
-        <body style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at center, var(--color-bg-2) 0%, var(--color-bg-1) 100%);">
-            <div class="bg-canvas"></div>
-            <div class="noise-overlay"></div>
-            
-            <div class="glass-card" style="width: 90%; max-width: 500px; text-align: center; padding: var(--space-lg); border-color: rgba(255, 255, 255, 0.15); z-index: 10; position: relative;">
-                <div style="font-size: 4rem; color: var(--color-success); margin-bottom: var(--space-sm); display: flex; justify-content: center;">
-                    <i data-lucide="check-circle" style="width: 64px; height: 64px; stroke-width: 2.5; color: var(--color-success);"></i>
-                </div>
-                <h1 class="gradient-gold" style="font-size: 2.25rem; margin-bottom: var(--space-xs);">Sandbox Download Success!</h1>
-                
-                <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-light); padding: 1rem; border-radius: var(--radius-sm); margin: 1.5rem 0; text-align: left; font-size: 0.9rem;">
-                    <p style="margin-bottom: 0.5rem; color: var(--color-text-white);"><strong>Order Title:</strong> <?php echo htmlspecialchars($order['title']); ?></p>
-                    <p style="margin-bottom: 0.5rem; color: var(--color-text-white);"><strong>File Name:</strong> <?php echo htmlspecialchars($file_name); ?></p>
-                    <p style="color: var(--color-text-white);"><strong>Status:</strong> Sandbox Simulation Mode 🛠️</p>
-                </div>
+        $relative = $file_paths[$file_index];
+        $full = __DIR__ . '/' . $relative;
 
-                <p style="font-size: 0.95rem; margin-bottom: var(--space-md); color: var(--color-text-slate);">Yaha click karne par file download simulate ho gayi hai. Production mode me customer ko real PDF ebook download file milegi.</p>
-                
-                <a href="index.html" class="btn btn-primary" style="width: 100%;"><i data-lucide="home"></i> Return to TATVAM Store</a>
-            </div>
+        if (!file_exists($full)) {
+            die("Error: File not found on server. Please contact support@tatvam.shop.");
+        }
 
-            <script>
-                window.addEventListener('load', () => {
-                    if (typeof lucide !== 'undefined') {
-                        lucide.createIcons();
-                    }
-                });
-            </script>
-        </body>
-        </html>
-        <?php
+        $file_name = basename($full);
+        $mime_type = mime_content_type($full);
+
+        header('Content-Description: File Transfer');
+        header('Content-Type: ' . ($mime_type ?: 'application/octet-stream'));
+        header('Content-Disposition: attachment; filename="' . $file_name . '"');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($full));
+        ob_clean();
+        flush();
+        readfile($full);
         exit;
     }
 
-    // Serve real file
-    $file_name = basename($full_file_path);
-    $mime_type = mime_content_type($full_file_path);
+    // 6. Show download list page (default when no file index or multiple files)
+    // Update download count once for page visit
+    $update_stmt = $db->prepare("UPDATE orders SET download_count = download_count + 1 WHERE id = ?");
+    $update_stmt->execute([$order['id']]);
 
-    header('Content-Description: File Transfer');
-    header('Content-Type: ' . ($mime_type ? $mime_type : 'application/octet-stream'));
-    header('Content-Disposition: attachment; filename="' . $file_name . '"');
-    header('Expires: 0');
-    header('Cache-Control: must-revalidate');
-    header('Pragma: public');
-    header('Content-Length: ' . filesize($full_file_path));
-    
-    // Clear buffer
-    ob_clean();
-    flush();
-    
-    readfile($full_file_path);
-    exit;
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Download Your E-Book | TATVAM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    <link rel="stylesheet" href="styles.css?v=2.3">
+</head>
+<body style="min-height:100vh; display:flex; align-items:center; justify-content:center; background:radial-gradient(circle at center, var(--color-bg-2) 0%, var(--color-bg-1) 100%); padding:1rem;">
+    <div class="bg-canvas"></div>
+    <div class="noise-overlay"></div>
+
+    <div class="glass-card" style="width:100%; max-width:520px; text-align:center; padding:2.5rem 2rem; border-color:rgba(251,191,36,0.4); box-shadow:var(--shadow-glow-gold); position:relative; z-index:10;">
+        <div style="font-size:3rem; color:var(--color-gold); margin-bottom:1rem; display:flex; justify-content:center;">
+            <i data-lucide="book-open" style="width:64px; height:64px; filter:drop-shadow(0 0 15px var(--color-gold));"></i>
+        </div>
+        <h1 class="gradient-gold" style="font-size:1.8rem; margin-bottom:0.5rem;">Your E-Book is Ready!</h1>
+        <p style="color:var(--color-text-slate); margin-bottom:2rem; font-size:0.95rem;">
+            <strong style="color:#fff;"><?php echo htmlspecialchars($order['title']); ?></strong><br>
+            <?php echo count($file_paths); ?> file(s) available for download
+        </p>
+
+        <div style="display:flex; flex-direction:column; gap:0.75rem; margin-bottom:1.5rem;">
+            <?php foreach ($file_paths as $i => $path):
+                $fname = basename($path);
+                $full_check = __DIR__ . '/' . $path;
+                $exists = file_exists($full_check);
+            ?>
+            <a href="download.php?token=<?php echo urlencode($token); ?>&file=<?php echo $i; ?>"
+               class="btn btn-primary"
+               style="width:100%; justify-content:center; <?php echo !$exists ? 'opacity:0.4; pointer-events:none;' : ''; ?>">
+                <i data-lucide="download" style="width:18px; height:18px; margin-right:8px;"></i>
+                <?php if (count($file_paths) > 1): ?>
+                    File <?php echo ($i+1); ?> — <?php echo htmlspecialchars($fname); ?>
+                <?php else: ?>
+                    Download E-Book PDF
+                <?php endif; ?>
+            </a>
+            <?php endforeach; ?>
+        </div>
+
+        <p style="font-size:0.8rem; color:rgba(255,255,255,0.3);">Link valid for 7 days. Download as many times as needed.</p>
+        <a href="index.html" style="display:block; margin-top:1rem; font-size:0.85rem; color:var(--color-text-slate);">← Return to TATVAM Store</a>
+    </div>
+
+    <script>
+        window.addEventListener('load', () => {
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        });
+    </script>
+</body>
+</html>
+<?php
 
 } catch (Exception $e) {
     die("Download Execution Error: " . $e->getMessage());
 }
+
