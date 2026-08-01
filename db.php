@@ -41,6 +41,14 @@ try {
         $db->exec("UPDATE products SET description = 'Paison ko lekar poor self-limiting beliefs aur money blocks aapki growth block kar rahe hain? Abundance habits seekhein.', cover_image = 'assets/wealth-cover.jpg' WHERE slug = 'wealth-mindset' AND (description IS NULL OR description = '')");
         $db->exec("UPDATE products SET description = 'Sari single guides ek bundle me paayein. Total Value ₹3,996 par abhi grab karein!', cover_image = 'assets/bundle-cover.jpg' WHERE slug = 'mega-bundle' AND (description IS NULL OR description = '')");
 
+        $db->exec("CREATE TABLE IF NOT EXISTS daily_calculations (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            calc_date TEXT UNIQUE NOT NULL,
+            ad_spend REAL DEFAULT 0,
+            notes TEXT,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        )");
+
         $db->exec("CREATE TABLE IF NOT EXISTS orders (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             customer_name TEXT NOT NULL,

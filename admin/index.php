@@ -1,22 +1,31 @@
 <?php
 /**
- * TATVAM - Premium SaaS-Style Admin Dashboard
- * Displays sales analytics, order log lists, database CSV downloads, and E-Book uploads.
+ * TATVAM - Comprehensive SaaS Admin Dashboard
+ * Features:
+ * 1. KPI Metrics (Revenue, Paid Orders, Pending, Failed, AOV)
+ * 2. Interactive Date Range & Chart.js Financial Analytics
+ * 3. Daily Profit & Loss (P&L) Calculator & Meta/Google Ad Spend Tracker
+ * 4. Order Management with Search, Filters, Auto-Sync Cashfree Status, Manual Mark-as-Paid & Resend Email
+ * 5. E-Book Content Management with Multi-PDF Upload & Live AJAX Progress Bar
+ * 6. Customer CSV Export
  */
 
 session_start();
 require_once __DIR__ . '/../db.php';
+require_once __DIR__ . '/../includes/smtp-helper.php';
+require_once __DIR__ . '/../includes/meta-capi-helper.php';
 
-// Simple Administrative Login Session Gate
 define('ADMIN_USER', 'admin');
 define('ADMIN_PASS', 'Tatvam@2025');
 
 $authenticated = false;
-
 if (isset($_SESSION['admin_auth']) && $_SESSION['admin_auth'] === true) {
     $authenticated = true;
 }
 
+// -------------------------------------------------------------
+// 1. AUTHENTICATION HANDLERS
+// -------------------------------------------------------------
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'login') {
     $username = trim($_POST['username'] ?? '');
     $password = trim($_POST['password'] ?? '');
@@ -37,20 +46,128 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
     exit;
 }
 
-// Handle adding a new product
+if (!$authenticated && $_SERVER['REQUEST_METHOD'] !== 'POST') {
+    // Render login page below
+}
+
+// -------------------------------------------------------------
+// 2. DAILY P&L / AD SPEND SAVER (AJAX / POST)
+// -------------------------------------------------------------
+if ($authenticated && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'save_ad_spend') {
+    header('Content-Type: application/json');
+    $date     = filter_input(INPUT_POST, 'calc_date', FILTER_SANITIZE_SPECIAL_CHARS);
+    $ad_spend = (float)($_POST['ad_spend'] ?? 0);
+    $notes    = filter_input(INPUT_POST, 'notes', FILTER_SANITIZE_SPECIAL_CHARS);
+
+    if ($date) {
+        try {
+            $stmt = $db->prepare("INSERT INTO daily_calculations (calc_date, ad_spend, notes) VALUES (?, ?, ?)
+                                  ON CONFLICT(calc_date) DO UPDATE SET ad_spend = EXCLUDED.ad_spend, notes = EXCLUDED.notes");
+            $stmt->execute([$date, $ad_spend, $notes]);
+            echo json_encode(['success' => true, 'message' => 'Ad spend updated successfully!']);
+        } catch (Exception $e) {
+            echo json_encode(['success' => false, 'message' => 'DB Error: ' . $e->getMessage()]);
+        }
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Date is required.']);
+    }
+    exit;
+}
+
+// -------------------------------------------------------------
+// 3. ORDER SYNC WITH CASHFREE API & MANUAL MARK AS PAID
+// -------------------------------------------------------------
+if ($authenticated && isset($_GET['action']) && $_GET['action'] === 'sync_order' && isset($_GET['id'])) {
+    $order_id = (int)$_GET['id'];
+    $stmt = $db->prepare("SELECT orders.*, products.title FROM orders JOIN products ON orders.product_id = products.id WHERE orders.id = ?");
+    $stmt->execute([$order_id]);
+    $order = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($order) {
+        $cf_order_id = $order['razorpay_order_id'];
+        $payment_verified = false;
+        $cf_payment_id = null;
+
+        if ($cf_order_id) {
+            $api_base = (CASHFREE_ENV === 'TEST') ? 'https://sandbox.cashfree.com/pg' : 'https://api.cashfree.com/pg';
+            $ch = curl_init($api_base . '/orders/' . $cf_order_id . '/payments');
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'x-client-id: ' . CASHFREE_APP_ID,
+                'x-client-secret: ' . CASHFREE_SECRET_KEY,
+                'x-api-version: 2023-08-01',
+            ]);
+            $response = curl_exec($ch);
+            $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+
+            if ($http_code === 200) {
+                $payments = json_decode($response, true);
+                foreach ((array)$payments as $p) {
+                    if (($p['payment_status'] ?? '') === 'SUCCESS') {
+                        $payment_verified = true;
+                        $cf_payment_id = $p['cf_payment_id'] ?? null;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if ($payment_verified) {
+            $download_token = bin2hex(random_bytes(16));
+            $token_expiry   = date('Y-m-d H:i:s', strtotime('+7 days'));
+
+            $u_stmt = $db->prepare("UPDATE orders SET payment_status = 'paid', razorpay_payment_id = ?, download_token = ?, token_expiry = ? WHERE id = ?");
+            $u_stmt->execute([$cf_payment_id ?? ('cf_sync_' . bin2hex(random_bytes(4))), $download_token, $token_expiry, $order['id']]);
+
+            $download_link = SITE_URL . "/download.php?token=" . $download_token;
+            sendEbookEmail($order['customer_email'], $order['customer_name'], $order['title'], $download_link);
+            sendMetaCapiEvent('Purchase', ['email' => $order['customer_email'], 'phone' => $order['customer_phone'], 'name' => $order['customer_name'], 'value' => $order['amount'], 'currency' => 'INR']);
+
+            header('Location: index.php?msg=sync_success');
+            exit;
+        } else {
+            header('Location: index.php?msg=sync_no_payment');
+            exit;
+        }
+    }
+}
+
+// Manual Resend Link or Mark Paid
+if ($authenticated && isset($_GET['action']) && $_GET['action'] === 'resend_email' && isset($_GET['id'])) {
+    $order_id = (int)$_GET['id'];
+    $stmt = $db->prepare("SELECT orders.*, products.title FROM orders JOIN products ON orders.product_id = products.id WHERE orders.id = ?");
+    $stmt->execute([$order_id]);
+    $order = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($order && $order['payment_status'] === 'paid') {
+        $token = $order['download_token'];
+        if (!$token) {
+            $token = bin2hex(random_bytes(16));
+            $db->prepare("UPDATE orders SET download_token = ?, token_expiry = ? WHERE id = ?")
+               ->execute([$token, date('Y-m-d H:i:s', strtotime('+7 days')), $order['id']]);
+        }
+        $link = SITE_URL . "/download.php?token=" . $token;
+        sendEbookEmail($order['customer_email'], $order['customer_name'], $order['title'], $link);
+        header('Location: index.php?msg=email_sent');
+        exit;
+    }
+}
+
+// -------------------------------------------------------------
+// 4. ADD & EDIT PRODUCT HANDLERS
+// -------------------------------------------------------------
 if ($authenticated && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'add_product') {
-    $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_SPECIAL_CHARS);
-    $slug = filter_input(INPUT_POST, 'slug', FILTER_SANITIZE_SPECIAL_CHARS);
-    $category = filter_input(INPUT_POST, 'category', FILTER_SANITIZE_SPECIAL_CHARS);
-    $description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_SPECIAL_CHARS);
-    $price = (float)$_POST['price'];
+    $title          = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_SPECIAL_CHARS);
+    $slug           = filter_input(INPUT_POST, 'slug', FILTER_SANITIZE_SPECIAL_CHARS);
+    $category       = filter_input(INPUT_POST, 'category', FILTER_SANITIZE_SPECIAL_CHARS);
+    $description    = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_SPECIAL_CHARS);
+    $price          = (float)$_POST['price'];
     $original_price = (float)$_POST['original_price'];
 
-    // Handle Cover Image upload
-    $cover_image_path = 'assets/book-cover.jpg'; // fallback default
+    $cover_image_path = 'assets/book-cover.jpg';
     if (isset($_FILES['cover_image']) && $_FILES['cover_image']['error'] === UPLOAD_ERR_OK) {
-        $img_name = basename($_FILES['cover_image']['name']);
-        $img_ext = strtolower(pathinfo($img_name, PATHINFO_EXTENSION));
+        $img_ext = strtolower(pathinfo($_FILES['cover_image']['name'], PATHINFO_EXTENSION));
         if (in_array($img_ext, ['jpg', 'jpeg', 'png', 'webp'])) {
             $dest_dir = __DIR__ . '/../assets/uploads/';
             if (!file_exists($dest_dir)) mkdir($dest_dir, 0755, true);
@@ -61,45 +178,48 @@ if ($authenticated && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['act
         }
     }
 
-    // Handle PDF file upload
-    $file_path = '';
-    if (isset($_FILES['ebook_file']) && $_FILES['ebook_file']['error'] === UPLOAD_ERR_OK) {
-        $file_name = basename($_FILES['ebook_file']['name']);
-        $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-        if ($file_ext === 'pdf' || $file_ext === 'zip') {
-            $dest_dir = __DIR__ . '/../files/uploads/';
-            if (!file_exists($dest_dir)) mkdir($dest_dir, 0755, true);
-            $new_name = uniqid('ebook_', true) . '.' . $file_ext;
-            if (move_uploaded_file($_FILES['ebook_file']['tmp_name'], $dest_dir . $new_name)) {
-                $file_path = 'files/uploads/' . $new_name;
+    $file_paths = [];
+    if (!empty($_FILES['ebook_file']['name'][0])) {
+        $dest_dir = __DIR__ . '/../files/uploads/';
+        if (!file_exists($dest_dir)) mkdir($dest_dir, 0755, true);
+
+        foreach ($_FILES['ebook_file']['tmp_name'] as $i => $tmp) {
+            if ($_FILES['ebook_file']['error'][$i] === UPLOAD_ERR_OK) {
+                $file_ext = strtolower(pathinfo($_FILES['ebook_file']['name'][$i], PATHINFO_EXTENSION));
+                if (in_array($file_ext, ['pdf', 'zip'])) {
+                    $new_name = uniqid('ebook_', true) . '.' . $file_ext;
+                    if (move_uploaded_file($tmp, $dest_dir . $new_name)) {
+                        $file_paths[] = 'files/uploads/' . $new_name;
+                    }
+                }
             }
         }
     }
 
-    if (!empty($title) && !empty($slug) && !empty($file_path)) {
+    $file_path_str = !empty($file_paths) ? json_encode($file_paths) : 'files/power_of_calm_hindi.pdf';
+
+    if (!empty($title) && !empty($slug)) {
         try {
             $stmt = $db->prepare("INSERT INTO products (title, slug, price, original_price, file_path, category, description, cover_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->execute([$title, $slug, $price, $original_price, $file_path, $category, $description, $cover_image_path]);
+            $stmt->execute([$title, $slug, $price, $original_price, $file_path_str, $category, $description, $cover_image_path]);
             $product_success = "Product added successfully!";
         } catch (Exception $e) {
             $product_error = "Error adding product: " . $e->getMessage();
         }
     } else {
-        $product_error = "Title, slug, and Ebook file are required.";
+        $product_error = "Title and slug are required.";
     }
 }
 
-// Handle editing an existing product
 if ($authenticated && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'edit_product') {
-    $edit_id    = (int)($_POST['edit_id'] ?? 0);
-    $title      = trim($_POST['title'] ?? '');
-    $slug       = trim($_POST['slug'] ?? '');
-    $category   = trim($_POST['category'] ?? '');
-    $description= trim($_POST['description'] ?? '');
-    $price      = (float)($_POST['price'] ?? 0);
+    $edit_id        = (int)($_POST['edit_id'] ?? 0);
+    $title          = trim($_POST['title'] ?? '');
+    $slug           = trim($_POST['slug'] ?? '');
+    $category       = trim($_POST['category'] ?? '');
+    $description    = trim($_POST['description'] ?? '');
+    $price          = (float)($_POST['price'] ?? 0);
     $original_price = (float)($_POST['original_price'] ?? 0);
 
-    // Optional: replace cover image
     $cover_sql = '';
     $cover_val = [];
     if (isset($_FILES['cover_image']) && $_FILES['cover_image']['error'] === UPLOAD_ERR_OK) {
@@ -115,30 +235,21 @@ if ($authenticated && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['act
         }
     }
 
-    // Optional: add more PDF/ZIP files (multiple allowed)
-    // Fetch existing file paths for this product so we can APPEND new ones
     $file_sql = '';
     $file_val = [];
     if (!empty($_FILES['ebook_file']['name'][0])) {
-        // Fetch existing paths first
         $existing_stmt = $db->prepare("SELECT file_path FROM products WHERE id = ?");
         $existing_stmt->execute([$edit_id]);
         $existing_row = $existing_stmt->fetch(PDO::FETCH_ASSOC);
         $existing_paths = [];
         if ($existing_row && !empty($existing_row['file_path'])) {
             $decoded = json_decode($existing_row['file_path'], true);
-            if (is_array($decoded)) {
-                $existing_paths = $decoded;
-            } else {
-                // Legacy single string — wrap it
-                $existing_paths = [$existing_row['file_path']];
-            }
+            $existing_paths = is_array($decoded) ? $decoded : [$existing_row['file_path']];
         }
 
         $dest_dir = __DIR__ . '/../files/uploads/';
         if (!file_exists($dest_dir)) mkdir($dest_dir, 0755, true);
 
-        // Loop through each uploaded file
         foreach ($_FILES['ebook_file']['tmp_name'] as $i => $tmp) {
             if ($_FILES['ebook_file']['error'][$i] === UPLOAD_ERR_OK) {
                 $file_ext = strtolower(pathinfo($_FILES['ebook_file']['name'][$i], PATHINFO_EXTENSION));
@@ -159,93 +270,135 @@ if ($authenticated && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['act
 
     if ($edit_id > 0 && !empty($title) && !empty($slug)) {
         try {
-            $params = array_merge(
-                [$title, $slug, $price, $original_price, $category, $description],
-                $cover_val,
-                $file_val,
-                [$edit_id]
-            );
+            $params = array_merge([$title, $slug, $price, $original_price, $category, $description], $cover_val, $file_val, [$edit_id]);
             $sql = "UPDATE products SET title=?, slug=?, price=?, original_price=?, category=?, description=?{$cover_sql}{$file_sql} WHERE id=?";
-            $stmt = $db->prepare($sql);
-            $stmt->execute($params);
-            $product_success = "E-Book updated successfully!";
-            // Refresh product list
-            $products_stmt = $db->query("SELECT * FROM products ORDER BY id DESC");
-            $all_products = $products_stmt->fetchAll(PDO::FETCH_ASSOC);
+            $db->prepare($sql)->execute($params);
+            echo "SUCCESS";
+            exit;
         } catch (Exception $e) {
-            $product_error = "Error updating product: " . $e->getMessage();
+            http_response_code(500);
+            echo "Error: " . $e->getMessage();
+            exit;
         }
-    } else {
-        $product_error = "Title and Slug are required to update.";
     }
 }
 
-// Handle deleting a product
 if ($authenticated && isset($_GET['action']) && $_GET['action'] === 'delete_product' && isset($_GET['id'])) {
     $prod_id = (int)$_GET['id'];
-    try {
-        $stmt = $db->prepare("DELETE FROM products WHERE id = ?");
-        $stmt->execute([$prod_id]);
-        header('Location: index.php?msg=deleted');
-        exit;
-    } catch (Exception $e) {
-        $product_error = "Error deleting product: " . $e->getMessage();
-    }
+    $db->prepare("DELETE FROM products WHERE id = ?")->execute([$prod_id]);
+    header('Location: index.php?tab=products-tab&msg=deleted');
+    exit;
 }
 
-// Handle CSV Database Export Request
+// -------------------------------------------------------------
+// 5. CSV EXPORT
+// -------------------------------------------------------------
 if ($authenticated && isset($_GET['export']) && $_GET['export'] === 'csv') {
     header('Content-Type: text/csv; charset=utf-8');
     header('Content-Disposition: attachment; filename=tatvam_customers_' . date('Y-m-d') . '.csv');
-    
     $output = fopen('php://output', 'w');
-    fputcsv($output, ['Order ID', 'Customer Name', 'Email Address', 'WhatsApp Phone', 'Product Purchased', 'Amount', 'Date']);
+    fputcsv($output, ['Order ID', 'Customer Name', 'Email Address', 'WhatsApp Phone', 'Product Purchased', 'Amount', 'Payment Status', 'Date']);
 
-    $stmt = $db->query("SELECT orders.*, products.title FROM orders JOIN products ON orders.product_id = products.id WHERE orders.payment_status = 'paid' ORDER BY orders.id DESC");
-    
+    $stmt = $db->query("SELECT orders.*, products.title FROM orders JOIN products ON orders.product_id = products.id ORDER BY orders.id DESC");
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        fputcsv($output, [
-            $row['id'],
-            $row['customer_name'],
-            $row['customer_email'],
-            $row['customer_phone'],
-            $row['title'],
-            'INR ' . $row['amount'],
-            $row['created_at']
-        ]);
+        fputcsv($output, [$row['id'], $row['customer_name'], $row['customer_email'], $row['customer_phone'], $row['title'], 'INR ' . $row['amount'], strtoupper($row['payment_status']), $row['created_at']]);
     }
-    
     fclose($output);
     exit;
 }
 
-// Fetch Metrics if authenticated
-$total_revenue = 0.00;
-$total_orders = 0;
+// -------------------------------------------------------------
+// 6. METRICS & P&L DATA AGGREGATION
+// -------------------------------------------------------------
+$total_revenue       = 0.00;
+$total_paid_orders   = 0;
+$total_pending_orders= 0;
+$total_failed_orders = 0;
 $average_order_value = 0.00;
-$recent_orders = [];
-$all_products = [];
+
+$search_query   = trim($_GET['search'] ?? '');
+$status_filter  = trim($_GET['status'] ?? '');
+$product_filter = (int)($_GET['product_id'] ?? 0);
 
 if ($authenticated) {
     try {
-        $revenue_stmt = $db->query("SELECT SUM(amount) FROM orders WHERE payment_status = 'paid'");
-        $total_revenue = (float)$revenue_stmt->fetchColumn();
+        $total_revenue        = (float)$db->query("SELECT SUM(amount) FROM orders WHERE payment_status = 'paid'")->fetchColumn();
+        $total_paid_orders    = (int)$db->query("SELECT COUNT(*) FROM orders WHERE payment_status = 'paid'")->fetchColumn();
+        $total_pending_orders = (int)$db->query("SELECT COUNT(*) FROM orders WHERE payment_status = 'pending'")->fetchColumn();
+        $total_failed_orders  = (int)$db->query("SELECT COUNT(*) FROM orders WHERE payment_status = 'failed'")->fetchColumn();
+        $average_order_value  = $total_paid_orders > 0 ? ($total_revenue / $total_paid_orders) : 0.00;
 
-        $orders_stmt = $db->query("SELECT COUNT(*) FROM orders WHERE payment_status = 'paid'");
-        $total_orders = (int)$orders_stmt->fetchColumn();
+        // Build Order Search & Filter Query
+        $where_clauses = [];
+        $params = [];
 
-        if ($total_orders > 0) {
-            $average_order_value = $total_revenue / $total_orders;
+        if (!empty($search_query)) {
+            $where_clauses[] = "(orders.customer_name LIKE ? OR orders.customer_email LIKE ? OR orders.customer_phone LIKE ? OR orders.id = ?)";
+            $params[] = "%$search_query%";
+            $params[] = "%$search_query%";
+            $params[] = "%$search_query%";
+            $params[] = (int)$search_query;
         }
 
-        $recent_stmt = $db->query("SELECT orders.*, products.title FROM orders JOIN products ON orders.product_id = products.id ORDER BY orders.id DESC LIMIT 30");
-        $recent_orders = $recent_stmt->fetchAll(PDO::FETCH_ASSOC);
+        if (!empty($status_filter)) {
+            $where_clauses[] = "orders.payment_status = ?";
+            $params[] = $status_filter;
+        }
 
-        $products_stmt = $db->query("SELECT * FROM products ORDER BY id DESC");
-        $all_products = $products_stmt->fetchAll(PDO::FETCH_ASSOC);
+        if ($product_filter > 0) {
+            $where_clauses[] = "orders.product_id = ?";
+            $params[] = $product_filter;
+        }
+
+        $where_sql = count($where_clauses) > 0 ? 'WHERE ' . implode(' AND ', $where_clauses) : '';
+        $orders_sql = "SELECT orders.*, products.title FROM orders JOIN products ON orders.product_id = products.id {$where_sql} ORDER BY orders.id DESC LIMIT 100";
+        $stmt = $db->prepare($orders_sql);
+        $stmt->execute($params);
+        $recent_orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $all_products = $db->query("SELECT * FROM products ORDER BY id DESC")->fetchAll(PDO::FETCH_ASSOC);
+
+        // Fetch Daily Financial Calculation (Last 14 Days)
+        $daily_pnl = [];
+        for ($i = 0; $i < 14; $i++) {
+            $d = date('Y-m-d', strtotime("-$i days"));
+            // Fetch gross revenue for date
+            $rev_stmt = $db->prepare("SELECT SUM(amount), COUNT(*) FROM orders WHERE payment_status = 'paid' AND date(created_at) = ?");
+            $rev_stmt->execute([$d]);
+            $row = $rev_stmt->fetch(PDO::FETCH_NUM);
+            $day_gross = (float)($row[0] ?? 0);
+            $day_orders= (int)($row[1] ?? 0);
+
+            // Gateway fees (2.36% Cashfree / Razorpay standard with GST)
+            $pg_fee = $day_gross * 0.0236;
+            $net_remittance = $day_gross - $pg_fee;
+
+            // Fetch ad spend from daily_calculations table
+            $ad_stmt = $db->prepare("SELECT ad_spend, notes FROM daily_calculations WHERE calc_date = ?");
+            $ad_stmt->execute([$d]);
+            $calc_row = $ad_stmt->fetch(PDO::FETCH_ASSOC);
+
+            $ad_spend = (float)($calc_row['ad_spend'] ?? 0);
+            $notes    = $calc_row['notes'] ?? '';
+
+            $net_profit = $net_remittance - $ad_spend;
+            $roas       = $ad_spend > 0 ? number_format($day_gross / $ad_spend, 2) . 'x' : 'N/A';
+
+            $daily_pnl[] = [
+                'date'           => $d,
+                'gross_revenue'  => $day_gross,
+                'orders'         => $day_orders,
+                'pg_fee'         => $pg_fee,
+                'net_remittance' => $net_remittance,
+                'ad_spend'       => $ad_spend,
+                'net_profit'     => $net_profit,
+                'roas'           => $roas,
+                'notes'          => $notes,
+            ];
+        }
 
     } catch (Exception $e) {
-        $db_error = "Failed to query analytical metrics: " . $e->getMessage();
+        $db_error = "Error querying analytics: " . $e->getMessage();
     }
 }
 ?>
@@ -254,32 +407,31 @@ if ($authenticated) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel | TATVAM Store</title>
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <title>SaaS Admin Dashboard | TATVAM</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest" defer></script>
- 
-    <!-- Master CSS -->
-    <link rel="stylesheet" href="../styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="../styles.css?v=2.4">
+    <style>
+        .pnl-table th, .pnl-table td { padding: 0.75rem 0.6rem; text-align: left; font-size: 0.85rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .pnl-table input { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); color: #fff; border-radius: 4px; padding: 4px 8px; width: 90px; font-size: 0.85rem; }
+        .badge-paid { background: rgba(16,185,129,0.15); color: #10B981; border: 1px solid rgba(16,185,129,0.3); padding: 3px 10px; border-radius: 12px; font-weight: 600; font-size: 0.78rem; }
+        .badge-pending { background: rgba(245,158,11,0.15); color: #F59E0B; border: 1px solid rgba(245,158,11,0.3); padding: 3px 10px; border-radius: 12px; font-weight: 600; font-size: 0.78rem; }
+        .badge-failed { background: rgba(239,68,68,0.15); color: #EF4444; border: 1px solid rgba(239,68,68,0.3); padding: 3px 10px; border-radius: 12px; font-weight: 600; font-size: 0.78rem; }
+    </style>
 </head>
-<body class="admin-wrapper" style="padding-top: 0;">
+<body class="admin-wrapper" style="padding-top: 0; background: var(--color-bg-1);">
 
-    <!-- BACKGROUND CANVAS -->
     <div class="bg-canvas"></div>
     <div class="noise-overlay"></div>
 
     <?php if (!$authenticated): ?>
         <!-- LOGIN PORTAL VIEW -->
         <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at center, var(--color-bg-2) 0%, var(--color-bg-1) 100%);">
-            <div class="glass-card" style="width: 100%; max-width: 400px; padding: var(--space-md); border-color: var(--color-border-gold); z-index: 2; position: relative;">
-                <div style="text-align: center; margin-bottom: var(--space-md);">
+            <div class="glass-card" style="width: 100%; max-width: 400px; padding: 2rem; border-color: var(--color-border-gold); z-index: 2; position: relative;">
+                <div style="text-align: center; margin-bottom: 1.5rem;">
                     <h2 class="gradient-gold" style="font-size: 1.85rem; margin-bottom: 0.25rem;">TATVAM Admin</h2>
-                    <p>Enter credentials to access revenue panel.</p>
+                    <p style="color: var(--color-text-slate); font-size: 0.9rem;">Enter authorized credentials</p>
                 </div>
 
                 <?php if (isset($login_error)): ?>
@@ -298,92 +450,196 @@ if ($authenticated) {
                         <input type="password" name="password" id="password" class="form-input" required placeholder=" ">
                         <label for="password" class="form-label">Password</label>
                     </div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <button type="submit" class="btn btn-primary" style="width: 100%; color: #000 !important;">
                         Authorize Panel <i data-lucide="shield-check"></i>
                     </button>
                 </form>
             </div>
         </div>
     <?php else: ?>
-        <!-- AUTHENTICATED PANEL VIEW -->
-        <header class="admin-header" style="position: relative; z-index: 10; padding: var(--space-sm) 0; border-bottom: 1px solid rgba(255,255,255,0.06); background: rgba(3,5,12,0.5);">
+        <!-- AUTHENTICATED SaaS DASHBOARD VIEW -->
+        <header class="admin-header" style="position: relative; z-index: 10; padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,0.06); background: rgba(3,5,12,0.85); backdrop-filter: blur(10px);">
             <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
-                <h1 class="admin-logo" style="font-size: 1.5rem;">TATVAM<span>.</span> <span style="font-size: 0.95rem; font-weight: 400; color: var(--color-text-slate); margin-left: 0.5rem;">Admin Panel</span></h1>
-                <div style="display: flex; gap: var(--space-sm); align-items: center;">
-                    <a href="?export=csv" class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, #FFE082 0%, var(--color-gold) 100%); color: #000; box-shadow: none;"><i data-lucide="download"></i> Export Customers (CSV)</a>
+                <h1 class="admin-logo" style="font-size: 1.5rem;">TATVAM<span>.</span> <span style="font-size: 0.9rem; font-weight: 400; color: var(--color-gold); margin-left: 0.5rem; background: rgba(251,191,36,0.1); padding: 2px 10px; border-radius: 12px; border: 1px solid rgba(251,191,36,0.2);">Executive SaaS Dashboard</span></h1>
+                <div style="display: flex; gap: 0.75rem; align-items: center;">
+                    <a href="?export=csv" class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, #FFE082 0%, var(--color-gold) 100%); color: #000 !important; box-shadow: none; font-weight: 700;"><i data-lucide="download"></i> Export Orders (CSV)</a>
                     <a href="?action=logout" class="btn btn-secondary btn-sm" style="background: transparent; color: #EF4444; border-color: rgba(239,68,68,0.2);"><i data-lucide="log-out"></i> Logout</a>
                 </div>
             </div>
         </header>
 
-        <main class="container" style="padding-top: var(--space-md); padding-bottom: var(--space-lg); position: relative; z-index: 2;">
-            
+        <main class="container" style="padding-top: 1.5rem; padding-bottom: 3rem; position: relative; z-index: 2;">
+
+            <!-- Flash Alert Messages -->
+            <?php if (isset($_GET['msg'])): ?>
+                <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: #10B981; padding: 0.85rem 1.2rem; border-radius: 8px; margin-bottom: 1.5rem; font-weight: 500; font-size: 0.9rem;">
+                    <?php 
+                        if ($_GET['msg'] === 'sync_success') echo '✅ Payment Status Verified & Download Email Dispatched to Customer!';
+                        elseif ($_GET['msg'] === 'sync_no_payment') echo '⚠️ Payment status is still pending or not completed on Cashfree.';
+                        elseif ($_GET['msg'] === 'email_sent') echo '📩 Download link email resent successfully!';
+                        elseif ($_GET['msg'] === 'deleted') echo '🗑️ E-Book product deleted.';
+                    ?>
+                </div>
+            <?php endif; ?>
+
             <!-- Admin Navigation Tabs -->
-            <div style="display: flex; gap: var(--space-md); border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: var(--space-xs); margin-bottom: var(--space-md);">
-                <button class="tab-btn active" id="btn-orders" onclick="switchTab('orders-tab')" style="background: none; border: none; color: var(--color-text-white); font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; cursor: pointer; padding-bottom: var(--space-xs); border-bottom: 2px solid var(--color-gold); transition: all 0.2s;">Sales & Orders</button>
-                <button class="tab-btn" id="btn-products" onclick="switchTab('products-tab')" style="background: none; border: none; color: var(--color-text-slate); font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; cursor: pointer; padding-bottom: var(--space-xs); border-bottom: 2px solid transparent; transition: all 0.2s;">Manage Ebooks</button>
+            <div style="display: flex; gap: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 0.75rem; margin-bottom: 1.5rem;">
+                <button class="tab-btn active" id="btn-pnl" onclick="switchTab('pnl-tab')" style="background: none; border: none; color: var(--color-gold); font-family: var(--font-heading); font-size: 1.1rem; font-weight: 700; cursor: pointer; padding-bottom: 0.5rem; border-bottom: 2px solid var(--color-gold);">📊 Analytics & P&L</button>
+                <button class="tab-btn" id="btn-orders" onclick="switchTab('orders-tab')" style="background: none; border: none; color: var(--color-text-slate); font-family: var(--font-heading); font-size: 1.1rem; font-weight: 700; cursor: pointer; padding-bottom: 0.5rem; border-bottom: 2px solid transparent;">🛍️ Order Pipeline</button>
+                <button class="tab-btn" id="btn-products" onclick="switchTab('products-tab')" style="background: none; border: none; color: var(--color-text-slate); font-family: var(--font-heading); font-size: 1.1rem; font-weight: 700; cursor: pointer; padding-bottom: 0.5rem; border-bottom: 2px solid transparent;">📦 Manage E-Books</button>
             </div>
 
-            <!-- TAB 1: ORDERS & ANALYTICS -->
-            <div id="orders-tab">
-                <!-- Metrics Row -->
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-md); margin-bottom: var(--space-lg);">
-                    <div class="glass-card">
-                        <h4 style="font-size: 0.85rem; text-transform: uppercase; color: var(--color-text-slate);">Total Sales Volume</h4>
-                        <p class="gradient-gold" style="font-size: 1.85rem; font-weight: 800; margin-top: 0.25rem;">INR <?php echo number_format($total_revenue, 2); ?></p>
+            <!-- TAB 1: ANALYTICS & P&L CALCULATOR -->
+            <div id="pnl-tab">
+                <!-- KPI CARDS OVERVIEW -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
+                    <div class="glass-card" style="padding: 1.25rem;">
+                        <span style="font-size: 0.75rem; text-transform: uppercase; color: var(--color-text-slate); font-weight: 700; letter-spacing: 0.05em;">Total Gross Revenue</span>
+                        <p class="gradient-gold" style="font-size: 1.85rem; font-weight: 800; margin-top: 0.35rem;">₹<?php echo number_format($total_revenue, 2); ?></p>
                     </div>
-                    <div class="glass-card">
-                        <h4 style="font-size: 0.85rem; text-transform: uppercase; color: var(--color-text-slate);">Total Orders (Paid)</h4>
-                        <p class="gradient-purple" style="font-size: 1.85rem; font-weight: 800; margin-top: 0.25rem; color: var(--color-primary);"><?php echo $total_orders; ?> Purchases</p>
+                    <div class="glass-card" style="padding: 1.25rem;">
+                        <span style="font-size: 0.75rem; text-transform: uppercase; color: #10B981; font-weight: 700; letter-spacing: 0.05em;">Paid Completed Orders</span>
+                        <p style="font-size: 1.85rem; font-weight: 800; margin-top: 0.35rem; color: #10B981;"><?php echo $total_paid_orders; ?> Sales</p>
                     </div>
-                    <div class="glass-card">
-                        <h4 style="font-size: 0.85rem; text-transform: uppercase; color: var(--color-text-slate);">Average Order Value</h4>
-                        <p style="font-size: 1.85rem; font-weight: 800; margin-top: 0.25rem; color: #fff;">INR <?php echo number_format($average_order_value, 2); ?></p>
+                    <div class="glass-card" style="padding: 1.25rem;">
+                        <span style="font-size: 0.75rem; text-transform: uppercase; color: #F59E0B; font-weight: 700; letter-spacing: 0.05em;">Pending Checkouts</span>
+                        <p style="font-size: 1.85rem; font-weight: 800; margin-top: 0.35rem; color: #F59E0B;"><?php echo $total_pending_orders; ?></p>
+                    </div>
+                    <div class="glass-card" style="padding: 1.25rem;">
+                        <span style="font-size: 0.75rem; text-transform: uppercase; color: var(--color-text-slate); font-weight: 700; letter-spacing: 0.05em;">Average Order Value (AOV)</span>
+                        <p style="font-size: 1.85rem; font-weight: 800; margin-top: 0.35rem; color: #fff;">₹<?php echo number_format($average_order_value, 2); ?></p>
                     </div>
                 </div>
 
-                <!-- Table Block -->
-                <div class="section-head" style="text-align: left; margin-bottom: var(--space-sm); max-width: 100%;">
-                    <h2 style="font-size: 1.75rem;">Recent Order Pipeline</h2>
-                    <p>Real-time log of the latest 30 transactions.</p>
+                <!-- CHART & ANALYTICS VISUALIZER -->
+                <div class="glass-card" style="padding: 1.5rem; margin-bottom: 2rem;">
+                    <h3 style="font-size: 1.2rem; color: var(--color-gold); margin-bottom: 1rem;">📈 14-Day Sales & Remittance Trend</h3>
+                    <div style="height: 260px; width: 100%;">
+                        <canvas id="salesChart"></canvas>
+                    </div>
                 </div>
 
-                <div class="admin-table-container" style="background: var(--panel-bg); border: 1px solid var(--border-light); border-radius: var(--radius-md); overflow-x: auto;">
-                    <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+                <!-- P&L CALCULATOR TABLE -->
+                <div class="glass-card" style="padding: 1.5rem; overflow-x: auto;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 10px;">
+                        <div>
+                            <h3 style="font-size: 1.25rem; color: #fff; margin: 0;">💰 Daily Financial & P&L Tracker</h3>
+                            <p style="font-size: 0.82rem; color: var(--color-text-slate); margin-top: 2px;">Enter daily Meta/Google Ad Spend to calculate Net Profit & ROAS in real-time.</p>
+                        </div>
+                    </div>
+
+                    <table class="pnl-table" style="width: 100%; border-collapse: collapse;">
                         <thead>
-                            <tr style="border-bottom: 1px solid var(--border-light); color: var(--color-text-slate);">
-                                <th style="padding: 1rem;">Order ID</th>
+                            <tr style="color: var(--color-gold); font-size: 0.8rem; border-bottom: 1px solid var(--border-light);">
+                                <th>Date</th>
+                                <th>Orders</th>
+                                <th>Gross Revenue</th>
+                                <th>PG Fee (2.36%)</th>
+                                <th>Net Remittance</th>
+                                <th>Ad Spend (₹)</th>
+                                <th>Net Profit (₹)</th>
+                                <th>ROAS</th>
+                                <th>Action / Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($daily_pnl as $row): ?>
+                                <tr>
+                                    <td style="font-weight: 600; color: #fff;"><?php echo date('d M Y (D)', strtotime($row['date'])); ?></td>
+                                    <td><span class="badge-paid"><?php echo $row['orders']; ?> sales</span></td>
+                                    <td style="color: #fff; font-weight: 600;">₹<?php echo number_format($row['gross_revenue'], 2); ?></td>
+                                    <td style="color: rgba(255,255,255,0.4);">₹<?php echo number_format($row['pg_fee'], 2); ?></td>
+                                    <td style="color: var(--color-gold); font-weight: 600;">₹<?php echo number_format($row['net_remittance'], 2); ?></td>
+                                    <td>
+                                        <input type="number" step="0.01" id="adspend-<?php echo $row['date']; ?>" value="<?php echo $row['ad_spend'] > 0 ? $row['ad_spend'] : ''; ?>" placeholder="0.00">
+                                    </td>
+                                    <td style="font-weight: 700; color: <?php echo $row['net_profit'] >= 0 ? '#10B981' : '#EF4444'; ?>;">
+                                        ₹<?php echo number_format($row['net_profit'], 2); ?>
+                                    </td>
+                                    <td style="font-weight: 700; color: var(--color-gold);"><?php echo $row['roas']; ?></td>
+                                    <td>
+                                        <div style="display: flex; gap: 6px; align-items: center;">
+                                            <input type="text" id="notes-<?php echo $row['date']; ?>" value="<?php echo htmlspecialchars($row['notes']); ?>" placeholder="Notes..." style="width: 110px;">
+                                            <button onclick="saveAdSpend('<?php echo $row['date']; ?>')" class="btn btn-primary btn-sm" style="padding: 4px 10px; font-size: 0.75rem; color: #000 !important;">Save</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB 2: ORDER PIPELINE & RECOVERY -->
+            <div id="orders-tab" style="display: none;">
+                <!-- SEARCH & FILTER BAR -->
+                <div class="glass-card" style="padding: 1rem; margin-bottom: 1.5rem;">
+                    <form method="GET" style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;">
+                        <input type="hidden" name="tab" value="orders-tab">
+                        <div style="flex: 1; min-width: 200px;">
+                            <input type="text" name="search" class="form-input" value="<?php echo htmlspecialchars($search_query); ?>" placeholder="Search by Order ID, Name, Email or Phone..." style="padding: 0.6rem 1rem; font-size: 0.85rem;">
+                        </div>
+                        <select name="status" class="form-input" style="width: 140px; padding: 0.6rem 0.8rem; font-size: 0.85rem; color: #fff; background: rgba(255,255,255,0.05);">
+                            <option value="" style="background:#0b132b;">All Statuses</option>
+                            <option value="paid" <?php echo $status_filter === 'paid' ? 'selected' : ''; ?> style="background:#0b132b;">Paid Only</option>
+                            <option value="pending" <?php echo $status_filter === 'pending' ? 'selected' : ''; ?> style="background:#0b132b;">Pending Only</option>
+                        </select>
+                        <select name="product_id" class="form-input" style="width: 160px; padding: 0.6rem 0.8rem; font-size: 0.85rem; color: #fff; background: rgba(255,255,255,0.05);">
+                            <option value="0" style="background:#0b132b;">All Products</option>
+                            <?php foreach ($all_products as $p): ?>
+                                <option value="<?php echo $p['id']; ?>" <?php echo $product_filter == $p['id'] ? 'selected' : ''; ?> style="background:#0b132b;"><?php echo htmlspecialchars($p['title']); ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <button type="submit" class="btn btn-primary btn-sm" style="color: #000 !important; font-weight: 700; padding: 0.65rem 1.2rem;">Filter Orders</button>
+                        <a href="index.php?tab=orders-tab" class="btn btn-secondary btn-sm" style="padding: 0.65rem 1rem; font-size: 0.8rem;">Reset</a>
+                    </form>
+                </div>
+
+                <!-- ORDERS PIPELINE TABLE -->
+                <div class="admin-table-container" style="background: var(--panel-bg); border: 1px solid var(--border-light); border-radius: var(--radius-md); overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem;">
+                        <thead>
+                            <tr style="border-bottom: 1px solid var(--border-light); color: var(--color-gold); font-size: 0.8rem;">
+                                <th style="padding: 1rem;">ID</th>
                                 <th style="padding: 1rem;">Customer Details</th>
-                                <th style="padding: 1rem;">Product Name</th>
+                                <th style="padding: 1rem;">Product Purchased</th>
                                 <th style="padding: 1rem;">Amount</th>
                                 <th style="padding: 1rem;">Status</th>
                                 <th style="padding: 1rem;">Date & Time</th>
+                                <th style="padding: 1rem;">Cashfree Sync / Recovery Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php if (count($recent_orders) > 0): ?>
                                 <?php foreach ($recent_orders as $order): ?>
                                     <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
-                                        <td style="padding: 1rem;">#<?php echo $order['id']; ?></td>
+                                        <td style="padding: 1rem; font-weight: 600;">#<?php echo $order['id']; ?></td>
                                         <td style="padding: 1rem;">
-                                            <div style="font-weight: 600; color: var(--color-text-white);"><?php echo htmlspecialchars($order['customer_name']); ?></div>
+                                            <div style="font-weight: 600; color: #fff;"><?php echo htmlspecialchars($order['customer_name']); ?></div>
                                             <div style="font-size: 0.8rem; color: var(--color-text-slate);"><?php echo htmlspecialchars($order['customer_email']); ?> | <?php echo htmlspecialchars($order['customer_phone']); ?></div>
                                         </td>
-                                        <td style="padding: 1rem;"><?php echo htmlspecialchars($order['title']); ?></td>
-                                        <td style="padding: 1rem;">INR <?php echo number_format($order['amount'], 2); ?></td>
+                                        <td style="padding: 1rem; color: #fff;"><?php echo htmlspecialchars($order['title']); ?></td>
+                                        <td style="padding: 1rem; font-weight: 700; color: var(--color-gold);">₹<?php echo number_format($order['amount'], 2); ?></td>
                                         <td style="padding: 1rem;">
                                             <?php if ($order['payment_status'] === 'paid'): ?>
-                                                <span style="color: #10B981; background: rgba(16, 185, 129, 0.1); padding: 2px 8px; border-radius: var(--radius-full); font-size: 0.8rem; font-weight: 600;">Paid</span>
+                                                <span class="badge-paid">PAID</span>
                                             <?php else: ?>
-                                                <span style="color: var(--color-text-slate); background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: var(--radius-full); font-size: 0.8rem;">Pending</span>
+                                                <span class="badge-pending">PENDING</span>
                                             <?php endif; ?>
                                         </td>
-                                        <td style="padding: 1rem;"><?php echo date('M d, Y h:i A', strtotime($order['created_at'])); ?></td>
+                                        <td style="padding: 1rem; color: rgba(255,255,255,0.6); font-size: 0.8rem;"><?php echo date('M d, Y h:i A', strtotime($order['created_at'])); ?></td>
+                                        <td style="padding: 1rem;">
+                                            <?php if ($order['payment_status'] === 'pending'): ?>
+                                                <a href="?action=sync_order&id=<?php echo $order['id']; ?>" class="btn btn-primary btn-sm" style="font-size: 0.75rem; padding: 4px 10px; color: #000 !important;" title="Verify with Cashfree API">🔄 Sync Cashfree API</a>
+                                            <?php else: ?>
+                                                <a href="?action=resend_email&id=<?php echo $order['id']; ?>" class="btn btn-secondary btn-sm" style="font-size: 0.75rem; padding: 4px 10px;" title="Resend download link to customer email">📩 Resend Email Link</a>
+                                            <?php endif; ?>
+                                        </td>
                                     </tr>
                                 <?php endforeach; ?>
                             <?php else: ?>
                                 <tr>
-                                    <td colspan="6" style="text-align: center; color: var(--color-text-slate); padding: var(--space-md) 0;">No transactions registered in database yet.</td>
+                                    <td colspan="7" style="text-align: center; color: var(--color-text-slate); padding: 2rem 0;">No matching orders found.</td>
                                 </tr>
                             <?php endif; ?>
                         </tbody>
@@ -391,24 +647,12 @@ if ($authenticated) {
                 </div>
             </div>
 
-            <!-- TAB 2: MANAGE EBOOKS -->
+            <!-- TAB 3: MANAGE EBOOKS -->
             <div id="products-tab" style="display: none;">
-                
-                <?php if (isset($product_success)): ?>
-                    <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); color: #10B981; padding: 1rem; border-radius: var(--radius-md); margin-bottom: var(--space-md);">
-                        <?php echo $product_success; ?>
-                    </div>
-                <?php endif; ?>
-                <?php if (isset($product_error)): ?>
-                    <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); color: #EF4444; padding: 1rem; border-radius: var(--radius-md); margin-bottom: var(--space-md);">
-                        <?php echo $product_error; ?>
-                    </div>
-                <?php endif; ?>
-
-                <div style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: var(--space-lg); align-items: start;">
+                <div style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 1.5rem; align-items: start;">
                     <!-- Add Product Card -->
-                    <div class="glass-card" style="padding: var(--space-md);">
-                        <h3 style="font-size: 1.5rem; margin-bottom: var(--space-sm); color: var(--color-gold);">Upload New E-Book</h3>
+                    <div class="glass-card" style="padding: 1.5rem;">
+                        <h3 style="font-size: 1.35rem; margin-bottom: 1rem; color: var(--color-gold);">✨ Add New E-Book Product</h3>
                         <form method="POST" enctype="multipart/form-data">
                             <input type="hidden" name="action" value="add_product">
                             
@@ -422,7 +666,7 @@ if ($authenticated) {
                                 <label for="p-slug" class="form-label">URL Slug (e.g. positive-thinking)</label>
                             </div>
 
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-sm);">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                                 <div class="form-group">
                                     <input type="number" step="0.01" name="price" id="p-price" class="form-input" required placeholder=" ">
                                     <label for="p-price" class="form-label">Price (INR)</label>
@@ -440,45 +684,45 @@ if ($authenticated) {
 
                             <div class="form-group">
                                 <textarea name="description" id="p-desc" class="form-input" rows="3" required placeholder=" " style="resize: none; padding-top: 1rem;"></textarea>
-                                <label for="p-desc" class="form-label" style="top: 0.6rem;">E-Book Short Description</label>
+                                <label for="p-desc" class="form-label" style="top: 0.6rem;">Description</label>
                             </div>
 
-                            <div class="form-group" style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-light); padding: var(--space-sm); border-radius: var(--radius-sm);">
-                                <label style="display: block; font-size: 0.8rem; color: var(--color-text-slate); margin-bottom: var(--space-xxs);">E-Book Cover Image (JPG / PNG)</label>
-                                <input type="file" name="cover_image" accept="image/*" required style="font-size: 0.9rem; color: var(--color-text-slate);">
+                            <div class="form-group" style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-light); padding: 0.75rem; border-radius: 6px;">
+                                <label style="display: block; font-size: 0.8rem; color: var(--color-gold); margin-bottom: 4px;">🖼️ Cover Image (JPG / PNG)</label>
+                                <input type="file" name="cover_image" accept="image/*" required style="font-size: 0.85rem; color: var(--color-text-slate);">
                             </div>
 
-                            <div class="form-group" style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-light); padding: var(--space-sm); border-radius: var(--radius-sm);">
-                                <label style="display: block; font-size: 0.8rem; color: var(--color-text-slate); margin-bottom: var(--space-xxs);">PDF Guide File or Bundle ZIP</label>
-                                <input type="file" name="ebook_file" accept=".pdf,.zip" required style="font-size: 0.9rem; color: var(--color-text-slate);">
+                            <div class="form-group" style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-light); padding: 0.75rem; border-radius: 6px;">
+                                <label style="display: block; font-size: 0.8rem; color: var(--color-gold); margin-bottom: 4px;">📄 E-Book Files (Main & Bonus PDFs - Multiple allowed)</label>
+                                <input type="file" name="ebook_file[]" accept=".pdf,.zip" multiple required style="font-size: 0.85rem; color: var(--color-text-slate);">
                             </div>
 
-                            <button type="submit" class="btn btn-primary" style="width: 100%;">
-                                Upload E-Book <i data-lucide="plus-circle"></i>
+                            <button type="submit" class="btn btn-primary" style="width: 100%; color: #000 !important; font-weight: 700;">
+                                Create E-Book <i data-lucide="plus-circle"></i>
                             </button>
                         </form>
                     </div>
 
-                    <!-- Products List Grid -->
+                    <!-- Products Catalog Grid -->
                     <div>
-                        <h3 style="font-size: 1.5rem; margin-bottom: var(--space-sm); color: var(--color-primary);">Current Catalog</h3>
-                        <div style="display: flex; flex-direction: column; gap: var(--space-sm);">
+                        <h3 style="font-size: 1.35rem; margin-bottom: 1rem; color: var(--color-primary);">Current Catalog</h3>
+                        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
                             <?php foreach ($all_products as $prod): ?>
-                                <div class="glass-card" style="display: flex; gap: var(--space-sm); align-items: center; padding: var(--space-xs);">
-                                    <img src="../<?php echo htmlspecialchars($prod['cover_image']); ?>" onerror="this.src='../assets/book-cover.jpg';" style="width: 50px; height: 70px; object-fit: cover; border-radius: 4px; box-shadow: 0 4px 8px rgba(0,0,0,0.3);">
+                                <div class="glass-card" style="display: flex; gap: 1rem; align-items: center; padding: 0.85rem;">
+                                    <img src="../<?php echo htmlspecialchars($prod['cover_image']); ?>" onerror="this.src='../assets/book-cover.jpg';" style="width: 45px; height: 65px; object-fit: cover; border-radius: 4px;">
                                     <div style="flex: 1;">
-                                        <h4 style="font-size: 0.95rem; color: #fff;"><?php echo htmlspecialchars($prod['title']); ?></h4>
-                                        <span style="font-size: 0.8rem; color: var(--color-text-slate);"><?php echo htmlspecialchars($prod['category']); ?></span>
-                                        <div style="font-size: 0.85rem; font-weight: bold; color: var(--color-gold); margin-top: 4px;">
-                                            INR <?php echo $prod['price']; ?> <del style="font-weight: normal; font-size: 0.75rem; color: var(--color-text-slate); margin-left: 4px;">INR <?php echo $prod['original_price']; ?></del>
+                                        <h4 style="font-size: 0.92rem; color: #fff; margin: 0;"><?php echo htmlspecialchars($prod['title']); ?></h4>
+                                        <span style="font-size: 0.78rem; color: var(--color-text-slate);"><?php echo htmlspecialchars($prod['category']); ?></span>
+                                        <div style="font-size: 0.85rem; font-weight: bold; color: var(--color-gold); margin-top: 2px;">
+                                            ₹<?php echo $prod['price']; ?> <del style="font-weight: normal; font-size: 0.75rem; color: var(--color-text-slate);">₹<?php echo $prod['original_price']; ?></del>
                                         </div>
                                     </div>
                                     <div style="display: flex; flex-direction: column; gap: 6px;">
-                                        <button onclick="openEditModal(<?php echo htmlspecialchars(json_encode($prod)); ?>)" style="color: var(--color-gold); padding: 8px; border: 1px solid rgba(212,175,55,0.3); border-radius: var(--radius-sm); background: rgba(212,175,55,0.08); display: inline-flex; cursor: pointer;" title="Edit E-Book">
-                                            <i data-lucide="pencil" style="width: 16px; height: 16px;"></i>
+                                        <button onclick="openEditModal(<?php echo htmlspecialchars(json_encode($prod)); ?>)" style="color: var(--color-gold); padding: 6px 10px; border: 1px solid rgba(212,175,55,0.3); border-radius: 6px; background: rgba(212,175,55,0.08); cursor: pointer;" title="Edit E-Book">
+                                            ✏️ Edit
                                         </button>
-                                        <a href="?action=delete_product&id=<?php echo $prod['id']; ?>" onclick="return confirm('Are you sure you want to delete this product?');" style="color: #EF4444; padding: 8px; border: 1px solid rgba(239,68,68,0.2); border-radius: var(--radius-sm); display: inline-flex;" title="Delete Product">
-                                            <i data-lucide="trash-2" style="width: 16px; height: 16px;"></i>
+                                        <a href="?action=delete_product&id=<?php echo $prod['id']; ?>" onclick="return confirm('Are you sure you want to delete this product?');" style="color: #EF4444; padding: 6px 10px; border: 1px solid rgba(239,68,68,0.2); border-radius: 6px; text-decoration: none; font-size: 0.8rem;" title="Delete Product">
+                                            🗑️ Delete
                                         </a>
                                     </div>
                                 </div>
@@ -490,12 +734,12 @@ if ($authenticated) {
 
         </main>
 
-        <!-- EDIT E-BOOK MODAL -->
-        <div id="edit-modal-overlay" onclick="closeEditModal()" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:1000; align-items:center; justify-content:center; padding:1rem;">
+        <!-- EDIT E-BOOK MODAL WITH LIVE AJAX PROGRESS BAR -->
+        <div id="edit-modal-overlay" onclick="closeEditModal()" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:1000; align-items:center; justify-content:center; padding:1rem;">
             <div onclick="event.stopPropagation()" style="background:#0b132b; border:1px solid rgba(212,175,55,0.35); border-radius:16px; width:100%; max-width:580px; max-height:90vh; overflow-y:auto; padding:2rem; position:relative;">
-                <button onclick="closeEditModal()" style="position:absolute; top:1rem; right:1rem; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#fff; width:36px; height:36px; border-radius:50%; font-size:1.2rem; cursor:pointer; display:flex; align-items:center; justify-content:center;">&times;</button>
+                <button onclick="closeEditModal()" style="position:absolute; top:1rem; right:1rem; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#fff; width:36px; height:36px; border-radius:50%; font-size:1.2rem; cursor:pointer;">&times;</button>
                 
-                <h3 style="font-size:1.4rem; color:var(--color-gold); margin-bottom:1.5rem;">✏️ Edit E-Book</h3>
+                <h3 style="font-size:1.4rem; color:var(--color-gold); margin-bottom:1.5rem;">✏️ Edit E-Book Details</h3>
 
                 <form method="POST" enctype="multipart/form-data" id="edit-ebook-form">
                     <input type="hidden" name="action" value="edit_product">
@@ -511,7 +755,7 @@ if ($authenticated) {
                         <label for="edit-slug" class="form-label">URL Slug</label>
                     </div>
 
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:var(--space-sm);">
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
                         <div class="form-group">
                             <input type="number" step="0.01" name="price" id="edit-price" class="form-input" required placeholder=" ">
                             <label for="edit-price" class="form-label">Price (INR)</label>
@@ -532,20 +776,19 @@ if ($authenticated) {
                         <label for="edit-description" class="form-label" style="top:0.6rem;">Description</label>
                     </div>
 
-                    <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-light); padding:var(--space-sm); border-radius:var(--radius-sm); margin-bottom:var(--space-sm);">
-                        <label style="display:block; font-size:0.8rem; color:var(--color-gold); margin-bottom:6px;">🖼️ Replace Cover Image (optional — JPG/PNG)</label>
-                        <input type="file" name="cover_image" accept="image/*" style="font-size:0.9rem; color:var(--color-text-slate);">
+                    <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-light); padding:0.75rem; border-radius:6px; margin-bottom:1rem;">
+                        <label style="display:block; font-size:0.8rem; color:var(--color-gold); margin-bottom:4px;">🖼️ Replace Cover Image (optional)</label>
+                        <input type="file" name="cover_image" accept="image/*" style="font-size:0.85rem; color:var(--color-text-slate);">
                     </div>
 
-                    <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-light); padding:var(--space-sm); border-radius:var(--radius-sm); margin-bottom:1.5rem;">
+                    <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-light); padding:0.75rem; border-radius:6px; margin-bottom:1.5rem;">
                         <label style="display:block; font-size:0.8rem; color:var(--color-gold); margin-bottom:4px;">📄 Add PDF/ZIP Files (Main & Bonus PDFs)</label>
                         <p id="edit-existing-files" style="font-size:0.75rem; color:rgba(255,255,255,0.5); margin-bottom:8px;"></p>
-                        <input type="file" name="ebook_file[]" id="edit-ebook-files" accept=".pdf,.zip" multiple style="font-size:0.9rem; color:var(--color-text-slate);">
-                        <p style="font-size:0.72rem; color:rgba(255,255,255,0.35); margin-top:6px;">💡 Bonus PDF ऐड करने के लिए Ctrl+Click (Windows) या Cmd+Click (Mac) दबाकर एक साथ multiple PDF/ZIP सिलेक्ट करें</p>
+                        <input type="file" name="ebook_file[]" id="edit-ebook-files" accept=".pdf,.zip" multiple style="font-size:0.85rem; color:var(--color-text-slate);">
                     </div>
 
                     <!-- Progress bar container -->
-                    <div id="upload-progress-box" style="display:none; margin-bottom:1.5rem; background:rgba(255,255,255,0.04); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:1rem;">
+                    <div id="upload-progress-box" style="display:none; margin-bottom:1.5rem; background:rgba(255,255,255,0.04); border:1px solid var(--border-light); border-radius:6px; padding:1rem;">
                         <div style="display:flex; justify-content:space-between; font-size:0.85rem; color:var(--color-gold); margin-bottom:6px;">
                             <span id="upload-status-text">Uploading files...</span>
                             <span id="upload-percent-text">0%</span>
@@ -555,7 +798,7 @@ if ($authenticated) {
                         </div>
                     </div>
 
-                    <button type="submit" id="edit-submit-btn" class="btn btn-primary" style="width:100%;">
+                    <button type="submit" id="edit-submit-btn" class="btn btn-primary" style="width:100%; color: #000 !important; font-weight: 700;">
                         Save Changes &nbsp;<i data-lucide="save" style="display:inline; vertical-align:middle;"></i>
                     </button>
                 </form>
@@ -566,10 +809,86 @@ if ($authenticated) {
 
     <script>
         window.addEventListener('load', () => {
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+            initChart();
+            
+            // Check query tab
+            const urlParams = new URLSearchParams(window.location.search);
+            const tabParam = urlParams.get('tab');
+            if (tabParam) switchTab(tabParam);
         });
+
+        // Initialize Chart.js Trend Visualizer
+        function initChart() {
+            const ctx = document.getElementById('salesChart');
+            if (!ctx) return;
+
+            const pnlData = <?php echo json_encode(array_reverse($daily_pnl ?? [])); ?>;
+            const labels = pnlData.map(d => d.date);
+            const grossData = pnlData.map(d => d.gross_revenue);
+            const netData   = pnlData.map(d => d.net_remittance);
+            const profitData= pnlData.map(d => d.net_profit);
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Gross Revenue (₹)',
+                            data: grossData,
+                            borderColor: '#FBBF24',
+                            backgroundColor: 'rgba(251, 191, 36, 0.1)',
+                            fill: true,
+                            tension: 0.3
+                        },
+                        {
+                            label: 'Net Profit (₹)',
+                            data: profitData,
+                            borderColor: '#10B981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.05)',
+                            fill: true,
+                            tension: 0.3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: '#CBD5E1' } }
+                    },
+                    scales: {
+                        x: { ticks: { color: '#94A3B8' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                        y: { ticks: { color: '#94A3B8' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+                    }
+                }
+            });
+        }
+
+        // AJAX Ad Spend Saver
+        function saveAdSpend(dateStr) {
+            const spendInput = document.getElementById('adspend-' + dateStr);
+            const notesInput = document.getElementById('notes-' + dateStr);
+            if (!spendInput) return;
+
+            const formData = new FormData();
+            formData.append('action', 'save_ad_spend');
+            formData.append('calc_date', dateStr);
+            formData.append('ad_spend', spendInput.value || 0);
+            formData.append('notes', notesInput ? notesInput.value : '');
+
+            fetch('index.php', { method: 'POST', body: formData })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.reload();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch(err => alert('Save failed. Connection error.'));
+        }
 
         function openEditModal(prod) {
             document.getElementById('edit-id').value          = prod.id;
@@ -580,25 +899,27 @@ if ($authenticated) {
             document.getElementById('edit-category').value    = prod.category;
             document.getElementById('edit-description').value = prod.description;
 
-            // Show existing file count
             var existingEl = document.getElementById('edit-existing-files');
             try {
                 var paths = JSON.parse(prod.file_path);
                 if (Array.isArray(paths)) {
-                    existingEl.textContent = '📂 Currently ' + paths.length + ' file(s) attached: ' + paths.map(function(p){ return p.split('/').pop(); }).join(', ');
+                    existingEl.textContent = '📂 Attached: ' + paths.length + ' file(s) (' + paths.map(function(p){ return p.split('/').pop(); }).join(', ') + ')';
                 } else {
-                    existingEl.textContent = prod.file_path ? ('📂 Currently 1 file attached: ' + prod.file_path.split('/').pop()) : '📂 No files attached yet';
+                    existingEl.textContent = prod.file_path ? ('📂 Attached: 1 file (' + prod.file_path.split('/').pop() + ')') : '📂 No files attached';
                 }
             } catch(e) {
-                existingEl.textContent = prod.file_path ? ('📂 Currently 1 file attached: ' + prod.file_path.split('/').pop()) : '📂 No files attached yet';
+                existingEl.textContent = prod.file_path ? ('📂 Attached: 1 file (' + prod.file_path.split('/').pop() + ')') : '📂 No files attached';
             }
 
             var overlay = document.getElementById('edit-modal-overlay');
             overlay.style.display = 'flex';
             document.body.style.overflow = 'hidden';
-
-            // Reinit icons inside modal
             setTimeout(() => { if (typeof lucide !== 'undefined') lucide.createIcons(); }, 100);
+        }
+
+        function closeEditModal() {
+            document.getElementById('edit-modal-overlay').style.display = 'none';
+            document.body.style.overflow = '';
         }
 
         // AJAX Form Submit with Smooth Progress Bar
@@ -606,7 +927,6 @@ if ($authenticated) {
         if (editForm) {
             editForm.addEventListener('submit', function(e) {
                 e.preventDefault();
-
                 const formData = new FormData(editForm);
                 const xhr = new XMLHttpRequest();
 
@@ -618,14 +938,13 @@ if ($authenticated) {
 
                 progressBox.style.display = 'block';
                 submitBtn.disabled = true;
-                submitBtn.style.opacity = '0.5';
 
                 xhr.upload.addEventListener('progress', function(event) {
                     if (event.lengthComputable) {
                         const percent = Math.round((event.loaded / event.total) * 100);
                         progressBar.style.width = percent + '%';
                         percentText.textContent = percent + '%';
-                        statusText.textContent = percent < 100 ? 'Uploading Files...' : 'Processing & Saving...';
+                        statusText.textContent = percent < 100 ? 'Uploading Files...' : 'Processing...';
                     }
                 });
 
@@ -633,23 +952,12 @@ if ($authenticated) {
                     if (xhr.status === 200) {
                         progressBar.style.width = '100%';
                         percentText.textContent = '100%';
-                        statusText.textContent = '✅ Save Complete!';
-                        setTimeout(function() {
-                            window.location.reload();
-                        }, 500);
+                        statusText.textContent = '✅ Saved!';
+                        setTimeout(() => window.location.reload(), 400);
                     } else {
-                        alert('Upload failed: Server error ' + xhr.status);
+                        alert('Upload error.');
                         submitBtn.disabled = false;
-                        submitBtn.style.opacity = '1';
-                        progressBox.style.display = 'none';
                     }
-                });
-
-                xhr.addEventListener('error', function() {
-                    alert('Upload failed: Network connection error.');
-                    submitBtn.disabled = false;
-                    submitBtn.style.opacity = '1';
-                    progressBox.style.display = 'none';
                 });
 
                 xhr.open('POST', 'index.php', true);
@@ -657,22 +965,17 @@ if ($authenticated) {
             });
         }
 
-        function closeEditModal() {
-            document.getElementById('edit-modal-overlay').style.display = 'none';
-            document.body.style.overflow = '';
-        }
-
         function switchTab(tabId) {
-            document.getElementById('orders-tab').style.display = tabId === 'orders-tab' ? 'block' : 'none';
+            document.getElementById('pnl-tab').style.display      = tabId === 'pnl-tab' ? 'block' : 'none';
+            document.getElementById('orders-tab').style.display   = tabId === 'orders-tab' ? 'block' : 'none';
             document.getElementById('products-tab').style.display = tabId === 'products-tab' ? 'block' : 'none';
             
-            document.getElementById('btn-orders').classList.toggle('active', tabId === 'orders-tab');
-            document.getElementById('btn-products').classList.toggle('active', tabId === 'products-tab');
+            document.getElementById('btn-pnl').style.color      = tabId === 'pnl-tab' ? 'var(--color-gold)' : 'var(--color-text-slate)';
+            document.getElementById('btn-orders').style.color   = tabId === 'orders-tab' ? 'var(--color-gold)' : 'var(--color-text-slate)';
+            document.getElementById('btn-products').style.color = tabId === 'products-tab' ? 'var(--color-gold)' : 'var(--color-text-slate)';
 
-            document.getElementById('btn-orders').style.color = tabId === 'orders-tab' ? 'var(--color-text-white)' : 'var(--color-text-slate)';
-            document.getElementById('btn-products').style.color = tabId === 'products-tab' ? 'var(--color-text-white)' : 'var(--color-text-slate)';
-            
-            document.getElementById('btn-orders').style.borderBottomColor = tabId === 'orders-tab' ? 'var(--color-gold)' : 'transparent';
+            document.getElementById('btn-pnl').style.borderBottomColor      = tabId === 'pnl-tab' ? 'var(--color-gold)' : 'transparent';
+            document.getElementById('btn-orders').style.borderBottomColor   = tabId === 'orders-tab' ? 'var(--color-gold)' : 'transparent';
             document.getElementById('btn-products').style.borderBottomColor = tabId === 'products-tab' ? 'var(--color-gold)' : 'transparent';
         }
     </script>
