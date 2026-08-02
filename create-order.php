@@ -98,8 +98,9 @@ try {
         exit;
     }
 
-    // 5. Register pending order in database
-    $order_stmt = $db->prepare("INSERT INTO orders (customer_name, customer_email, customer_phone, product_id, amount, payment_status, razorpay_order_id) VALUES (?, ?, ?, ?, ?, 'pending', ?)");
+    // 5. Register pending order in database with exact local timestamp (IST)
+    $current_now = date('Y-m-d H:i:s');
+    $order_stmt = $db->prepare("INSERT INTO orders (customer_name, customer_email, customer_phone, product_id, amount, payment_status, razorpay_order_id, created_at) VALUES (?, ?, ?, ?, ?, 'pending', ?, ?)");
     $order_stmt->execute([
         $customer_name,
         $customer_email,
@@ -107,6 +108,7 @@ try {
         $product['id'],
         $amount,
         $cf_order_id,
+        $current_now,
     ]);
 
     $db_order_id = $db->lastInsertId();

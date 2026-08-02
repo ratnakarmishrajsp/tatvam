@@ -4,6 +4,10 @@
  * Contains API Credentials, Site Constants, and Database configurations
  */
 
+// Set Default Timezone to Indian Standard Time (IST)
+date_default_timezone_set('Asia/Kolkata');
+
+
 if (file_exists(__DIR__ . '/config.secret.php')) {
     require_once __DIR__ . '/config.secret.php';
 }

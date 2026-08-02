@@ -300,11 +300,16 @@ if ($authenticated) {
         $saved_dates = array_column($saved_pnl, 'calc_date');
 
         $daily_pnl = [];
-        // Combine last 14 days and any saved custom dates
-        $date_list = [];
-        for ($i = 0; $i < 14; $i++) {
-            $date_list[] = date('Y-m-d', strtotime("-$i days"));
+        // Generate date list starting from August 1st (2026-08-01) up to today
+        $start_date_obj = new DateTime('2026-08-01');
+        $today_obj      = new DateTime('today');
+        $date_list      = [];
+
+        while ($start_date_obj <= $today_obj) {
+            $date_list[] = $start_date_obj->format('Y-m-d');
+            $start_date_obj->modify('+1 day');
         }
+
         foreach ($saved_dates as $sd) {
             if (!in_array($sd, $date_list)) $date_list[] = $sd;
         }
