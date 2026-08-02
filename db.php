@@ -8,6 +8,12 @@ require_once __DIR__ . '/config.php';
 
 try {
     if (DB_DRIVE === 'sqlite') {
+        // Ensure database file directory exists
+        $db_dir = dirname(SQLITE_DB_PATH);
+        if (!file_exists($db_dir)) {
+            mkdir($db_dir, 0755, true);
+        }
+
         // Initialize SQLite Connection
         $db = new PDO('sqlite:' . SQLITE_DB_PATH);
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
