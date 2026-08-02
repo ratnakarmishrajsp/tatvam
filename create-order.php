@@ -14,15 +14,16 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 // Sanitize post variables
-$customer_name  = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
-$customer_email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-$customer_phone = filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_SPECIAL_CHARS);
-$product_slug   = filter_input(INPUT_POST, 'product_slug', FILTER_SANITIZE_SPECIAL_CHARS);
+$customer_name  = trim($_POST['name'] ?? filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS) ?? '');
+$customer_email = filter_var($_POST['email'] ?? filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL), FILTER_VALIDATE_EMAIL);
+$customer_phone = trim($_POST['phone'] ?? filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_SPECIAL_CHARS) ?? '');
+$product_slug   = trim($_POST['product_slug'] ?? filter_input(INPUT_POST, 'product_slug', FILTER_SANITIZE_SPECIAL_CHARS) ?? '');
 
 if (!$customer_name || !$customer_email || !$customer_phone || !$product_slug) {
     echo json_encode(['success' => false, 'message' => 'Please fill in all details correctly.']);
     exit;
 }
+
 
 try {
     // 1. Fetch target product details
@@ -70,6 +71,8 @@ try {
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
         'Content-Type: application/json',
         'x-client-id: ' . CASHFREE_APP_ID,

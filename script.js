@@ -391,8 +391,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
-                // Determine Cashfree mode
+                // Determine Cashfree mode & initialize SDK instance
                 const cfMode = data.environment === 'PRODUCTION' ? 'production' : 'sandbox';
+                const cashfreeObj = (typeof Cashfree !== 'undefined') ? Cashfree({ mode: cfMode }) : (window.cashfree || cashfree);
 
                 // Trigger Meta Pixel InitiateCheckout Event
                 if (typeof fbq === 'function') {
@@ -407,7 +408,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Launch Cashfree Drop checkout
                 // Cashfree will redirect to thank-you.php?order_id=xxx on payment finish
-                cashfree.checkout({
+                cashfreeObj.checkout({
                     paymentSessionId: data.payment_session_id,
                     redirectTarget: '_self', // redirect in same tab
                 });

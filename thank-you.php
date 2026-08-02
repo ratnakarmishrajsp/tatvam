@@ -43,6 +43,8 @@ if (!empty($_GET['order_id']) || !empty($_POST['cf_order_id'])) {
 
                 $ch = curl_init($api_base . '/orders/' . $cf_order_id . '/payments');
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
                 curl_setopt($ch, CURLOPT_HTTPHEADER, [
                     'x-client-id: ' . CASHFREE_APP_ID,
                     'x-client-secret: ' . CASHFREE_SECRET_KEY,
