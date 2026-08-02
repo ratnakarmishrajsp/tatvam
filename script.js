@@ -382,18 +382,42 @@ document.addEventListener('DOMContentLoaded', () => {
                     method: 'POST',
                     body: formData,
                 });
-                const data = await res.json();
+                
+                const responseText = await res.text();
+                let data;
+                try {
+                    data = JSON.parse(responseText);
+                } catch (jsonErr) {
+                    console.error('Non-JSON response from server:', responseText);
+                    alert('Server Response Error: ' + responseText.substring(0, 200));
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                    return;
+                }
 
                 if (!data.success) {
-                    alert('Error: ' + data.message);
+                    alert('Checkout Error: ' + (data.message || 'Payment session creation failed'));
                     submitBtn.innerHTML = originalText;
                     submitBtn.disabled = false;
                     return;
                 }
 
                 // Determine Cashfree mode & initialize SDK instance
-                const cfMode = data.environment === 'PRODUCTION' ? 'production' : 'sandbox';
-                const cashfreeObj = (typeof Cashfree !== 'undefined') ? Cashfree({ mode: cfMode }) : (window.cashfree || cashfree);
+                const cfMode = (data.environment === 'PRODUCTION') ? 'production' : 'sandbox';
+                let cashfreeObj = null;
+
+                if (typeof Cashfree !== 'undefined') {
+                    cashfreeObj = Cashfree({ mode: cfMode });
+                } else if (typeof window.Cashfree !== 'undefined') {
+                    cashfreeObj = window.Cashfree({ mode: cfMode });
+                }
+
+                if (!cashfreeObj) {
+                    alert('Cashfree Payment SDK failed to load. Please refresh the page or check ad-blockers.');
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                    return;
+                }
 
                 // Trigger Meta Pixel InitiateCheckout Event
                 if (typeof fbq === 'function') {
@@ -407,15 +431,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 closeCheckoutModal();
 
                 // Launch Cashfree Drop checkout
-                // Cashfree will redirect to thank-you.php?order_id=xxx on payment finish
                 cashfreeObj.checkout({
                     paymentSessionId: data.payment_session_id,
-                    redirectTarget: '_self', // redirect in same tab
+                    redirectTarget: '_self',
                 });
 
             } catch (err) {
-                console.error(err);
-                alert('Checkout error. Please try again.');
+                console.error('Checkout Submit Exception:', err);
+                alert('Checkout Error: ' + (err.message || 'Network issue. Please try again.'));
                 submitBtn.innerHTML = originalText;
                 submitBtn.disabled = false;
             }
