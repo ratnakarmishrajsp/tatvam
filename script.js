@@ -266,42 +266,88 @@ document.addEventListener('DOMContentLoaded', () => {
     if (toast) {
         const names = ['Amit', 'Rahul', 'Sneha', 'Vikram', 'Aditya', 'Priya', 'Pooja', 'Nikhil', 'Siddharth', 'Karan', 'Deepak', 'Anjali', 'Neha', 'Rohan', 'Manish'];
         const locations = ['Delhi', 'Mumbai', 'Bangalore', 'Pune', 'Jaipur', 'Lucknow', 'Ahmedabad', 'Indore', 'Patna', 'Ranchi', 'Kolkata', 'Chennai', 'Bhopal', 'Surat'];
-        const products = ['मन की शांति', 'चिंता मुक्ति', 'अनुशासन क्रांति', 'समृद्धि सूत्र', 'Mega Mindset Bundle'];
-        const productCovers = {
-            'मन की शांति': 'assets/calm-cover.jpg?v=1.1',
-            'चिंता मुक्ति': 'assets/anxiety-cover.jpg',
-            'अनुशासन क्रांति': 'assets/discipline-cover.jpg',
-            'समृद्धि सूत्र': 'assets/wealth-cover.jpg',
-            'Mega Mindset Bundle': 'assets/bundle-cover.jpg'
-        };
+        const product = 'Positive Thinking (नकारात्मक सोच से बाहर निकलें)';
+        const productCover = 'assets/calm-cover.jpg?v=1.1';
         const times = ['just now', '1m ago', '2m ago', '3m ago', '4m ago'];
+
+        // Web Audio API Synthesizer for Notification Pop Chime Sound
+        let audioCtx = null;
+        const playNotificationSound = () => {
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContext) return;
+                if (!audioCtx) audioCtx = new AudioContext();
+                
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                osc.type = 'sine';
+                // Two-tone subtle luxury pop chime (E5 -> B5)
+                osc.frequency.setValueAtTime(659.25, now); // E5
+                osc.frequency.exponentialRampToValueAtTime(987.77, now + 0.08); // B5
+
+                gain.gain.setValueAtTime(0.12, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start(now);
+                osc.stop(now + 0.35);
+            } catch (e) {
+                // Ignore audio restriction errors gracefully
+            }
+        };
+
+        // Initialize AudioContext on first user interaction to satisfy browser autoplay policy
+        const initAudioOnUserInteraction = () => {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (AudioContext) audioCtx = new AudioContext();
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            document.removeEventListener('click', initAudioOnUserInteraction);
+            document.removeEventListener('touchstart', initAudioOnUserInteraction);
+            document.removeEventListener('keydown', initAudioOnUserInteraction);
+        };
+
+        document.addEventListener('click', initAudioOnUserInteraction, { once: true });
+        document.addEventListener('touchstart', initAudioOnUserInteraction, { once: true });
+        document.addEventListener('keydown', initAudioOnUserInteraction, { once: true });
 
         const triggerActivityAlert = () => {
             if (document.hidden) return;
 
             const name = names[Math.floor(Math.random() * names.length)];
             const location = locations[Math.floor(Math.random() * locations.length)];
-            const product = products[Math.floor(Math.random() * products.length)];
             const timeVal = times[Math.floor(Math.random() * times.length)];
 
             if (buyerNameSpan) buyerNameSpan.innerText = name;
             if (buyerLocationSpan) buyerLocationSpan.innerText = location;
             if (toastProductSpan) toastProductSpan.innerText = product;
             if (toastTimeSpan) toastTimeSpan.innerText = timeVal;
-            if (toastProductImg && productCovers[product]) {
-                toastProductImg.src = productCovers[product];
+            if (toastProductImg) {
+                toastProductImg.src = productCover;
                 toastProductImg.alt = product;
             }
 
             toast.classList.add('show');
+            playNotificationSound();
 
             setTimeout(() => {
                 toast.classList.remove('show');
             }, 4500);
         };
 
-        setInterval(triggerActivityAlert, 14000);
-        setTimeout(triggerActivityAlert, 3000);
+        setInterval(triggerActivityAlert, 9000);
+        setTimeout(triggerActivityAlert, 1500);
     }
 
     // ==========================================================================

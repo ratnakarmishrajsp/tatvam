@@ -311,8 +311,7 @@
                 <div class="nav-dropdown">
                     <a href="library.php" class="nav-link dropdown-trigger">E-Books <i data-lucide="chevron-down" class="dropdown-icon"></i></a>
                     <div class="dropdown-menu">
-                        <a href="library.php" class="dropdown-item">All E-Books</a>
-                        <a href="positive-thinking.html" class="dropdown-item">मन की शांति (Calm)</a>
+                        <a href="positive-thinking.html" class="dropdown-item">Positive Thinking E-Book</a>
                     </div>
                 </div>
                 <a href="index.html#faq" class="nav-link">About</a>
@@ -896,6 +895,29 @@
         </div>
         
         <button class="btn btn-primary btn-sm checkout-trigger dynamic-buy-btn-text" data-product-slug="positive-thinking" style="width: 100%; justify-content: center; box-shadow: none;">🛒 Buy Now – ₹199</button>
+    </div>
+
+    <!-- LIVE PURCHASE ACTIVITY TOAST -->
+    <div class="toast-container">
+        <div class="toast" id="purchase-toast">
+            <div class="toast-img-wrapper">
+                <img src="assets/calm-cover.jpg?v=1.1" id="toast-product-img" alt="Product Cover">
+            </div>
+            <div class="toast-content">
+                <div class="toast-header-row">
+                    <span class="verified-badge-pill">
+                        <svg class="verified-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        Verified Purchase
+                    </span>
+                    <span id="toast-time-val" class="toast-time">2m ago</span>
+                </div>
+                <div class="toast-text">
+                    <span id="toast-buyer-name">Amit</span> from <span id="toast-buyer-location">Delhi</span> bought <strong id="toast-product-name" class="highlight">Positive Thinking (नकारात्मक सोच से बाहर निकलें)</strong>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Mobile sticky bottom bar -->
