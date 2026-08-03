@@ -527,6 +527,7 @@ if ($authenticated) {
             <!-- DISTINCT MODULAR TABS -->
             <div class="admin-tabs-nav" style="display: flex; gap: 1rem; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 0.75rem; margin-bottom: 1.5rem; overflow-x: auto;">
                 <button class="tab-btn active" id="btn-overview" onclick="switchTab('overview-tab')" style="background: none; border: none; color: var(--color-gold); font-family: var(--font-heading); font-size: 1.05rem; font-weight: 700; cursor: pointer; padding: 0.4rem 0.8rem; border-bottom: 2px solid var(--color-gold); white-space: nowrap;">📊 Overview & Charts</button>
+                <button class="tab-btn" id="btn-funnel" onclick="switchTab('funnel-tab')" style="background: none; border: none; color: var(--color-text-slate); font-family: var(--font-heading); font-size: 1.05rem; font-weight: 700; cursor: pointer; padding: 0.4rem 0.8rem; border-bottom: 2px solid transparent; white-space: nowrap;">🎯 Traffic & Drop-Off Funnel</button>
                 <button class="tab-btn" id="btn-pnl" onclick="switchTab('pnl-tab')" style="background: none; border: none; color: var(--color-text-slate); font-family: var(--font-heading); font-size: 1.05rem; font-weight: 700; cursor: pointer; padding: 0.4rem 0.8rem; border-bottom: 2px solid transparent; white-space: nowrap;">💰 Financial P&L Tracker</button>
                 <button class="tab-btn" id="btn-orders" onclick="switchTab('orders-tab')" style="background: none; border: none; color: var(--color-text-slate); font-family: var(--font-heading); font-size: 1.05rem; font-weight: 700; cursor: pointer; padding: 0.4rem 0.8rem; border-bottom: 2px solid transparent; white-space: nowrap;">🛍️ Order Pipeline & WhatsApp</button>
                 <button class="tab-btn" id="btn-products" onclick="switchTab('products-tab')" style="background: none; border: none; color: var(--color-text-slate); font-family: var(--font-heading); font-size: 1.05rem; font-weight: 700; cursor: pointer; padding: 0.4rem 0.8rem; border-bottom: 2px solid transparent; white-space: nowrap;">📦 Manage E-Books</button>
@@ -534,34 +535,69 @@ if ($authenticated) {
 
             <!-- MODULE 1: OVERVIEW & CHARTS -->
             <div id="overview-tab">
-                <!-- TRAFFIC & CONVERSION FUNNEL METRICS CARDS -->
-                <div style="margin-bottom: 1.5rem;">
-                    <h3 style="font-size: 1.15rem; color: var(--color-gold); margin-bottom: 0.85rem; display: flex; align-items: center; gap: 8px;">
-                        🎯 Live Funnel & Drop-Off Analytics
+                <!-- KPI CARDS OVERVIEW -->
+                <div class="kpi-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
+                    <div class="glass-card kpi-card" style="padding: 1.25rem;">
+                        <span style="font-size: 0.75rem; text-transform: uppercase; color: var(--color-text-slate); font-weight: 700; letter-spacing: 0.05em;">Total Gross Revenue</span>
+                        <p class="gradient-gold" style="font-size: 1.85rem; font-weight: 800; margin-top: 0.35rem;">₹<?php echo number_format($total_revenue, 2); ?></p>
+                    </div>
+                    <div class="glass-card kpi-card" style="padding: 1.25rem;">
+                        <span style="font-size: 0.75rem; text-transform: uppercase; color: #10B981; font-weight: 700; letter-spacing: 0.05em;">Paid Completed Orders</span>
+                        <p style="font-size: 1.85rem; font-weight: 800; margin-top: 0.35rem; color: #10B981;"><?php echo $total_paid_orders; ?> Sales</p>
+                    </div>
+                    <div class="glass-card kpi-card" style="padding: 1.25rem;">
+                        <span style="font-size: 0.75rem; text-transform: uppercase; color: #F59E0B; font-weight: 700; letter-spacing: 0.05em;">Pending Checkouts</span>
+                        <p style="font-size: 1.85rem; font-weight: 800; margin-top: 0.35rem; color: #F59E0B;"><?php echo $total_pending_orders; ?></p>
+                    </div>
+                    <div class="glass-card kpi-card" style="padding: 1.25rem;">
+                        <span style="font-size: 0.75rem; text-transform: uppercase; color: var(--color-text-slate); font-weight: 700; letter-spacing: 0.05em;">Average Order Value (AOV)</span>
+                        <p style="font-size: 1.85rem; font-weight: 800; margin-top: 0.35rem; color: #fff;">₹<?php echo number_format($average_order_value, 2); ?></p>
+                    </div>
+                </div>
+
+                <!-- CHART & ANALYTICS VISUALIZER -->
+                <div class="glass-card" style="padding: 1.5rem;">
+                    <h3 style="font-size: 1.2rem; color: var(--color-gold); margin-bottom: 1rem;">📈 14-Day Sales & Remittance Trend Graph</h3>
+                    <div style="height: 320px; width: 100%;">
+                        <canvas id="salesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODULE: TRAFFIC & FUNNEL ANALYTICS (DEDICATED OPTION TAB) -->
+            <div id="funnel-tab" style="display: none;">
+                <div class="glass-card" style="padding: 1.5rem; margin-bottom: 1.5rem; border-color: rgba(251,191,36,0.3);">
+                    <h3 style="font-size: 1.3rem; color: var(--color-gold); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px;">
+                        🎯 Traffic & Drop-Off Conversion Funnel
                     </h3>
-                    <div class="kpi-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem;">
-                        <div class="glass-card kpi-card" style="padding: 1.1rem; border-left: 3px solid #3B82F6;">
-                            <span style="font-size: 0.72rem; text-transform: uppercase; color: #60A5FA; font-weight: 700; letter-spacing: 0.05em;">👀 Website Visitors</span>
-                            <p style="font-size: 1.75rem; font-weight: 800; margin-top: 0.35rem; color: #fff;"><?php echo number_format($total_pageviews); ?></p>
-                            <span style="font-size: 0.72rem; color: var(--color-text-slate);">Total pageviews</span>
+                    <p style="color: var(--color-text-slate); font-size: 0.9rem; margin-bottom: 1.5rem;">
+                        Track real-time visitors, Buy Now button clicks, abandoned checkouts, and exact funnel conversion rates.
+                    </p>
+
+                    <div class="kpi-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem;">
+                        <div class="glass-card kpi-card" style="padding: 1.25rem; border-left: 4px solid #3B82F6;">
+                            <span style="font-size: 0.75rem; text-transform: uppercase; color: #60A5FA; font-weight: 700; letter-spacing: 0.05em;">👀 Website Visitors</span>
+                            <p style="font-size: 1.85rem; font-weight: 800; margin-top: 0.35rem; color: #fff;"><?php echo number_format($total_pageviews); ?></p>
+                            <span style="font-size: 0.75rem; color: var(--color-text-slate);">Total page visits</span>
                         </div>
-                        <div class="glass-card kpi-card" style="padding: 1.1rem; border-left: 3px solid #8B5CF6;">
-                            <span style="font-size: 0.72rem; text-transform: uppercase; color: #A78BFA; font-weight: 700; letter-spacing: 0.05em;">🛒 Buy Now Clicks</span>
-                            <p style="font-size: 1.75rem; font-weight: 800; margin-top: 0.35rem; color: #A78BFA;"><?php echo number_format($total_buy_clicks); ?></p>
-                            <span style="font-size: 0.72rem; color: var(--color-text-slate);">Clicked Buy button</span>
+                        <div class="glass-card kpi-card" style="padding: 1.25rem; border-left: 4px solid #8B5CF6;">
+                            <span style="font-size: 0.75rem; text-transform: uppercase; color: #A78BFA; font-weight: 700; letter-spacing: 0.05em;">🛒 Buy Now Clicks</span>
+                            <p style="font-size: 1.85rem; font-weight: 800; margin-top: 0.35rem; color: #A78BFA;"><?php echo number_format($total_buy_clicks); ?></p>
+                            <span style="font-size: 0.75rem; color: var(--color-text-slate);">Clicked Buy button</span>
                         </div>
-                        <div class="glass-card kpi-card" style="padding: 1.1rem; border-left: 3px solid #EF4444;">
-                            <span style="font-size: 0.72rem; text-transform: uppercase; color: #F87171; font-weight: 700; letter-spacing: 0.05em;">⚠️ Dropped Users</span>
-                            <p style="font-size: 1.75rem; font-weight: 800; margin-top: 0.35rem; color: #EF4444;"><?php echo number_format($total_dropped_users); ?></p>
-                            <span style="font-size: 0.72rem; color: var(--color-text-slate);">Clicked but didn't pay</span>
+                        <div class="glass-card kpi-card" style="padding: 1.25rem; border-left: 4px solid #EF4444;">
+                            <span style="font-size: 0.75rem; text-transform: uppercase; color: #F87171; font-weight: 700; letter-spacing: 0.05em;">⚠️ Dropped Users</span>
+                            <p style="font-size: 1.85rem; font-weight: 800; margin-top: 0.35rem; color: #EF4444;"><?php echo number_format($total_dropped_users); ?></p>
+                            <span style="font-size: 0.75rem; color: var(--color-text-slate);">Clicked but didn't pay</span>
                         </div>
-                        <div class="glass-card kpi-card" style="padding: 1.1rem; border-left: 3px solid #10B981;">
-                            <span style="font-size: 0.72rem; text-transform: uppercase; color: #34D399; font-weight: 700; letter-spacing: 0.05em;">⚡ Conversion Rate</span>
-                            <p style="font-size: 1.75rem; font-weight: 800; margin-top: 0.35rem; color: #10B981;"><?php echo $checkout_conversion; ?></p>
-                            <span style="font-size: 0.72rem; color: var(--color-text-slate);">Buy button to Sale</span>
+                        <div class="glass-card kpi-card" style="padding: 1.25rem; border-left: 4px solid #10B981;">
+                            <span style="font-size: 0.75rem; text-transform: uppercase; color: #34D399; font-weight: 700; letter-spacing: 0.05em;">⚡ Conversion Rate</span>
+                            <p style="font-size: 1.85rem; font-weight: 800; margin-top: 0.35rem; color: #10B981;"><?php echo $checkout_conversion; ?></p>
+                            <span style="font-size: 0.75rem; color: var(--color-text-slate);">Buy button to Sale</span>
                         </div>
                     </div>
                 </div>
+            </div>
 
                 <!-- CHART & ANALYTICS VISUALIZER -->
                 <div class="glass-card" style="padding: 1.5rem;">
@@ -1087,19 +1123,26 @@ if ($authenticated) {
 
         function switchTab(tabId) {
             document.getElementById('overview-tab').style.display = tabId === 'overview-tab' ? 'block' : 'none';
+            document.getElementById('funnel-tab').style.display   = tabId === 'funnel-tab' ? 'block' : 'none';
             document.getElementById('pnl-tab').style.display      = tabId === 'pnl-tab' ? 'block' : 'none';
             document.getElementById('orders-tab').style.display   = tabId === 'orders-tab' ? 'block' : 'none';
             document.getElementById('products-tab').style.display = tabId === 'products-tab' ? 'block' : 'none';
             
-            document.getElementById('btn-overview').style.color  = tabId === 'overview-tab' ? 'var(--color-gold)' : 'var(--color-text-slate)';
-            document.getElementById('btn-pnl').style.color       = tabId === 'pnl-tab' ? 'var(--color-gold)' : 'var(--color-text-slate)';
-            document.getElementById('btn-orders').style.color    = tabId === 'orders-tab' ? 'var(--color-gold)' : 'var(--color-text-slate)';
-            document.getElementById('btn-products').style.color  = tabId === 'products-tab' ? 'var(--color-gold)' : 'var(--color-text-slate)';
-
-            document.getElementById('btn-overview').style.borderBottomColor  = tabId === 'overview-tab' ? 'var(--color-gold)' : 'transparent';
-            document.getElementById('btn-pnl').style.borderBottomColor       = tabId === 'pnl-tab' ? 'var(--color-gold)' : 'transparent';
-            document.getElementById('btn-orders').style.borderBottomColor    = tabId === 'orders-tab' ? 'var(--color-gold)' : 'transparent';
-            document.getElementById('btn-products').style.borderBottomColor  = tabId === 'products-tab' ? 'var(--color-gold)' : 'transparent';
+            const tabs = ['overview', 'funnel', 'pnl', 'orders', 'products'];
+            tabs.forEach(t => {
+                const btn = document.getElementById('btn-' + t);
+                if (btn) {
+                    if (tabId === t + '-tab') {
+                        btn.style.color = 'var(--color-gold)';
+                        btn.style.borderBottomColor = 'var(--color-gold)';
+                        btn.classList.add('active');
+                    } else {
+                        btn.style.color = 'var(--color-text-slate)';
+                        btn.style.borderBottomColor = 'transparent';
+                        btn.classList.remove('active');
+                    }
+                }
+            });
         }
     </script>
 </body>
