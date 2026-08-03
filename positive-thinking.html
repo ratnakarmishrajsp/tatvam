@@ -744,56 +744,66 @@
                 </div>
             </div>
             
-            <div class="review-grid" style="display: flex; gap: var(--space-md); overflow-x: auto; padding-bottom: var(--space-md); scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;">
-                <!-- Review 1 -->
-                <div class="glass-card" style="flex: 0 0 320px; scroll-snap-align: start; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; min-height: 250px;">
-                    <div>
-                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: var(--space-sm);">
-                            <img src="assets/profile-rahul.jpg" alt="Rahul profile placeholder" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid var(--color-primary);">
-                            <div>
-                                <h4 style="font-size: 1rem; color: #FFFFFF; font-weight: bold; margin: 0;">Rahul</h4>
-                                <span style="color: var(--color-primary); font-size: 0.75rem;">★★★★★ Verified Purchase</span>
-                            </div>
-                        </div>
-                        <p style="font-size: 0.85rem; line-height: 1.5; color: var(--color-text-slate);">
-                            "Overthinking loop me phasa rehta tha tab ye book mili. Subconscious control techniques directly daily routines track karne me help karti hain. Highly recommended!"
-                        </p>
-                    </div>
-                    <span style="font-size: 0.75rem; color: var(--color-text-gray); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; display: block; margin-top: 1rem;">Mind Reset Focus</span>
-                </div>
+            <div style="position: relative; margin-top: 1.5rem;">
+                <!-- Carousel Scroll Control Arrows -->
+                <button id="review-prev-btn" onclick="document.getElementById('reviews-carousel').scrollBy({left: -320, behavior: 'smooth'})" style="position: absolute; left: -15px; top: 50%; transform: translateY(-50%); z-index: 10; background: rgba(15, 23, 42, 0.85); color: var(--color-gold); border: 1px solid rgba(251, 191, 36, 0.4); width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; backdrop-filter: blur(8px); box-shadow: 0 4px 15px rgba(0,0,0,0.5); transition: all 0.3s ease;">
+                    ❮
+                </button>
+                <button id="review-next-btn" onclick="document.getElementById('reviews-carousel').scrollBy({left: 320, behavior: 'smooth'})" style="position: absolute; right: -15px; top: 50%; transform: translateY(-50%); z-index: 10; background: rgba(15, 23, 42, 0.85); color: var(--color-gold); border: 1px solid rgba(251, 191, 36, 0.4); width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; backdrop-filter: blur(8px); box-shadow: 0 4px 15px rgba(0,0,0,0.5); transition: all 0.3s ease;">
+                    ❯
+                </button>
 
-                <!-- Review 2 -->
-                <div class="glass-card" style="flex: 0 0 320px; scroll-snap-align: start; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; min-height: 250px;">
-                    <div>
-                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: var(--space-sm);">
-                            <img src="assets/profile-priya.jpg" alt="Priya profile placeholder" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid var(--color-primary);">
-                            <div>
-                                <h4 style="font-size: 1rem; color: #FFFFFF; font-weight: bold; margin: 0;">Priya</h4>
-                                <span style="color: var(--color-primary); font-size: 0.75rem;">★★★★★ Verified Purchase</span>
+                <div id="reviews-carousel" class="review-grid" style="display: flex; gap: 1.25rem; overflow-x: auto; padding: 0.5rem 0.25rem 1rem 0.25rem; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scroll-behavior: smooth;">
+                    <!-- Review 1 -->
+                    <div class="glass-card" style="flex: 0 0 300px; max-width: 85vw; scroll-snap-align: center; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; border-color: rgba(255,255,255,0.08); background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(12px);">
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: var(--space-sm);">
+                                <img src="assets/profile-rahul.jpg" alt="Rahul" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid var(--color-gold);">
+                                <div>
+                                    <h4 style="font-size: 1rem; color: #FFFFFF; font-weight: bold; margin: 0;">Rahul</h4>
+                                    <span style="color: var(--color-gold); font-size: 0.75rem;">★★★★★ Verified Reader</span>
+                                </div>
                             </div>
+                            <p style="font-size: 0.88rem; line-height: 1.55; color: var(--color-text-slate);">
+                                "Overthinking loop me phasa rehta tha tab ye book mili. Subconscious control techniques directly daily routines track karne me help karti hain. Highly recommended!"
+                            </p>
                         </div>
-                        <p style="font-size: 0.85rem; line-height: 1.5; color: var(--color-text-slate);">
-                            "Hinglish language simple aur clean hai. Visual illustrations brain relaxation patterns samajhne me visual support dete hain. Mindset clarity ab daily active hai!"
-                        </p>
+                        <span style="font-size: 0.72rem; color: var(--color-gold); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; display: block; margin-top: 1rem;">Mind Reset Focus</span>
                     </div>
-                    <span style="font-size: 0.75rem; color: var(--color-text-gray); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; display: block; margin-top: 1rem;">Anxiety Control</span>
-                </div>
 
-                <!-- Review 3 -->
-                <div class="glass-card" style="flex: 0 0 320px; scroll-snap-align: start; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; min-height: 250px;">
-                    <div>
-                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: var(--space-sm);">
-                            <div style="width: 48px; height: 48px; border-radius: 50%; background: var(--color-bg-3); border: 2px solid var(--color-primary); display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--color-primary);">N</div>
-                            <div>
-                                <h4 style="font-size: 1rem; color: #FFFFFF; font-weight: bold; margin: 0;">Neha</h4>
-                                <span style="color: var(--color-primary); font-size: 0.75rem;">★★★★★ Verified Purchase</span>
+                    <!-- Review 2 -->
+                    <div class="glass-card" style="flex: 0 0 300px; max-width: 85vw; scroll-snap-align: center; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; border-color: rgba(255,255,255,0.08); background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(12px);">
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: var(--space-sm);">
+                                <img src="assets/profile-priya.jpg" alt="Priya" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid var(--color-gold);">
+                                <div>
+                                    <h4 style="font-size: 1rem; color: #FFFFFF; font-weight: bold; margin: 0;">Priya</h4>
+                                    <span style="color: var(--color-gold); font-size: 0.75rem;">★★★★★ Verified Reader</span>
+                                </div>
                             </div>
+                            <p style="font-size: 0.88rem; line-height: 1.55; color: var(--color-text-slate);">
+                                "Hinglish language simple aur clean hai. Visual illustrations brain relaxation patterns samajhne me visual support dete hain. Mindset clarity ab daily active hai!"
+                            </p>
                         </div>
-                        <p style="font-size: 0.85rem; line-height: 1.5; color: var(--color-text-slate);">
-                            "Sensory grounding hack is awesome! Sleep quality improve ho gayi aur negative thoughts sleep latency break hone se pehle check ho jaate hain."
-                        </p>
+                        <span style="font-size: 0.72rem; color: var(--color-gold); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; display: block; margin-top: 1rem;">Anxiety Control</span>
                     </div>
-                    <span style="font-size: 0.75rem; color: var(--color-text-gray); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; display: block; margin-top: 1rem;">Self-Confidence Rewire</span>
+
+                    <!-- Review 3 -->
+                    <div class="glass-card" style="flex: 0 0 300px; max-width: 85vw; scroll-snap-align: center; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; border-color: rgba(255,255,255,0.08); background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(12px);">
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: var(--space-sm);">
+                                <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(251, 191, 36, 0.15); border: 2px solid var(--color-gold); display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--color-gold);">N</div>
+                                <div>
+                                    <h4 style="font-size: 1rem; color: #FFFFFF; font-weight: bold; margin: 0;">Neha</h4>
+                                    <span style="color: var(--color-gold); font-size: 0.75rem;">★★★★★ Verified Reader</span>
+                                </div>
+                            </div>
+                            <p style="font-size: 0.88rem; line-height: 1.55; color: var(--color-text-slate);">
+                                "Sensory grounding hack is awesome! Sleep quality improve ho gayi aur negative thoughts sleep latency break hone se pehle check ho jaate hain."
+                            </p>
+                        </div>
+                        <span style="font-size: 0.72rem; color: var(--color-gold); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; display: block; margin-top: 1rem;">Self-Confidence Rewire</span>
+                    </div>
                 </div>
             </div>
         </div>
