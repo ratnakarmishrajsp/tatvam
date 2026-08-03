@@ -343,11 +343,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             setTimeout(() => {
                 toast.classList.remove('show');
-            }, 4500);
+            }, 3500);
         };
 
-        setInterval(triggerActivityAlert, 9000);
-        setTimeout(triggerActivityAlert, 1500);
+        setInterval(triggerActivityAlert, 5000);
+        setTimeout(triggerActivityAlert, 1000);
     }
 
     // ==========================================================================
