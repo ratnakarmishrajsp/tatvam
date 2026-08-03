@@ -391,10 +391,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // Automatic Pageview Analytics Logger
+    fetch('track-analytics.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `event_type=pageview&page_slug=${encodeURIComponent(currentSlug)}`
+    }).catch(err => {});
+
     checkoutTriggers.forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
-            const productSlug = btn.getAttribute('data-product-slug') || 'mega-bundle';
+            const productSlug = btn.getAttribute('data-product-slug') || 'positive-thinking';
+            
+            // Track Buy Now button click event
+            fetch('track-analytics.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `event_type=buy_click&page_slug=${encodeURIComponent(productSlug)}`
+            }).catch(err => {});
+
             openCheckoutModal(productSlug);
         });
     });

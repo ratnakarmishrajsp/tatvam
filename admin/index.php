@@ -257,15 +257,10 @@ if ($authenticated && isset($_GET['export']) && $_GET['export'] === 'csv') {
 // -------------------------------------------------------------
 // 6. METRICS & DATA AGGREGATION FOR ALL MODULES
 // -------------------------------------------------------------
-$total_revenue       = 0.00;
-$total_paid_orders   = 0;
-$total_pending_orders= 0;
-$total_failed_orders = 0;
-$average_order_value = 0.00;
-
-$search_query   = trim($_GET['search'] ?? '');
-$status_filter  = trim($_GET['status'] ?? '');
-$product_filter = (int)($_GET['product_id'] ?? 0);
+$total_pageviews       = 0;
+$total_buy_clicks      = 0;
+$total_dropped_users   = 0;
+$checkout_conversion   = '0%';
 
 if ($authenticated) {
     try {
@@ -274,6 +269,14 @@ if ($authenticated) {
         $total_pending_orders = (int)$db->query("SELECT COUNT(*) FROM orders WHERE payment_status = 'pending'")->fetchColumn();
         $total_failed_orders  = (int)$db->query("SELECT COUNT(*) FROM orders WHERE payment_status = 'failed'")->fetchColumn();
         $average_order_value  = $total_paid_orders > 0 ? ($total_revenue / $total_paid_orders) : 0.00;
+
+        // Traffic & Conversion Funnel Analytics Queries
+        $total_pageviews     = (int)$db->query("SELECT COUNT(*) FROM site_analytics WHERE event_type = 'pageview'")->fetchColumn();
+        $total_buy_clicks    = (int)$db->query("SELECT COUNT(*) FROM site_analytics WHERE event_type = 'buy_click'")->fetchColumn();
+        
+        // Dropped users = People who clicked Buy Now button but didn't complete payment
+        $total_dropped_users = max(0, $total_buy_clicks - $total_paid_orders);
+        $checkout_conversion = $total_buy_clicks > 0 ? number_format(($total_paid_orders / $total_buy_clicks) * 100, 1) . '%' : '0%';
 
         // Build Order Search & Filter Query
         $where_clauses = [];
@@ -531,23 +534,32 @@ if ($authenticated) {
 
             <!-- MODULE 1: OVERVIEW & CHARTS -->
             <div id="overview-tab">
-                <!-- KPI CARDS OVERVIEW -->
-                <div class="kpi-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
-                    <div class="glass-card kpi-card" style="padding: 1.25rem;">
-                        <span style="font-size: 0.75rem; text-transform: uppercase; color: var(--color-text-slate); font-weight: 700; letter-spacing: 0.05em;">Total Gross Revenue</span>
-                        <p class="gradient-gold" style="font-size: 1.85rem; font-weight: 800; margin-top: 0.35rem;">₹<?php echo number_format($total_revenue, 2); ?></p>
-                    </div>
-                    <div class="glass-card kpi-card" style="padding: 1.25rem;">
-                        <span style="font-size: 0.75rem; text-transform: uppercase; color: #10B981; font-weight: 700; letter-spacing: 0.05em;">Paid Completed Orders</span>
-                        <p style="font-size: 1.85rem; font-weight: 800; margin-top: 0.35rem; color: #10B981;"><?php echo $total_paid_orders; ?> Sales</p>
-                    </div>
-                    <div class="glass-card kpi-card" style="padding: 1.25rem;">
-                        <span style="font-size: 0.75rem; text-transform: uppercase; color: #F59E0B; font-weight: 700; letter-spacing: 0.05em;">Pending Checkouts</span>
-                        <p style="font-size: 1.85rem; font-weight: 800; margin-top: 0.35rem; color: #F59E0B;"><?php echo $total_pending_orders; ?></p>
-                    </div>
-                    <div class="glass-card kpi-card" style="padding: 1.25rem;">
-                        <span style="font-size: 0.75rem; text-transform: uppercase; color: var(--color-text-slate); font-weight: 700; letter-spacing: 0.05em;">Average Order Value (AOV)</span>
-                        <p style="font-size: 1.85rem; font-weight: 800; margin-top: 0.35rem; color: #fff;">₹<?php echo number_format($average_order_value, 2); ?></p>
+                <!-- TRAFFIC & CONVERSION FUNNEL METRICS CARDS -->
+                <div style="margin-bottom: 1.5rem;">
+                    <h3 style="font-size: 1.15rem; color: var(--color-gold); margin-bottom: 0.85rem; display: flex; align-items: center; gap: 8px;">
+                        🎯 Live Funnel & Drop-Off Analytics
+                    </h3>
+                    <div class="kpi-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem;">
+                        <div class="glass-card kpi-card" style="padding: 1.1rem; border-left: 3px solid #3B82F6;">
+                            <span style="font-size: 0.72rem; text-transform: uppercase; color: #60A5FA; font-weight: 700; letter-spacing: 0.05em;">👀 Website Visitors</span>
+                            <p style="font-size: 1.75rem; font-weight: 800; margin-top: 0.35rem; color: #fff;"><?php echo number_format($total_pageviews); ?></p>
+                            <span style="font-size: 0.72rem; color: var(--color-text-slate);">Total pageviews</span>
+                        </div>
+                        <div class="glass-card kpi-card" style="padding: 1.1rem; border-left: 3px solid #8B5CF6;">
+                            <span style="font-size: 0.72rem; text-transform: uppercase; color: #A78BFA; font-weight: 700; letter-spacing: 0.05em;">🛒 Buy Now Clicks</span>
+                            <p style="font-size: 1.75rem; font-weight: 800; margin-top: 0.35rem; color: #A78BFA;"><?php echo number_format($total_buy_clicks); ?></p>
+                            <span style="font-size: 0.72rem; color: var(--color-text-slate);">Clicked Buy button</span>
+                        </div>
+                        <div class="glass-card kpi-card" style="padding: 1.1rem; border-left: 3px solid #EF4444;">
+                            <span style="font-size: 0.72rem; text-transform: uppercase; color: #F87171; font-weight: 700; letter-spacing: 0.05em;">⚠️ Dropped Users</span>
+                            <p style="font-size: 1.75rem; font-weight: 800; margin-top: 0.35rem; color: #EF4444;"><?php echo number_format($total_dropped_users); ?></p>
+                            <span style="font-size: 0.72rem; color: var(--color-text-slate);">Clicked but didn't pay</span>
+                        </div>
+                        <div class="glass-card kpi-card" style="padding: 1.1rem; border-left: 3px solid #10B981;">
+                            <span style="font-size: 0.72rem; text-transform: uppercase; color: #34D399; font-weight: 700; letter-spacing: 0.05em;">⚡ Conversion Rate</span>
+                            <p style="font-size: 1.75rem; font-weight: 800; margin-top: 0.35rem; color: #10B981;"><?php echo $checkout_conversion; ?></p>
+                            <span style="font-size: 0.72rem; color: var(--color-text-slate);">Buy button to Sale</span>
+                        </div>
                     </div>
                 </div>
 
