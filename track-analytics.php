@@ -9,7 +9,7 @@ require_once __DIR__ . '/db.php';
 $action = filter_input(INPUT_POST, 'event_type', FILTER_SANITIZE_SPECIAL_CHARS) ?? filter_input(INPUT_GET, 'event_type', FILTER_SANITIZE_SPECIAL_CHARS);
 $slug   = filter_input(INPUT_POST, 'page_slug', FILTER_SANITIZE_SPECIAL_CHARS) ?? filter_input(INPUT_GET, 'page_slug', FILTER_SANITIZE_SPECIAL_CHARS) ?? 'positive-thinking';
 
-if (in_array($action, ['pageview', 'buy_click'])) {
+if (in_array($action, ['pageview', 'buy_click', 'heartbeat'])) {
     try {
         $ip = $_SERVER['REMOTE_ADDR'] ?? '';
         $agent = substr($_SERVER['HTTP_USER_AGENT'] ?? '', 0, 255);

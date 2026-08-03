@@ -261,6 +261,7 @@ $total_pageviews       = 0;
 $total_buy_clicks      = 0;
 $total_dropped_users   = 0;
 $checkout_conversion   = '0%';
+$live_active_visitors  = 0;
 
 if ($authenticated) {
     try {
@@ -274,6 +275,12 @@ if ($authenticated) {
         $total_pageviews     = (int)$db->query("SELECT COUNT(*) FROM site_analytics WHERE event_type = 'pageview'")->fetchColumn();
         $total_buy_clicks    = (int)$db->query("SELECT COUNT(*) FROM site_analytics WHERE event_type = 'buy_click'")->fetchColumn();
         
+        // Real Live Active Visitors (Unique IP addresses active within the last 2 minutes)
+        $two_mins_ago = date('Y-m-d H:i:s', strtotime('-2 minutes'));
+        $live_stmt    = $db->prepare("SELECT COUNT(DISTINCT ip_address) FROM site_analytics WHERE created_at >= ?");
+        $live_stmt->execute([$two_mins_ago]);
+        $live_active_visitors = (int)$live_stmt->fetchColumn();
+
         // Dropped users = People who clicked Buy Now button but didn't complete payment
         $total_dropped_users = max(0, $total_buy_clicks - $total_paid_orders);
         $checkout_conversion = $total_buy_clicks > 0 ? number_format(($total_paid_orders / $total_buy_clicks) * 100, 1) . '%' : '0%';
@@ -574,9 +581,17 @@ if ($authenticated) {
                         Track real-time visitors, Buy Now button clicks, abandoned checkouts, and exact funnel conversion rates.
                     </p>
 
-                    <div class="kpi-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem;">
+                    <div class="kpi-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem;">
+                        <div class="glass-card kpi-card" style="padding: 1.25rem; border-left: 4px solid #10B981; background: rgba(16,185,129,0.05);">
+                            <span style="font-size: 0.75rem; text-transform: uppercase; color: #10B981; font-weight: 700; letter-spacing: 0.05em; display: flex; align-items: center; gap: 4px;">
+                                <span style="width: 8px; height: 8px; border-radius: 50%; background: #10B981; display: inline-block; animation: wa-pulse 1.5s infinite;"></span>
+                                🟢 Live Active Visitors
+                            </span>
+                            <p style="font-size: 1.85rem; font-weight: 800; margin-top: 0.35rem; color: #10B981;"><?php echo number_format($live_active_visitors); ?> Online</p>
+                            <span style="font-size: 0.75rem; color: var(--color-text-slate);">Active right now (2 min window)</span>
+                        </div>
                         <div class="glass-card kpi-card" style="padding: 1.25rem; border-left: 4px solid #3B82F6;">
-                            <span style="font-size: 0.75rem; text-transform: uppercase; color: #60A5FA; font-weight: 700; letter-spacing: 0.05em;">👀 Website Visitors</span>
+                            <span style="font-size: 0.75rem; text-transform: uppercase; color: #60A5FA; font-weight: 700; letter-spacing: 0.05em;">👀 Total Pageviews</span>
                             <p style="font-size: 1.85rem; font-weight: 800; margin-top: 0.35rem; color: #fff;"><?php echo number_format($total_pageviews); ?></p>
                             <span style="font-size: 0.75rem; color: var(--color-text-slate);">Total page visits</span>
                         </div>
@@ -590,9 +605,9 @@ if ($authenticated) {
                             <p style="font-size: 1.85rem; font-weight: 800; margin-top: 0.35rem; color: #EF4444;"><?php echo number_format($total_dropped_users); ?></p>
                             <span style="font-size: 0.75rem; color: var(--color-text-slate);">Clicked but didn't pay</span>
                         </div>
-                        <div class="glass-card kpi-card" style="padding: 1.25rem; border-left: 4px solid #10B981;">
-                            <span style="font-size: 0.75rem; text-transform: uppercase; color: #34D399; font-weight: 700; letter-spacing: 0.05em;">⚡ Conversion Rate</span>
-                            <p style="font-size: 1.85rem; font-weight: 800; margin-top: 0.35rem; color: #10B981;"><?php echo $checkout_conversion; ?></p>
+                        <div class="glass-card kpi-card" style="padding: 1.25rem; border-left: 4px solid #F59E0B;">
+                            <span style="font-size: 0.75rem; text-transform: uppercase; color: #FBBF24; font-weight: 700; letter-spacing: 0.05em;">⚡ Conversion Rate</span>
+                            <p style="font-size: 1.85rem; font-weight: 800; margin-top: 0.35rem; color: #FBBF24;"><?php echo $checkout_conversion; ?></p>
                             <span style="font-size: 0.75rem; color: var(--color-text-slate);">Buy button to Sale</span>
                         </div>
                     </div>

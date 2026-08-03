@@ -398,6 +398,17 @@ document.addEventListener('DOMContentLoaded', () => {
         body: `event_type=pageview&page_slug=${encodeURIComponent(currentSlug)}`
     }).catch(err => {});
 
+    // Periodic Heartbeat (Every 30s) to track Real Active Live Visitors
+    setInterval(() => {
+        if (!document.hidden) {
+            fetch('track-analytics.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `event_type=heartbeat&page_slug=${encodeURIComponent(currentSlug)}`
+            }).catch(err => {});
+        }
+    }, 30000);
+
     checkoutTriggers.forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
