@@ -366,13 +366,86 @@ if ($authenticated) {
     <style>
         .pnl-table th, .pnl-table td { padding: 0.75rem 0.6rem; text-align: left; font-size: 0.85rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .pnl-table input { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); color: #fff; border-radius: 4px; padding: 4px 8px; width: 95px; font-size: 0.85rem; }
-        .badge-paid { background: rgba(16,185,129,0.15); color: #10B981; border: 1px solid rgba(16,185,129,0.3); padding: 3px 10px; border-radius: 12px; font-weight: 600; font-size: 0.78rem; }
-        .badge-pending { background: rgba(245,158,11,0.15); color: #F59E0B; border: 1px solid rgba(245,158,11,0.3); padding: 3px 10px; border-radius: 12px; font-weight: 600; font-size: 0.78rem; }
-        .badge-failed { background: rgba(239,68,68,0.15); color: #EF4444; border: 1px solid rgba(239,68,68,0.3); padding: 3px 10px; border-radius: 12px; font-weight: 600; font-size: 0.78rem; }
-        .btn-whatsapp-recover { background: #25D366; color: #000 !important; font-weight: 700; border-radius: 6px; padding: 5px 12px; font-size: 0.78rem; display: inline-flex; align-items: center; gap: 4px; text-decoration: none; box-shadow: 0 4px 10px rgba(37,211,102,0.25); }
+        .badge-paid { background: rgba(16,185,129,0.15); color: #10B981; border: 1px solid rgba(16,185,129,0.3); padding: 3px 10px; border-radius: 12px; font-weight: 600; font-size: 0.78rem; display: inline-block; }
+        .badge-pending { background: rgba(245,158,11,0.15); color: #F59E0B; border: 1px solid rgba(245,158,11,0.3); padding: 3px 10px; border-radius: 12px; font-weight: 600; font-size: 0.78rem; display: inline-block; }
+        .badge-failed { background: rgba(239,68,68,0.15); color: #EF4444; border: 1px solid rgba(239,68,68,0.3); padding: 3px 10px; border-radius: 12px; font-weight: 600; font-size: 0.78rem; display: inline-block; }
+        .btn-whatsapp-recover { background: #25D366; color: #000 !important; font-weight: 700; border-radius: 6px; padding: 6px 12px; font-size: 0.8rem; display: inline-flex; align-items: center; justify-content: center; gap: 4px; text-decoration: none; box-shadow: 0 4px 10px rgba(37,211,102,0.25); white-space: nowrap; width: 100%; }
         .btn-whatsapp-recover:hover { background: #1EBE5D; transform: scale(1.02); }
-        .btn-whatsapp-thankyou { background: rgba(37,211,102,0.12); color: #25D366 !important; border: 1px solid rgba(37,211,102,0.3); border-radius: 6px; padding: 5px 12px; font-size: 0.78rem; display: inline-flex; align-items: center; gap: 4px; text-decoration: none; }
+        .btn-whatsapp-thankyou { background: rgba(37,211,102,0.12); color: #25D366 !important; border: 1px solid rgba(37,211,102,0.3); border-radius: 6px; padding: 6px 12px; font-size: 0.8rem; display: inline-flex; align-items: center; justify-content: center; gap: 4px; text-decoration: none; white-space: nowrap; width: 100%; }
         .btn-whatsapp-thankyou:hover { background: rgba(37,211,102,0.25); }
+
+        /* Mobile Aesthetics & Touch Friendly Controls */
+        @media (max-width: 768px) {
+            .admin-header .container {
+                flex-direction: column !important;
+                gap: 12px !important;
+                align-items: stretch !important;
+                text-align: center;
+            }
+            .admin-header div {
+                justify-content: center !important;
+                width: 100%;
+            }
+            .admin-logo {
+                font-size: 1.25rem !important;
+            }
+            .admin-tabs-nav {
+                display: flex !important;
+                gap: 8px !important;
+                overflow-x: auto !important;
+                padding-bottom: 8px !important;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+            .admin-tabs-nav::-webkit-scrollbar { display: none; }
+            .tab-btn {
+                font-size: 0.9rem !important;
+                padding: 0.6rem 0.9rem !important;
+                border-radius: 8px !important;
+                background: rgba(255,255,255,0.03) !important;
+                border: 1px solid rgba(255,255,255,0.08) !important;
+                white-space: nowrap !important;
+                flex-shrink: 0;
+            }
+            .tab-btn.active {
+                background: rgba(251,191,36,0.15) !important;
+                border-color: var(--color-gold) !important;
+                color: var(--color-gold) !important;
+            }
+            .kpi-grid {
+                grid-template-columns: 1fr 1fr !important;
+                gap: 10px !important;
+            }
+            .kpi-card {
+                padding: 1rem !important;
+            }
+            .kpi-card p {
+                font-size: 1.35rem !important;
+            }
+            .admin-table-container, .glass-card {
+                padding: 1rem !important;
+                border-radius: 12px !important;
+            }
+            .mobile-stack-form {
+                flex-direction: column !important;
+                align-items: stretch !important;
+                gap: 12px !important;
+            }
+            .mobile-stack-form > div, .mobile-stack-form input, .mobile-stack-form select {
+                width: 100% !important;
+            }
+            /* Manage Ebook Layout Mobile */
+            .manage-ebooks-grid {
+                grid-template-columns: 1fr !important;
+                gap: 1.5rem !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .kpi-grid {
+                grid-template-columns: 1fr !important;
+            }
+        }
     </style>
 </head>
 <body class="admin-wrapper" style="padding-top: 0; background: var(--color-bg-1);">
@@ -437,7 +510,7 @@ if ($authenticated) {
             <?php endif; ?>
 
             <!-- DISTINCT MODULAR TABS -->
-            <div style="display: flex; gap: 1rem; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 0.75rem; margin-bottom: 1.5rem; overflow-x: auto;">
+            <div class="admin-tabs-nav" style="display: flex; gap: 1rem; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 0.75rem; margin-bottom: 1.5rem; overflow-x: auto;">
                 <button class="tab-btn active" id="btn-overview" onclick="switchTab('overview-tab')" style="background: none; border: none; color: var(--color-gold); font-family: var(--font-heading); font-size: 1.05rem; font-weight: 700; cursor: pointer; padding: 0.4rem 0.8rem; border-bottom: 2px solid var(--color-gold); white-space: nowrap;">📊 Overview & Charts</button>
                 <button class="tab-btn" id="btn-pnl" onclick="switchTab('pnl-tab')" style="background: none; border: none; color: var(--color-text-slate); font-family: var(--font-heading); font-size: 1.05rem; font-weight: 700; cursor: pointer; padding: 0.4rem 0.8rem; border-bottom: 2px solid transparent; white-space: nowrap;">💰 Financial P&L Tracker</button>
                 <button class="tab-btn" id="btn-orders" onclick="switchTab('orders-tab')" style="background: none; border: none; color: var(--color-text-slate); font-family: var(--font-heading); font-size: 1.05rem; font-weight: 700; cursor: pointer; padding: 0.4rem 0.8rem; border-bottom: 2px solid transparent; white-space: nowrap;">🛍️ Order Pipeline & WhatsApp</button>
@@ -447,20 +520,20 @@ if ($authenticated) {
             <!-- MODULE 1: OVERVIEW & CHARTS -->
             <div id="overview-tab">
                 <!-- KPI CARDS OVERVIEW -->
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
-                    <div class="glass-card" style="padding: 1.25rem;">
+                <div class="kpi-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
+                    <div class="glass-card kpi-card" style="padding: 1.25rem;">
                         <span style="font-size: 0.75rem; text-transform: uppercase; color: var(--color-text-slate); font-weight: 700; letter-spacing: 0.05em;">Total Gross Revenue</span>
                         <p class="gradient-gold" style="font-size: 1.85rem; font-weight: 800; margin-top: 0.35rem;">₹<?php echo number_format($total_revenue, 2); ?></p>
                     </div>
-                    <div class="glass-card" style="padding: 1.25rem;">
+                    <div class="glass-card kpi-card" style="padding: 1.25rem;">
                         <span style="font-size: 0.75rem; text-transform: uppercase; color: #10B981; font-weight: 700; letter-spacing: 0.05em;">Paid Completed Orders</span>
                         <p style="font-size: 1.85rem; font-weight: 800; margin-top: 0.35rem; color: #10B981;"><?php echo $total_paid_orders; ?> Sales</p>
                     </div>
-                    <div class="glass-card" style="padding: 1.25rem;">
+                    <div class="glass-card kpi-card" style="padding: 1.25rem;">
                         <span style="font-size: 0.75rem; text-transform: uppercase; color: #F59E0B; font-weight: 700; letter-spacing: 0.05em;">Pending Checkouts</span>
                         <p style="font-size: 1.85rem; font-weight: 800; margin-top: 0.35rem; color: #F59E0B;"><?php echo $total_pending_orders; ?></p>
                     </div>
-                    <div class="glass-card" style="padding: 1.25rem;">
+                    <div class="glass-card kpi-card" style="padding: 1.25rem;">
                         <span style="font-size: 0.75rem; text-transform: uppercase; color: var(--color-text-slate); font-weight: 700; letter-spacing: 0.05em;">Average Order Value (AOV)</span>
                         <p style="font-size: 1.85rem; font-weight: 800; margin-top: 0.35rem; color: #fff;">₹<?php echo number_format($average_order_value, 2); ?></p>
                     </div>
@@ -480,7 +553,7 @@ if ($authenticated) {
                 <!-- MANUAL DATE & AD SPEND ADDITION FORM -->
                 <div class="glass-card" style="padding: 1.25rem; margin-bottom: 1.5rem; border-color: rgba(251,191,36,0.3);">
                     <h3 style="font-size: 1.15rem; color: var(--color-gold); margin-bottom: 0.75rem;">➕ Add / Update Manual Date Record</h3>
-                    <form id="manual-pnl-form" onsubmit="saveManualAdSpend(event)" style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end;">
+                    <form id="manual-pnl-form" class="mobile-stack-form" onsubmit="saveManualAdSpend(event)" style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end;">
                         <div>
                             <label style="display: block; font-size: 0.78rem; color: var(--color-text-slate); margin-bottom: 4px;">Select Date</label>
                             <input type="date" id="manual-date" class="form-input" required value="<?php echo date('Y-m-d'); ?>" style="padding: 0.5rem 0.8rem; font-size: 0.85rem; color: #fff; background: rgba(255,255,255,0.05);">
@@ -548,7 +621,7 @@ if ($authenticated) {
             <div id="orders-tab" style="display: none;">
                 <!-- SEARCH & FILTER BAR -->
                 <div class="glass-card" style="padding: 1rem; margin-bottom: 1.5rem;">
-                    <form method="GET" style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;">
+                    <form method="GET" class="mobile-stack-form" style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;">
                         <input type="hidden" name="tab" value="orders-tab">
                         <div style="flex: 1; min-width: 200px;">
                             <input type="text" name="search" class="form-input" value="<?php echo htmlspecialchars($search_query); ?>" placeholder="Search Order ID, Name, Email or Phone..." style="padding: 0.6rem 1rem; font-size: 0.85rem;">
@@ -646,7 +719,7 @@ if ($authenticated) {
 
             <!-- MODULE 4: MANAGE E-BOOKS -->
             <div id="products-tab" style="display: none;">
-                <div style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 1.5rem; align-items: start;">
+                <div class="manage-ebooks-grid" style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 1.5rem; align-items: start;">
                     <!-- Add Product Card -->
                     <div class="glass-card" style="padding: 1.5rem;">
                         <h3 style="font-size: 1.35rem; margin-bottom: 1rem; color: var(--color-gold);">✨ Add New E-Book Product</h3>
