@@ -346,7 +346,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 4500);
         };
 
-        setInterval(triggerActivityAlert, 10000);
+        setInterval(triggerActivityAlert, 15000);
         setTimeout(triggerActivityAlert, 1000);
     }
 
