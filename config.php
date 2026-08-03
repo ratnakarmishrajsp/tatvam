@@ -24,7 +24,12 @@ if (DEBUG_MODE) {
 }
 
 // Site Configurations
-define('SITE_URL', 'https://tatvam.shop'); // Always use tatvam.shop
+if (!defined('SITE_URL')) {
+    $protocol = (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] === 'on' || $_SERVER['HTTPS'] === 1)) || 
+                (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') ? 'https' : 'http';
+    $host = $_SERVER['HTTP_HOST'] ?? 'tatvam.in';
+    define('SITE_URL', $protocol . '://' . $host);
+}
 define('SITE_NAME', 'TATVAM');
 define('SUPPORT_EMAIL', 'support@tatvam.shop');
 
