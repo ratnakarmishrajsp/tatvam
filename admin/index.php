@@ -500,8 +500,7 @@ if ($authenticated) {
         <header class="admin-header" style="position: relative; z-index: 10; padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,0.06); background: rgba(3,5,12,0.85); backdrop-filter: blur(10px);">
             <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
                 <h1 class="admin-logo" style="font-size: 1.5rem;">TATVAM<span>.</span> <span style="font-size: 0.85rem; font-weight: 400; color: var(--color-gold); margin-left: 0.5rem; background: rgba(251,191,36,0.1); padding: 2px 10px; border-radius: 12px; border: 1px solid rgba(251,191,36,0.2);">Executive SaaS Panel</span></h1>
-                <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
-                    <a href="?action=reset_test_data" onclick="return confirm('क्या आप वाकई सभी टेस्टिंग ऑर्डर्स और कलेक्शन डेटा डिलीट करके ज़ीरो (0) करना चाहते हैं?');" class="btn btn-secondary btn-sm" style="background: rgba(239,68,68,0.1); color: #EF4444; border-color: rgba(239,68,68,0.3); font-weight: 600;"><i data-lucide="rotate-ccw"></i> Reset Test Orders (Set 0)</a>
+                <div style="display: flex; gap: 0.75rem; align-items: center;">
                     <a href="?export=csv" class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, #FFE082 0%, var(--color-gold) 100%); color: #000 !important; box-shadow: none; font-weight: 700;"><i data-lucide="download"></i> Export Orders (CSV)</a>
                     <a href="?action=logout" class="btn btn-secondary btn-sm" style="background: transparent; color: #EF4444; border-color: rgba(239,68,68,0.2);"><i data-lucide="log-out"></i> Logout</a>
                 </div>
