@@ -1158,7 +1158,26 @@ if ($authenticated) {
                     }
                 }
             });
+
+            // Save active tab in localStorage and URL hash so refresh keeps user on active tab
+            try {
+                localStorage.setItem('tatvam_active_admin_tab', tabId);
+                history.replaceState(null, null, '#' + tabId);
+            } catch(e) {}
         }
+
+        // Restore active tab on Page Load / Refresh
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const phpTab = urlParams.get('tab');
+            const hashTab = window.location.hash ? window.location.hash.replace('#', '') : null;
+            const savedTab = localStorage.getItem('tatvam_active_admin_tab');
+
+            const activeTab = phpTab || hashTab || savedTab || 'overview-tab';
+            if (document.getElementById(activeTab)) {
+                switchTab(activeTab);
+            }
+        });
     </script>
 </body>
 </html>
