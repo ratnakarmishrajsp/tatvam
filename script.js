@@ -1,6 +1,45 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // ==========================================================================
+    // TOP LOADING PROGRESS BAR CONTROLLER
+    // ==========================================================================
+    let topBar = document.getElementById('top-loading-bar');
+    if (!topBar) {
+        topBar = document.createElement('div');
+        topBar.id = 'top-loading-bar';
+        document.body.prepend(topBar);
+    }
+    
+    window.startTopLoading = () => {
+        if (!topBar) return;
+        topBar.style.opacity = '1';
+        topBar.style.width = '35%';
+        setTimeout(() => { if (topBar) topBar.style.width = '75%'; }, 120);
+    };
+
+    window.finishTopLoading = () => {
+        if (!topBar) return;
+        topBar.style.width = '100%';
+        setTimeout(() => {
+            topBar.style.opacity = '0';
+            setTimeout(() => { if (topBar) topBar.style.width = '0%'; }, 350);
+        }, 150);
+    };
+
+    // Trigger initial finish on page ready
+    window.finishTopLoading();
+
+    // Attach to all link clicks for instant loading feedback
+    document.querySelectorAll('a[href]').forEach(link => {
+        link.addEventListener('click', (e) => {
+            const href = link.getAttribute('href');
+            if (href && !href.startsWith('#') && !href.startsWith('javascript:')) {
+                window.startTopLoading();
+            }
+        });
+    });
+
+    // ==========================================================================
     // 0. META PIXEL UNIVERSAL TRACKER (Client-Side)
     // ==========================================================================
     const metaPixelId = window.META_PIXEL_ID || '123456789012345';
