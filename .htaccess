@@ -1,80 +1,27 @@
-# ==============================================================================
-# TATVAM HIGH-PERFORMANCE SERVER CONFIGURATION (.htaccess)
-# Enables GZIP Compression, Browser Caching, and Instant Mobile Load
-# ==============================================================================
-
-# Disable Directory Browsing
-Options -Indexes
-
-# Enable Rewrite Engine
+# TATVAM - Optimized LiteSpeed Server Configuration
 <IfModule mod_rewrite.c>
     RewriteEngine On
     
-    # Force HTTPS (Handles Hostinger, Cloudflare, & Reverse Proxies)
-    RewriteCond %{HTTPS} !=on [NC]
-    RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]
-    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+    # Automatic HTTPS Redirect
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-    # Pretty URLs (Automatically load .html file if accessed without .html extension)
+    # Pretty URL routing: route /positive-thinking to positive-thinking.html
+    RewriteRule ^positive-thinking/?$ positive-thinking.html [L,QSA]
+    
+    # Fallback extensionless HTML routing
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME}.html -f
     RewriteRule ^(.*)$ $1.html [L,QSA]
-
-    # Route /positive-thinking directly to positive-thinking.html
-    RewriteRule ^positive-thinking/?$ positive-thinking.html [L,QSA]
 </IfModule>
 
-# ==============================================================================
-# GZIP & DEFLATE COMPRESSION (Shrinks CSS, JS, HTML size by ~75% for fast loading)
-# ==============================================================================
 <IfModule mod_deflate.c>
-    AddOutputFilterByType DEFLATE text/html
-    AddOutputFilterByType DEFLATE text/css
-    AddOutputFilterByType DEFLATE text/javascript
-    AddOutputFilterByType DEFLATE text/plain
-    AddOutputFilterByType DEFLATE text/xml
-    AddOutputFilterByType DEFLATE application/javascript
-    AddOutputFilterByType DEFLATE application/x-javascript
-    AddOutputFilterByType DEFLATE application/json
-    AddOutputFilterByType DEFLATE application/xml
-    AddOutputFilterByType DEFLATE image/svg+xml
-    AddOutputFilterByType DEFLATE font/ttf font/otf font/woff font/woff2
+    AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml
 </IfModule>
 
-# ==============================================================================
-# BROWSER CACHING (Instant load for returning visitors & asset re-downloads)
-# ==============================================================================
-<IfModule mod_expires.c>
-    ExpiresActive On
-    ExpiresDefault "access plus 1 month"
-    
-    # Images & Favicons
-    ExpiresByType image/jpg "access plus 1 year"
-    ExpiresByType image/jpeg "access plus 1 year"
-    ExpiresByType image/gif "access plus 1 year"
-    ExpiresByType image/png "access plus 1 year"
-    ExpiresByType image/webp "access plus 1 year"
-    ExpiresByType image/svg+xml "access plus 1 year"
-    ExpiresByType image/x-icon "access plus 1 year"
-    
-    # CSS & JavaScript
-    ExpiresByType text/css "access plus 1 month"
-    ExpiresByType application/javascript "access plus 1 month"
-    ExpiresByType text/javascript "access plus 1 month"
-    
-    # Fonts
-    ExpiresByType font/woff2 "access plus 1 year"
-    ExpiresByType font/woff "access plus 1 year"
-    ExpiresByType font/ttf "access plus 1 year"
-</IfModule>
-
-# Set Cache-Control Headers
 <IfModule mod_headers.c>
-    <FilesMatch "\.(ico|jpe?g|png|gif|webp|svg|woff2?|ttf)$">
+    <FilesMatch "\.(ico|jpe?g|png|gif|webp|svg|css|js|woff2?)$">
         Header set Cache-Control "public, max-age=31536000, immutable"
-    </FilesMatch>
-    <FilesMatch "\.(css|js)$">
-        Header set Cache-Control "public, max-age=2592000, must-revalidate"
     </FilesMatch>
 </IfModule>
