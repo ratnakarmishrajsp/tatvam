@@ -14,6 +14,15 @@ Options -Indexes
     RewriteCond %{HTTPS} !=on [NC]
     RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]
     RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Pretty URLs (Automatically load .html file if accessed without .html extension)
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME}.html -f
+    RewriteRule ^(.*)$ $1.html [L,QSA]
+
+    # Route /positive-thinking directly to positive-thinking.html
+    RewriteRule ^positive-thinking/?$ positive-thinking.html [L,QSA]
 </IfModule>
 
 # ==============================================================================
