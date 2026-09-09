@@ -6,7 +6,7 @@
 require_once __DIR__ . '/db.php';
 
 try {
-    $stmt = $db->query("SELECT * FROM products WHERE slug = 'positive-thinking'");
+    $stmt = $db->query("SELECT * FROM products ORDER BY id ASC");
     $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (Exception $e) {
     die("Database Query Failed: " . $e->getMessage());
@@ -193,8 +193,12 @@ function getProductUrl($slug) {
                 <div class="nav-dropdown">
                     <a href="library.php" class="nav-link dropdown-trigger">E-Books <i data-lucide="chevron-down" class="dropdown-icon"></i></a>
                     <div class="dropdown-menu">
-                        <a href="library.php" class="dropdown-item">All E-Books</a>
+                        <a href="library.php" class="dropdown-item">📚 All E-Books</a>
                         <a href="positive-thinking.html" class="dropdown-item">मन की शांति (Calm)</a>
+                        <a href="stress-worry.html" class="dropdown-item">चिंता मुक्ति (Anxiety Relief)</a>
+                        <a href="habit-freedom.html" class="dropdown-item">अनुशासन क्रांति (Discipline)</a>
+                        <a href="wealth-mindset.html" class="dropdown-item">समृद्धि सूत्र (Wealth)</a>
+                        <a href="bundle.html" class="dropdown-item">⚡ Mega Bundle (4-in-1)</a>
                     </div>
                 </div>
                 <a href="index.html#faq" class="nav-link">About</a>
