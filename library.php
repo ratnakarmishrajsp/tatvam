@@ -25,6 +25,8 @@ function getProductUrl($slug) {
             return 'wealth-mindset.html';
         case 'mega-bundle':
             return 'bundle.html';
+        case 'focus-reset':
+            return 'focus-reset.html';
         default:
             return 'product.php?slug=' . urlencode($slug);
     }

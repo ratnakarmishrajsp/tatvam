@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <script>if(location.protocol!=='https:'){location.replace('https://'+location.host+location.pathname+location.search);}</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <title>Focus Reset E-Book | Phone की लत तोड़ो, Focus वापस लाओ | TATVAM</title>
+    <meta name="description" content="क्या Phone और Social Media आपका पूरा दिन बर्बाद कर रहे हैं? Focus Reset E-Book से Screen Addiction तोड़ें और Deep Focus की शक्ति पाएं। सिर्फ ₹199 में।">
+
+    <!-- Performance Optimizations & Preconnects -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://sdk.cashfree.com">
+    <link rel="dns-prefetch" href="https://unpkg.com">
+    <link rel="dns-prefetch" href="https://connect.facebook.net">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Lucide Icons & Cashfree JS SDK -->
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    <script src="https://sdk.cashfree.com/js/v3/cashfree.js" defer></script>
+
+    <!-- Master CSS -->
+    <link rel="stylesheet" href="styles.css?v=2.3">
+
+    <style>
+        /* FOCUS RESET — Electric Blue / Cyan Theme */
+        :root {
+            --color-bg-1: #020810;
+            --color-bg-2: #050f1a;
+            --color-bg-3: #081628;
+            --color-primary: #00C8FF;
+            --color-primary-hover: #00A8D8;
+            --color-secondary: #FFFFFF;
+            --color-text-white: #FFFFFF;
+            --color-text-slate: #CBD5E1;
+            --color-text-gray: #94A3B8;
+            --border-light: rgba(0, 200, 255, 0.1);
+            --border-glowing: rgba(0, 200, 255, 0.35);
+            --panel-bg: rgba(8, 22, 40, 0.8);
+            --card-bg: rgba(5, 18, 35, 0.6);
+            --font-heading: 'Outfit', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --shadow-soft: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 1px rgba(0, 200, 255, 0.08);
+            --shadow-glow: 0 0 30px rgba(0, 200, 255, 0.15);
+        }
+
+        body { background-color: var(--color-bg-1); color: var(--color-secondary); }
+
+        .header {
+            background: rgba(2, 8, 16, 0.9);
+            border-bottom: 1px solid rgba(0, 200, 255, 0.08);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .logo { color: #FFFFFF; }
+        .logo span { color: var(--color-primary); }
+        .nav-link { color: var(--color-text-slate); }
+        .nav-link:hover { color: #FFFFFF; }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00C8FF 0%, #0088CC 100%);
+            color: #020810 !important;
+            box-shadow: 0 8px 25px rgba(0, 200, 255, 0.3);
+            border: 1px solid rgba(0, 200, 255, 0.2);
+            font-weight: 700;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+        }
+        .btn-primary:hover { transform: scale(1.02); box-shadow: 0 12px 32px rgba(0, 200, 255, 0.45); }
+        .btn-primary:active { transform: scale(0.96); }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-light);
+            color: #FFFFFF !important;
+        }
+
+        .gradient-cyan-text {
+            background: linear-gradient(135deg, #FFFFFF 20%, #99EEFF 60%, var(--color-primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-soft);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+        .glass-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            border-color: var(--border-glowing);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5), var(--shadow-glow);
+        }
+
+        footer {
+            background: var(--color-bg-2) !important;
+            border-top: 1px solid var(--border-light) !important;
+            color: var(--color-text-slate) !important;
+        }
+
+        .floating-checkout-card {
+            background: rgba(2, 8, 16, 0.97);
+            border: 1px solid var(--border-glowing);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.6), var(--shadow-glow);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .sticky-buy-bar {
+            background: rgba(2, 8, 16, 0.97);
+            border-top: 1px solid rgba(0, 200, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .modal-card {
+            background: #050f1a;
+            border: 1px solid var(--border-glowing);
+            color: #FFFFFF;
+        }
+
+        .form-input {
+            background: rgba(0, 200, 255, 0.03);
+            border: 1px solid rgba(0, 200, 255, 0.1);
+            color: #FFFFFF;
+        }
+        .form-input:focus {
+            border-color: var(--color-primary);
+            background: rgba(0, 200, 255, 0.06);
+            outline: none;
+        }
+        .form-label { color: var(--color-text-gray); }
+        .form-input:focus ~ .form-label,
+        .form-input:not(:placeholder-shown) ~ .form-label {
+            color: var(--color-primary);
+            background: #050f1a;
+        }
+
+        @keyframes floating-book {
+            0%   { transform: translateY(0px) rotateY(-12deg) rotateX(6deg); }
+            50%  { transform: translateY(-12px) rotateY(-6deg) rotateX(3deg); }
+            100% { transform: translateY(0px) rotateY(-12deg) rotateX(6deg); }
+        }
+        .book-3d {
+            animation: floating-book 6s ease-in-out infinite;
+            transform-style: preserve-3d;
+            will-change: transform;
+        }
+
+        @keyframes pulse-glow-cyan {
+            0%, 100% { box-shadow: 0 8px 25px rgba(0, 200, 255, 0.3); }
+            50%       { box-shadow: 0 8px 45px rgba(0, 200, 255, 0.6); }
+        }
+        .btn-pulse { animation: pulse-glow-cyan 2.5s ease-in-out infinite; }
+
+        .tag {
+            background: rgba(0, 200, 255, 0.08);
+            border: 1px solid rgba(0, 200, 255, 0.2);
+            color: var(--color-primary);
+        }
+
+        .blurred-preview-card {
+            position: relative;
+            padding: 2rem 1.5rem;
+            background: rgba(0, 200, 255, 0.02);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            backdrop-filter: blur(16px);
+            min-height: 160px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .blurred-preview-card:hover {
+            transform: translateY(-8px) scale(1.03);
+            border-color: var(--border-glowing);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6), var(--shadow-glow);
+        }
+        .blurred-text {
+            filter: blur(5.5px);
+            user-select: none;
+            color: var(--color-text-slate);
+            font-size: 0.82rem;
+            line-height: 1.4;
+            margin-top: 0.5rem;
+        }
+
+        .illustration-showcase {
+            width: 100%;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-soft);
+            border: 1px solid var(--border-light);
+            margin-bottom: var(--space-sm);
+        }
+
+        .faq-card { background: rgba(0,200,255,0.02); border: 1px solid rgba(0,200,255,0.08); border-radius: 12px; margin-bottom: 0.75rem; overflow: hidden; transition: border-color 0.3s ease; }
+        .faq-card.active { border-color: rgba(0, 200, 255, 0.4); }
+        .faq-trigger { display: flex; justify-content: space-between; align-items: center; padding: 1.1rem 1.25rem; cursor: pointer; user-select: none; font-weight: 600; font-size: 0.98rem; color: #fff; gap: 12px; }
+        .faq-trigger span { flex: 1; }
+        .faq-trigger i { width: 20px; height: 20px; flex-shrink: 0; color: var(--color-primary); transition: transform 0.35s ease; }
+        .faq-card.active .faq-trigger i { transform: rotate(180deg); }
+        .faq-content { max-height: 0 !important; overflow: hidden !important; opacity: 0 !important; padding: 0 1.25rem !important; transition: max-height 0.4s ease, padding 0.3s ease, opacity 0.3s ease; }
+        .faq-card.active .faq-content { max-height: 400px !important; padding: 0 1.25rem 1.1rem !important; opacity: 1 !important; }
+        .faq-content p { color: rgba(255,255,255,0.6); font-size: 0.95rem; line-height: 1.65; }
+    </style>
+</head>
+<body data-page-slug="focus-reset">
+
+    <!-- TICKER BANNER -->
+    <div class="ticker-banner" style="background: linear-gradient(90deg, #001520 0%, #002030 50%, #001520 100%); border-bottom: 1px solid rgba(0,200,255,0.15);">
+        <div class="ticker-text-wrapper">
+            <div class="ticker-item" style="color: #00C8FF;">&#128275; SCREEN TIME KO CONTROL KARO &#8212; FOCUS RESET E-BOOK AB AVAILABLE HAI!</div>
+            <div class="ticker-item" style="color: #00C8FF;">&#128275; SCREEN TIME KO CONTROL KARO &#8212; FOCUS RESET E-BOOK AB AVAILABLE HAI!</div>
+            <div class="ticker-item" style="color: #00C8FF;">&#128275; SCREEN TIME KO CONTROL KARO &#8212; FOCUS RESET E-BOOK AB AVAILABLE HAI!</div>
+            <div class="ticker-item" style="color: #00C8FF;">&#128275; SCREEN TIME KO CONTROL KARO &#8212; FOCUS RESET E-BOOK AB AVAILABLE HAI!</div>
+        </div>
+    </div>
+
+    <!-- BACKGROUND -->
+    <div class="bg-canvas"></div>
+    <div class="noise-overlay"></div>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="nav-glass">
+            <a href="index.html" class="logo">TATVAM<span>.</span></a>
+            <button class="mobile-menu-btn" aria-label="Toggle Menu">&#9776;</button>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <div class="nav-dropdown">
+                    <a href="library.php" class="nav-link dropdown-trigger">E-Books <i data-lucide="chevron-down" class="dropdown-icon"></i></a>
+                    <div class="dropdown-menu">
+                        <a href="library.php" class="dropdown-item">&#128218; All E-Books</a>
+                        <a href="positive-thinking.html" class="dropdown-item">&#2350;&#2344; &#2325;&#2368; &#2358;&#2366;&#2306;&#2340;&#2367; (Calm)</a>
+                        <a href="stress-worry.html" class="dropdown-item">&#2330;&#2367;&#2306;&#2340;&#2366; &#2350;&#2369;&#2325;&#2381;&#2340;&#2367; (Anxiety Relief)</a>
+                        <a href="habit-freedom.html" class="dropdown-item">&#2309;&#2344;&#2369;&#2358;&#2366;&#2360;&#2344; &#2325;&#2381;&#2352;&#2366;&#2306;&#2340;&#2367; (Discipline)</a>
+                        <a href="wealth-mindset.html" class="dropdown-item">&#2360;&#2350;&#2371;&#2342;&#2381;&#2343;&#2367; &#2360;&#2370;&#2340;&#2381;&#2352; (Wealth)</a>
+                        <a href="focus-reset.html" class="dropdown-item">&#127919; Focus Reset (Digital Detox)</a>
+                        <a href="bundle.html" class="dropdown-item">&#9889; Mega Bundle (4-in-1)</a>
+                    </div>
+                </div>
+                <a href="index.html#faq" class="nav-link">About</a>
+                <div class="nav-dropdown">
+                    <span class="nav-link dropdown-trigger">Policies &amp; Help <i data-lucide="chevron-down" class="dropdown-icon"></i></span>
+                    <div class="dropdown-menu">
+                        <a href="contact-us.html" class="dropdown-item">Contact Us</a>
+                        <a href="privacy.html" class="dropdown-item">Privacy Policy</a>
+                        <a href="refund-policy.html" class="dropdown-item">Refund Policy</a>
+                        <a href="terms-conditions.html" class="dropdown-item">Terms &amp; Conditions</a>
+                    </div>
+                </div>
+                <a href="focus-reset.html" class="btn btn-primary btn-sm"><i data-lucide="target"></i> Get E-Book</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- SECTION 1: HERO -->
+    <section class="hero" style="min-height: 95vh; padding-top: 150px;">
+        <div class="container hero-grid">
+            <div class="hero-content">
+                <div class="hero-badge" style="background: rgba(0,200,255,0.06); border-color: rgba(0,200,255,0.2); color: #00C8FF;">
+                    <i data-lucide="target"></i>
+                    <span>Digital Detox &amp; Focus E-Book</span>
+                </div>
+
+                <h1 class="hero-title gradient-cyan-text">
+                    &#2325;&#2381;&#2351;&#2366; Phone &#2344;&#2375; &#2310;&#2346;&#2325;&#2366; Focus, Time &#2324;&#2352; Confidence &#2360;&#2348; &#2331;&#2368;&#2344; &#2354;&#2367;&#2351;&#2366; &#2361;&#2376;?
+                </h1>
+
+                <p class="lead" style="margin-top: 1.5rem; font-size: 1.15rem; color: var(--color-text-slate); line-height: 1.6;">
+                    &#2361;&#2352; 5 &#2350;&#2367;&#2344;&#2335; &#2350;&#2375;&#2306; Phone check &#2325;&#2352;&#2344;&#2366;, Social Media &#2346;&#2352; &#2328;&#2306;&#2335;&#2375; &#2348;&#2352;&#2381;&#2348;&#2366;&#2342; &#2325;&#2352;&#2344;&#2366;, &#2324;&#2352; &#2332;&#2352;&#2370;&#2352;&#2368; &#2325;&#2366;&#2350; &#2335;&#2366;&#2354;&#2340;&#2375; &#2352;&#2361;&#2344;&#2366; &#8212;
+                    <strong style="color: #fff;">&#2351;&#2361; Addiction &#2361;&#2376;, Laziness &#2344;&#2361;&#2368;&#2306;&#0046;</strong>
+                    Focus Reset &#2310;&#2346;&#2325;&#2379; &#2311;&#2360; loop &#2360;&#2375; &#2348;&#2366;&#2361;&#2352; &#2344;&#2367;&#2325;&#2366;&#2354;&#2375;&#2327;&#2368;&#0046;
+                </p>
+
+                <div class="hero-cta-wrapper" style="margin-top: 2.5rem;">
+                    <div class="visitor-badge" style="margin-bottom: var(--space-sm); background: rgba(0,200,255,0.04); border-color: rgba(0,200,255,0.15); color: #00C8FF;">
+                        <div class="visitor-dot" style="background: var(--color-primary); box-shadow: 0 0 8px var(--color-primary);"></div>
+                        <span id="visitor-count-text">213 people are viewing this right now</span>
+                    </div>
+                    <div class="hero-cta">
+                        <button class="btn btn-primary btn-pulse checkout-trigger dynamic-buy-btn-text" data-product-slug="focus-reset" style="padding: 1.25rem 4rem; font-size: 1.15rem; display: flex; align-items: center; gap: 8px;">
+                            &#128275; Buy Now &#8211; &#8377;199
+                        </button>
+                    </div>
+                </div>
+
+                <div class="hero-trust-bullets" style="margin-top: var(--space-md); border-top: 1px solid rgba(0,200,255,0.08); padding-top: var(--space-sm);">
+                    <span><i data-lucide="zap" style="color: var(--color-primary);"></i> &#9889; Instant Download</span>
+                    <span><i data-lucide="lock" style="color: var(--color-primary);"></i> &#128274; Secure Checkout</span>
+                    <span><i data-lucide="infinity" style="color: var(--color-primary);"></i> &#9854; Lifetime Access</span>
+                    <span><i data-lucide="smartphone" style="color: var(--color-primary);"></i> &#128241; Mobile &amp; Laptop Ready</span>
+                </div>
+            </div>
+
+            <div class="showcase-wrapper">
+                <div class="glow-ambient" style="background: radial-gradient(circle, rgba(0,200,255,0.15) 0%, transparent 60%);"></div>
+                <div class="book-shadow-wrapper">
+                    <div class="book-3d">
+                        <div class="book-front">
+                            <img src="assets/focus-reset-cover.jpg" alt="Focus Reset E-Book Cover" loading="eager">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: PAIN POINTS -->
+    <section id="problems" class="section-pad" style="border-top: 1px solid var(--border-light);">
+        <div class="container">
+            <div class="section-head">
+                <span class="tag">Screen Addiction Loop</span>
+                <h2>&#2325;&#2381;&#2351;&#2366; &#2310;&#2346; &#2349;&#2368; &#2311;&#2344; &#2332;&#2366;&#2354;&#2379;&#2306; &#2350;&#2375;&#2306; &#2347;&#2306;&#2360;&#2375; &#2361;&#2376;&#2306;?</h2>
+                <p>Phone Addiction &#2360;&#2367;&#2352;&#2381;&#2347; &#2360;&#2350;&#2351; &#2344;&#2361;&#2368;&#2306; &#8212; &#2310;&#2346;&#2325;&#2368; Mental Energy, Sleep &#2324;&#2352; Self-Respect &#2349;&#2368; &#2330;&#2369;&#2352;&#2366; &#2354;&#2375;&#2340;&#2368; &#2361;&#2376;&#0046;</p>
+            </div>
+            <div class="review-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md);">
+                <div class="glass-card" style="border-left: 3px solid #EF4444; padding: 1.25rem;">
+                    <i data-lucide="smartphone" style="color: #EF4444; width: 28px; height: 28px; margin-bottom: 0.5rem;"></i>
+                    <h3>&#2361;&#2352; 5 &#2350;&#2367;&#2344;&#2335; &#2350;&#2375;&#2306; Phone Check</h3>
+                    <p style="font-size: 0.9rem;">&#2325;&#2366;&#2350; &#2358;&#2369;&#2352;&#2370; &#2325;&#2352;&#2340;&#2375; &#2361;&#2368; notification &#2310;&#2340;&#2368; &#2361;&#2376; &#2324;&#2352; focus &#2335;&#2370;&#2335; &#2332;&#2366;&#2340;&#2366; &#2361;&#2376;&#0046; &#2351;&#2361; cycle &#2342;&#2367;&#2344;&#2349;&#2352; &#2330;&#2354;&#2340;&#2368; &#2352;&#2361;&#2340;&#2368; &#2361;&#2376;&#0046;</p>
+                </div>
+                <div class="glass-card" style="border-left: 3px solid #EF4444; padding: 1.25rem;">
+                    <i data-lucide="clock" style="color: #EF4444; width: 28px; height: 28px; margin-bottom: 0.5rem;"></i>
+                    <h3>Reels &amp; YouTube &#2350;&#2375;&#2306; &#2328;&#2306;&#2335;&#2375; &#2348;&#2352;&#2381;&#2348;&#2366;&#2342;</h3>
+                    <p style="font-size: 0.9rem;">5 &#2350;&#2367;&#2344;&#2335; &#2342;&#2375;&#2326;&#2344;&#2375; &#2348;&#2376;&#2336;&#2340;&#2375; &#2361;&#2376;&#2306; &#2324;&#2352; 2 &#2328;&#2306;&#2335;&#2375; &#2344;&#2367;&#2325;&#2354; &#2332;&#2366;&#2340;&#2375; &#2361;&#2376;&#2306;&#0046; &#2352;&#2366;&#2340; &#2325;&#2379; &#2346;&#2331;&#2340;&#2366;&#2340;&#2375; &#2361;&#2376;&#2306;, &#2309;&#2327;&#2354;&#2375; &#2342;&#2367;&#2344; &#2347;&#2367;&#2352; &#2357;&#2361;&#2368;&#0046;</p>
+                </div>
+                <div class="glass-card" style="border-left: 3px solid #EF4444; padding: 1.25rem;">
+                    <i data-lucide="brain" style="color: #EF4444; width: 28px; height: 28px; margin-bottom: 0.5rem;"></i>
+                    <h3>Brain Fog &amp; Mental Exhaustion</h3>
+                    <p style="font-size: 0.9rem;">&#2360;&#2381;&#2351;&#2366;&#2342;&#2366; Screen time &#2360;&#2375; Dopamine cycle &#2335;&#2370;&#2335; &#2332;&#2366;&#2340;&#2368; &#2361;&#2376; &#8212; concentration &#2344;&#2361;&#2368;&#2306; &#2361;&#2379;&#2340;&#2368;, &#2360;&#2348; boring &#2354;&#2327;&#2340;&#2366; &#2361;&#2376;&#0046;</p>
+                </div>
+                <div class="glass-card" style="border-left: 3px solid #EF4444; padding: 1.25rem;">
+                    <i data-lucide="users" style="color: #EF4444; width: 28px; height: 28px; margin-bottom: 0.5rem;"></i>
+                    <h3>Social Media Comparison</h3>
+                    <p style="font-size: 0.9rem;">&#2342;&#2370;&#2360;&#2352;&#2379;&#2306; &#2325;&#2368; success &#2342;&#2375;&#2326;&#2325;&#2352; &#2326;&#2369;&#2342; &#2325;&#2379; worthless feel &#2361;&#2379;&#2340;&#2366; &#2361;&#2376;&#0046; Anxiety &#2324;&#2352; self-doubt &#2348;&#2397;&#2340;&#2366; &#2332;&#2366;&#2340;&#2366; &#2361;&#2376;&#0046;</p>
+                </div>
+                <div class="glass-card" style="border-left: 3px solid #EF4444; padding: 1.25rem;">
+                    <i data-lucide="moon" style="color: #EF4444; width: 28px; height: 28px; margin-bottom: 0.5rem;"></i>
+                    <h3>&#2326;&#2352;&#2366;&#2348; &#2344;&#2368;&#2306;&#2342;, &#2341;&#2325;&#2368; &#2361;&#2369;&#2312; &#2360;&#2369;&#2348;&#2361;</h3>
+                    <p style="font-size: 0.9rem;">&#2352;&#2366;&#2340; &#2325;&#2379; phone scrolling &#2325;&#2352;&#2340;&#2375; &#2361;&#2376;&#2306;, &#2344;&#2368;&#2306;&#2342; &#2342;&#2375;&#2352; &#2360;&#2375; &#2310;&#2340;&#2368; &#2361;&#2376;, &#2324;&#2352; &#2360;&#2369;&#2348;&#2361; &#2313;&#2336;&#2340;&#2375; &#2361;&#2368; &#2347;&#2367;&#2352; phone &#2346;&#2325;&#2397; &#2354;&#2375;&#2340;&#2375; &#2361;&#2376;&#2306;&#0046;</p>
+                </div>
+                <div class="glass-card" style="border-left: 3px solid #EF4444; padding: 1.25rem;">
+                    <i data-lucide="trending-down" style="color: #EF4444; width: 28px; height: 28px; margin-bottom: 0.5rem;"></i>
+                    <h3>Goals &#2361;&#2350;&#2375;&#2358;&#2366; "&#2325;&#2354; &#2360;&#2375; &#2358;&#2369;&#2352;&#2370;"</h3>
+                    <p style="font-size: 0.9rem;">Padhai, gym, skill &#8212; &#2360;&#2348; &#2325;&#2354; &#2346;&#2352; &#2335;&#2354;&#2366; &#2361;&#2369;&#2310; &#2361;&#2376;&#0046; Screen addiction procrastination &#2325;&#2366; &#2360;&#2348;&#2360;&#2375; &#2348;&#2397;&#2366; &#2325;&#2366;&#2352;&#2339; &#2361;&#2376;&#0046;</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: QUOTE CARDS -->
+    <section class="section-pad" style="background: var(--color-bg-2); border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light);">
+        <div class="container">
+            <div class="section-head">
+                <span class="tag">The Reset</span>
+                <h2>&#2332;&#2348; Focus &#2357;&#2366;&#2346;&#2360; &#2310;&#2340;&#2366; &#2361;&#2376;, &#2360;&#2348; &#2325;&#2369;&#2331; &#2348;&#2342;&#2354; &#2332;&#2366;&#2340;&#2366; &#2361;&#2376;&#0046;</h2>
+                <p>Screen &#2360;&#2375; freedom &#2360;&#2367;&#2352;&#2381;&#2347; time &#2348;&#2330;&#2366;&#2344;&#2366; &#2344;&#2361;&#2368;&#2306; &#8212; &#2351;&#2361; &#2310;&#2346;&#2325;&#2368; &#2346;&#2370;&#2352;&#2368; energy &#2324;&#2352; identity &#2357;&#2366;&#2346;&#2360; &#2354;&#2366;&#2344;&#2366; &#2361;&#2376;&#0046;</p>
+            </div>
+            <div class="review-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md);">
+                <div class="glass-card" style="padding: 3rem 2rem; border: 1px solid var(--border-glowing); border-radius: var(--radius-md); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; min-height: 240px;">
+                    <span style="font-size: 3rem; color: var(--color-primary); font-family: Georgia, serif; line-height: 1; margin-bottom: 0.5rem;">&#10077;</span>
+                    <h3 style="font-size: 1.4rem; font-family: var(--font-heading); color: #FFFFFF; font-weight: bold; line-height: 1.5; margin: 0;">
+                        &#2332;&#2379; Phone &#2325;&#2366; &#2327;&#2369;&#2354;&#2366;&#2350; &#2361;&#2376;,<br>&#2357;&#2379; &#2309;&#2346;&#2344;&#2375; &#2360;&#2346;&#2344;&#2379;&#2306; &#2325;&#2366; &#2350;&#2366;&#2354;&#2367;&#2325; &#2344;&#2361;&#2368;&#2306; &#2348;&#2344; &#2360;&#2325;&#2340;&#2366;&#0046;
+                    </h3>
+                    <span style="font-size: 3rem; color: var(--color-primary); font-family: Georgia, serif; line-height: 1; margin-top: 0.5rem;">&#10078;</span>
+                </div>
+                <div class="glass-card" style="padding: 3rem 2rem; border: 1px solid var(--border-glowing); border-radius: var(--radius-md); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; min-height: 240px;">
+                    <span style="font-size: 3rem; color: var(--color-primary); font-family: Georgia, serif; line-height: 1; margin-bottom: 0.5rem;">&#10077;</span>
+                    <h3 style="font-size: 1.4rem; font-family: var(--font-heading); color: #FFFFFF; font-weight: bold; line-height: 1.5; margin: 0;">
+                        Focus &#2319;&#2325; skill &#2361;&#2376;,<br>&#2324;&#2352; &#2361;&#2352; skill &#2360;&#2368;&#2326;&#2368; &#2332;&#2366; &#2360;&#2325;&#2340;&#2368; &#2361;&#2376;&#0046;
+                    </h3>
+                    <span style="font-size: 3rem; color: var(--color-primary); font-family: Georgia, serif; line-height: 1; margin-top: 0.5rem;">&#10078;</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: THE SCIENCE -->
+    <section class="section-pad">
+        <div class="container">
+            <div class="section-head">
+                <span class="tag">Neuroscience &amp; Psychology</span>
+                <h2>Phone Addiction &#2360;&#2330; &#2350;&#2375;&#2306; Addiction &#2325;&#2381;&#2351;&#2379;&#2306; &#2361;&#2376;?</h2>
+                <p>&#2351;&#2361; willpower &#2325;&#2368; &#2325;&#2350;&#2368; &#2344;&#2361;&#2368;&#2306; &#2361;&#2376; &#8212; &#2351;&#2361; &#2310;&#2346;&#2325;&#2375; brain &#2325;&#2368; chemistry &#2361;&#2376;&#0046;</p>
+            </div>
+            <div class="hero-grid" style="align-items: center;">
+                <div style="background: var(--card-bg); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 2.5rem; backdrop-filter: blur(16px);">
+                    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                        <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                            <div style="width: 40px; height: 40px; border-radius: 50%; background: rgba(0,200,255,0.1); border: 1px solid rgba(0,200,255,0.3); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <i data-lucide="zap" style="color: var(--color-primary); width: 18px; height: 18px;"></i>
+                            </div>
+                            <div>
+                                <h4 style="color: #fff; margin-bottom: 4px;">Dopamine Hit Loop</h4>
+                                <p style="font-size: 0.88rem; color: var(--color-text-slate); line-height: 1.5;">&#2361;&#2352; Notification, Like, &#2324;&#2352; Reel &#2360;&#2375; brain &#2325;&#2379; &#2331;&#2379;&#2335;&#2366; dopamine hit &#2350;&#2367;&#2354;&#2340;&#2366; &#2361;&#2376;&#0046; Brain &#2311;&#2360;&#2325;&#2366; &#2310;&#2342;&#2368; &#2361;&#2379; &#2332;&#2366;&#2340;&#2366; &#2361;&#2376; &#2324;&#2352; real work boring &#2354;&#2327;&#2344;&#2375; &#2354;&#2327;&#2340;&#2368; &#2361;&#2376;&#0046;</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                            <div style="width: 40px; height: 40px; border-radius: 50%; background: rgba(0,200,255,0.1); border: 1px solid rgba(0,200,255,0.3); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <i data-lucide="activity" style="color: var(--color-primary); width: 18px; height: 18px;"></i>
+                            </div>
+                            <div>
+                                <h4 style="color: #fff; margin-bottom: 4px;">Attention Span 8 Seconds</h4>
+                                <p style="font-size: 0.88rem; color: var(--color-text-slate); line-height: 1.5;">Studies &#2342;&#2367;&#2326;&#2366;&#2340;&#2375; &#2361;&#2376;&#2306; &#2325;&#2367; average human attention span Goldfish &#2360;&#2375; &#2349;&#2368; &#2325;&#2350; &#2361;&#2379; &#2327;&#2312; &#2361;&#2376; &#8212; &#2360;&#2367;&#2352;&#2381;&#2347; 8 seconds&#0046; Phone &#2311;&#2360;&#2325;&#2366; &#2360;&#2348;&#2360;&#2375; &#2348;&#2397;&#2366; &#2325;&#2366;&#2352;&#2339; &#2361;&#2376;&#0046;</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                            <div style="width: 40px; height: 40px; border-radius: 50%; background: rgba(0,200,255,0.1); border: 1px solid rgba(0,200,255,0.3); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <i data-lucide="refresh-cw" style="color: var(--color-primary); width: 18px; height: 18px;"></i>
+                            </div>
+                            <div>
+                                <h4 style="color: #fff; margin-bottom: 4px;">Neuroplasticity &#8212; Brain Reset &#2360;&#2306;&#2349;&#2357; &#2361;&#2376;</h4>
+                                <p style="font-size: 0.88rem; color: var(--color-text-slate); line-height: 1.5;">&#2309;&#2330;&#2381;&#2331;&#2368; &#2326;&#2348;&#2352; &#2351;&#2361; &#2361;&#2376; &#2325;&#2367; brain change &#2361;&#2379; &#2360;&#2325;&#2340;&#2366; &#2361;&#2376;&#0046; &#2360;&#2361;&#2368; techniques &#2360;&#2375; 21 &#2342;&#2367;&#2344; &#2350;&#2375;&#2306; dopamine pathways reset &#2361;&#2379; &#2360;&#2325;&#2340;&#2368; &#2361;&#2376;&#2306; &#2324;&#2352; Deep Focus &#2357;&#2366;&#2346;&#2360; &#2310; &#2360;&#2325;&#2340;&#2368; &#2361;&#2376;&#0046;</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3 style="font-size: 1.55rem; margin-bottom: var(--space-sm); font-family: var(--font-heading);">Focus Reset &#2325;&#2366; Formula &#2325;&#2381;&#2351;&#2366; &#2361;&#2376;?</h3>
+                    <p style="color: var(--color-text-slate); font-size: 0.95rem; line-height: 1.7; margin-bottom: var(--space-sm);">&#2311;&#2360; E-Book &#2350;&#2375;&#2306; scientifically proven Digital Detox techniques &#2342;&#2368; &#2327;&#2312; &#2361;&#2376;&#2306; &#2332;&#2379; &#2310;&#2346;&#2325;&#2375; brain &#2325;&#2379; step-by-step Screen Addiction &#2360;&#2375; &#2348;&#2366;&#2361;&#2352; &#2344;&#2367;&#2325;&#2366;&#2354;&#2340;&#2368; &#2361;&#2376;&#2306;&#0046;</p>
+                    <p style="color: var(--color-text-slate); font-size: 0.95rem; line-height: 1.7;">Deep Work, Phone-Free Zones, Dopamine Fasting, &#2324;&#2352; 21-Day Focus Challenge &#8212; &#2360;&#2348; &#2325;&#2369;&#2331; &#2319;&#2325; simple Hinglish guide &#2350;&#2375;&#2306;&#0046;</p>
+                    <div style="margin-top: 1.5rem; display: flex; flex-wrap: wrap; gap: 0.75rem;">
+                        <span style="background: rgba(0,200,255,0.08); border: 1px solid rgba(0,200,255,0.2); color: var(--color-primary); padding: 6px 14px; border-radius: 100px; font-size: 0.82rem; font-weight: 600;">&#10004; Dopamine Fasting</span>
+                        <span style="background: rgba(0,200,255,0.08); border: 1px solid rgba(0,200,255,0.2); color: var(--color-primary); padding: 6px 14px; border-radius: 100px; font-size: 0.82rem; font-weight: 600;">&#10004; Deep Work Method</span>
+                        <span style="background: rgba(0,200,255,0.08); border: 1px solid rgba(0,200,255,0.2); color: var(--color-primary); padding: 6px 14px; border-radius: 100px; font-size: 0.82rem; font-weight: 600;">&#10004; 21-Day Challenge</span>
+                        <span style="background: rgba(0,200,255,0.08); border: 1px solid rgba(0,200,255,0.2); color: var(--color-primary); padding: 6px 14px; border-radius: 100px; font-size: 0.82rem; font-weight: 600;">&#10004; Phone-Free Zones</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: WHAT YOU LEARN -->
+    <section class="section-pad" style="background: var(--color-bg-2);">
+        <div class="container">
+            <div class="section-head">
+                <span class="tag">Book Value</span>
+                <h2>Focus Reset &#2360;&#2375; &#2310;&#2346; &#2325;&#2381;&#2351;&#2366; &#2360;&#2368;&#2326;&#2375;&#2306;&#2327;&#2375;?</h2>
+                <p>&#2361;&#2352; chapter &#2319;&#2325; practical tool &#2361;&#2376; &#8212; theory &#2344;&#2361;&#2368;&#2306;, action &#2361;&#2376;&#0046;</p>
+            </div>
+            <div class="review-grid">
+                <div class="glass-card">
+                    <i data-lucide="wifi-off" style="color: var(--color-primary); width: 32px; height: 32px; margin-bottom: 0.5rem;"></i>
+                    <h3>Digital Detox Plan</h3>
+                    <p style="font-size: 0.9rem;">Step-by-step 7-day plan &#2332;&#2379; bina anxiety &#2325;&#2375; phone use &#2325;&#2350; &#2325;&#2352;&#2340;&#2366; &#2361;&#2376;&#0046;</p>
+                </div>
+                <div class="glass-card">
+                    <i data-lucide="timer" style="color: var(--color-primary); width: 32px; height: 32px; margin-bottom: 0.5rem;"></i>
+                    <h3>Deep Work Blocks</h3>
+                    <p style="font-size: 0.9rem;">90-minute distraction-free sessions &#2332;&#2379; &#2319;&#2325; &#2342;&#2367;&#2344; &#2350;&#2375;&#2306; &#2346;&#2370;&#2352;&#2366; week &#2325;&#2366; &#2325;&#2366;&#2350; &#2325;&#2352;&#2357;&#2366;&#2340;&#2375; &#2361;&#2376;&#2306;&#0046;</p>
+                </div>
+                <div class="glass-card">
+                    <i data-lucide="battery-charging" style="color: var(--color-primary); width: 32px; height: 32px; margin-bottom: 0.5rem;"></i>
+                    <h3>Dopamine Reset</h3>
+                    <p style="font-size: 0.9rem;">Brain &#2325;&#2368; reward system &#2325;&#2379; naturally reboot &#2325;&#2352;&#2344;&#2375; &#2325;&#2368; proven technique&#0046;</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 6: INSIDE EBOOK (Blurred Cards) -->
+    <section id="whats-inside" class="section-pad" style="background: var(--color-bg-1); border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light);">
+        <div class="container">
+            <div class="section-head">
+                <span class="tag">&#128214; Exclusive Content</span>
+                <h2>E-Book &#2325;&#2375; &#2309;&#2306;&#2342;&#2352; &#2325;&#2381;&#2351;&#2366; &#2361;&#2376;?</h2>
+                <p>&#2351;&#2361; &#2360;&#2367;&#2352;&#2381;&#2347; &#2325;&#2367;&#2340;&#2366;&#2348; &#2344;&#2361;&#2368;&#2306; &#8212; &#2319;&#2325; complete transformation toolkit &#2361;&#2376;&#0046;</p>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-md);">
+                <div class="blurred-preview-card">
+                    <i data-lucide="target" style="color: var(--color-primary); width: 28px; height: 28px; margin-bottom: 0.5rem;"></i>
+                    <h4 style="font-size: 1rem; color: #FFFFFF; font-weight: bold; margin: 0;">21-Day Focus Challenge</h4>
+                    <div class="blurred-text">Daily structured challenges jo aapke brain ko screen dependency se gradually free karte hain aur deep focus restore karte hain.</div>
+                </div>
+                <div class="blurred-preview-card">
+                    <i data-lucide="sun" style="color: var(--color-primary); width: 28px; height: 28px; margin-bottom: 0.5rem;"></i>
+                    <h4 style="font-size: 1rem; color: #FFFFFF; font-weight: bold; margin: 0;">Phone-Free Morning Routine</h4>
+                    <div class="blurred-text">Subah uthte hi phone mat pakdo. Ye 30-minute morning template aapki poori din ki energy aur clarity set karta hai.</div>
+                </div>
+                <div class="blurred-preview-card">
+                    <i data-lucide="bar-chart-2" style="color: var(--color-primary); width: 28px; height: 28px; margin-bottom: 0.5rem;"></i>
+                    <h4 style="font-size: 1rem; color: #FFFFFF; font-weight: bold; margin: 0;">Screen Time Tracker</h4>
+                    <div class="blurred-text">Fillable daily log to track your screen time patterns, identify triggers, and measure weekly improvement progress systematically.</div>
+                </div>
+                <div class="blurred-preview-card">
+                    <i data-lucide="shield" style="color: var(--color-primary); width: 28px; height: 28px; margin-bottom: 0.5rem;"></i>
+                    <h4 style="font-size: 1rem; color: #FFFFFF; font-weight: bold; margin: 0;">Distraction Shield Guide</h4>
+                    <div class="blurred-text">Practical strategies to create phone-free zones at home, office and study space. Environment design for maximum focus output.</div>
+                </div>
+                <div class="blurred-preview-card">
+                    <i data-lucide="zap" style="color: var(--color-primary); width: 28px; height: 28px; margin-bottom: 0.5rem;"></i>
+                    <h4 style="font-size: 1rem; color: #FFFFFF; font-weight: bold; margin: 0;">Dopamine Fasting Protocol</h4>
+                    <div class="blurred-text">Scientific step-by-step fasting plan jo aapke brain ko boring tasks mein bhi natural pleasure dhoondna sikhata hai permanently.</div>
+                </div>
+                <div class="blurred-preview-card">
+                    <i data-lucide="book-open" style="color: var(--color-primary); width: 28px; height: 28px; margin-bottom: 0.5rem;"></i>
+                    <h4 style="font-size: 1rem; color: #FFFFFF; font-weight: bold; margin: 0;">Deep Work Blueprint</h4>
+                    <div class="blurred-text">Cal Newport ke proven deep work methodology ko simple Hinglish mein. 90-minute focused blocks kaise schedule karein daily.</div>
+                </div>
+                <div class="blurred-preview-card">
+                    <i data-lucide="moon" style="color: var(--color-primary); width: 28px; height: 28px; margin-bottom: 0.5rem;"></i>
+                    <h4 style="font-size: 1rem; color: #FFFFFF; font-weight: bold; margin: 0;">Night Detox Ritual</h4>
+                    <div class="blurred-text">Raat ko phone band karke kya karein. Sleep-friendly evening routine jo brain ko recover karne deta hai aur kal fresh feel karwata hai.</div>
+                </div>
+                <div class="blurred-preview-card">
+                    <i data-lucide="check-circle" style="color: var(--color-primary); width: 28px; height: 28px; margin-bottom: 0.5rem;"></i>
+                    <h4 style="font-size: 1rem; color: #FFFFFF; font-weight: bold; margin: 0;">Weekly Reset Worksheet</h4>
+                    <div class="blurred-text">Every Sunday ki 15-minute reflection exercise jo next week ke goals, focus areas, aur screen time limits set karti hai clearly.</div>
+                </div>
+                <div class="blurred-preview-card">
+                    <i data-lucide="trending-up" style="color: var(--color-primary); width: 28px; height: 28px; margin-bottom: 0.5rem;"></i>
+                    <h4 style="font-size: 1rem; color: #FFFFFF; font-weight: bold; margin: 0;">Focus Progress Journal</h4>
+                    <div class="blurred-text">Daily journaling prompts to build self-awareness about your phone habits and track mental clarity improvement week by week.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 7: FREE BONUS -->
+    <section class="section-pad" style="background: var(--color-bg-2);">
+        <div class="container">
+            <div class="section-head">
+                <span class="tag">Gift Package</span>
+                <h2>&#127873; FREE PREMIUM BONUS</h2>
+                <p>Purchase &#2325;&#2375; &#2360;&#2366;&#2341; &#2351;&#2361; &#2360;&#2348; &#2325;&#2369;&#2331; &#2348;&#2367;&#2354;&#2381;&#2325;&#2369;&#2354; FREE &#2350;&#2367;&#2354;&#2375;&#2327;&#2366;&#0046;</p>
+            </div>
+            <div class="hero-grid" style="align-items: center;">
+                <div class="glass-card" style="padding: 2.5rem; border-color: var(--border-glowing);">
+                    <h3 style="font-size: 1.4rem; color: var(--color-primary); margin-bottom: 1rem;">Complete Bonus Toolkit</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.5rem;">
+                        <span style="font-size: 0.9rem; color: var(--color-text-slate);">&#10004;&#65039; 21-Day Focus Planner</span>
+                        <span style="font-size: 0.9rem; color: var(--color-text-slate);">&#10004;&#65039; Screen Time Log Sheet</span>
+                        <span style="font-size: 0.9rem; color: var(--color-text-slate);">&#10004;&#65039; Deep Work Timetable</span>
+                        <span style="font-size: 0.9rem; color: var(--color-text-slate);">&#10004;&#65039; Dopamine Reset Guide</span>
+                        <span style="font-size: 0.9rem; color: var(--color-text-slate);">&#10004;&#65039; Phone-Free Zone Checklist</span>
+                        <span style="font-size: 0.9rem; color: var(--color-text-slate);">&#10004;&#65039; Weekly Reflection Pages</span>
+                        <span style="font-size: 0.9rem; color: var(--color-text-slate);">&#10004;&#65039; Focus Habit Tracker</span>
+                        <span style="font-size: 0.9rem; color: var(--color-text-slate);">&#10004;&#65039; Digital Detox Journal</span>
+                    </div>
+                    <span style="font-size: 0.8rem; background: rgba(16,185,129,0.08); color: #10B981; padding: 6px 12px; border-radius: 100px; font-weight: bold; border: 1px solid rgba(16,185,129,0.2);">FREE BONUS (Value: &#8377;999)</span>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: var(--space-sm);">
+                    <div class="glass-card" style="padding: 1.5rem; border-left: 3px solid var(--color-primary);">
+                        <div style="font-size: 2rem; margin-bottom: 4px;">&#129504;</div>
+                        <h4 style="color: #fff;">Neuroscience-Backed Methods</h4>
+                        <p style="font-size: 0.85rem; color: var(--color-text-slate); margin-top: 4px;">&#2361;&#2352; technique brain research &#2346;&#2352; based &#2361;&#2376;, &#2344; &#2325;&#2367; generic advice &#2346;&#2352;&#0046;</p>
+                    </div>
+                    <div class="glass-card" style="padding: 1.5rem; border-left: 3px solid var(--color-primary);">
+                        <div style="font-size: 2rem; margin-bottom: 4px;">&#127470;&#127475;</div>
+                        <h4 style="color: #fff;">Simple Hinglish Language</h4>
+                        <p style="font-size: 0.85rem; color: var(--color-text-slate); margin-top: 4px;">70% Hindi + 30% English &#8212; &#2348;&#2367;&#2344;&#2366; dictionary &#2325;&#2375; &#2360;&#2350;&#2359; &#2310;&#2319;&#2327;&#2366;&#0046;</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 8: 3 STEPS -->
+    <section class="section-pad">
+        <div class="container">
+            <div class="section-head">
+                <span class="tag">Steps</span>
+                <h2>&#9889; 3 Simple Steps &#2350;&#2375;&#2306; Instant Access &#2346;&#2366;&#2319;&#2306;</h2>
+                <p>Payment &#2325;&#2375; &#2340;&#2369;&#2352;&#2306;&#2340; &#2348;&#2366;&#2342; download link &#2350;&#2367;&#2354; &#2332;&#2366;&#2340;&#2368; &#2361;&#2376;&#0046;</p>
+            </div>
+            <div class="review-grid" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));">
+                <div class="glass-card" style="background: var(--card-bg);">
+                    <div style="font-size: 2rem; color: var(--color-primary); margin-bottom: 0.5rem; font-family: var(--font-heading); font-weight: 800;">01</div>
+                    <h4>Securely Pay &#2325;&#2352;&#2375;&#2306;</h4>
+                    <p style="font-size: 0.85rem; margin-top: 4px; color: var(--color-text-slate);">UPI, NetBanking, &#2351;&#2366; Credit/Debit Card &#2360;&#2375; SSL encrypted secure payment &#2325;&#2352;&#2375;&#2306;&#0046;</p>
+                </div>
+                <div class="glass-card" style="background: var(--card-bg);">
+                    <div style="font-size: 2rem; color: var(--color-primary); margin-bottom: 0.5rem; font-family: var(--font-heading); font-weight: 800;">02</div>
+                    <h4>Instant Download Link</h4>
+                    <p style="font-size: 0.85rem; margin-top: 4px; color: var(--color-text-slate);">Screen &#2346;&#2352; &#2340;&#2369;&#2352;&#2306;&#2340; link &#2350;&#2367;&#2354;&#2375;&#2327;&#2368;&#0046; Email &#2350;&#2375;&#2306; &#2349;&#2368; backup link &#2332;&#2366;&#2319;&#2327;&#2368;&#0046;</p>
+                </div>
+                <div class="glass-card" style="background: var(--card-bg);">
+                    <div style="font-size: 2rem; color: var(--color-primary); margin-bottom: 0.5rem; font-family: var(--font-heading); font-weight: 800;">03</div>
+                    <h4>Anywhere Anytime &#2346;&#2397;&#2375;&#2306;</h4>
+                    <p style="font-size: 0.85rem; margin-top: 4px; color: var(--color-text-slate);">PDF format &#8212; Mobile, Tablet, Laptop, E-Reader &#8212; &#2360;&#2349;&#2368; &#2346;&#2352; perfect&#0046;</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 9: TRUST -->
+    <section id="promise" class="section-pad" style="background: var(--color-bg-2); border-top: 1px solid var(--border-light);">
+        <div class="container">
+            <div class="section-head">
+                <span class="tag">Trust</span>
+                <h2>&#128737;&#65039; &#2361;&#2350;&#2366;&#2352;&#2366; &#2357;&#2366;&#2342;&#2366;</h2>
+                <p>&#2361;&#2350; &#2310;&#2346;&#2325;&#2368; investment &#2325;&#2368; value guarantee &#2325;&#2352;&#2340;&#2375; &#2361;&#2376;&#2306;&#0046;</p>
+            </div>
+            <div class="review-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--space-md);">
+                <div class="glass-card" style="padding: 1.5rem; border-top: 2px solid var(--color-primary);">
+                    <h4>&#10004;&#65039; Original Premium Content</h4>
+                    <p style="font-size: 0.85rem; color: var(--color-text-slate); margin-top: 4px;">Experienced content creators &#2342;&#2381;&#2357;&#2366;&#2352;&#2366; &#2354;&#2367;&#2326;&#2366; &#2327;&#2351;&#2366; &#8212; &#2325;&#2379;&#2312; AI fluff &#2344;&#2361;&#2368;&#2306;&#0046;</p>
+                </div>
+                <div class="glass-card" style="padding: 1.5rem; border-top: 2px solid var(--color-primary);">
+                    <h4>&#10004;&#65039; Practical Exercises</h4>
+                    <p style="font-size: 0.85rem; color: var(--color-text-slate); margin-top: 4px;">Theory &#2344;&#2361;&#2368;&#2306;, action &#8212; &#2361;&#2352; page &#2346;&#2352; &#2325;&#2352;&#2344;&#2375; &#2351;&#2379;&#2327;&#2381;&#2351; exercises&#0046;</p>
+                </div>
+                <div class="glass-card" style="padding: 1.5rem; border-top: 2px solid var(--color-primary);">
+                    <h4>&#10004;&#65039; Simple Hinglish</h4>
+                    <p style="font-size: 0.85rem; color: var(--color-text-slate); margin-top: 4px;">70% Hindi + 30% English &#8212; &#2348;&#2367;&#2344;&#2366; dictionary &#2325;&#2375; &#2360;&#2350;&#2360; &#2310;&#2319;&#2327;&#2366;&#0046;</p>
+                </div>
+                <div class="glass-card" style="padding: 1.5rem; border-top: 2px solid var(--color-primary);">
+                    <h4>&#10004;&#65039; Instant Delivery</h4>
+                    <p style="font-size: 0.85rem; color: var(--color-text-slate); margin-top: 4px;">Payment &#2361;&#2379;&#2340;&#2375; &#2361;&#2368; download link &#8212; 0 wait time&#0046;</p>
+                </div>
+                <div class="glass-card" style="padding: 1.5rem; border-top: 2px solid var(--color-primary);">
+                    <h4>&#10004;&#65039; Lifetime Access</h4>
+                    <p style="font-size: 0.85rem; color: var(--color-text-slate); margin-top: 4px;">&#2319;&#2325; &#2348;&#2366;&#2352; &#2326;&#2352;&#2368;&#2342;&#2379;, &#2332;&#2367;&#2340;&#2344;&#2368; &#2348;&#2366;&#2352; &#2330;&#2366;&#2361;&#2379; download &#2325;&#2352;&#2379;&#0046;</p>
+                </div>
+                <div class="glass-card" style="padding: 1.5rem; border-top: 2px solid var(--color-primary);">
+                    <h4>&#10004;&#65039; Free Bonus Kit</h4>
+                    <p style="font-size: 0.85rem; color: var(--color-text-slate); margin-top: 4px;">Trackers, worksheets, &#2324;&#2352; planner &#2348;&#2367;&#2354;&#2381;&#2325;&#2369;&#2354; FREE &#2360;&#2366;&#2341; &#2350;&#2375;&#2306;&#0046;</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 10: REVIEWS -->
+    <section id="reviews" class="section-pad" style="background: var(--color-bg-1); border-top: 1px solid var(--border-light);">
+        <div class="container">
+            <div class="section-head">
+                <span class="tag">Social Proof</span>
+                <h2>Early Readers &#2325;&#2381;&#2351;&#2366; &#2325;&#2361; &#2352;&#2361;&#2375; &#2361;&#2376;&#2306;?</h2>
+                <p>&#2332;&#2367;&#2344;&#2361;&#2379;&#2306;&#2344;&#2375; Focus Reset &#2346;&#2397;&#2368;, &#2313;&#2344;&#2325;&#2368; life &#2350;&#2375;&#2306; &#2325;&#2381;&#2351;&#2366; &#2348;&#2342;&#2354;&#2366;&#0046;</p>
+                <div style="margin-top: 1.5rem; display: inline-flex; align-items: center; gap: 8px; background: rgba(0,200,255,0.04); border: 1px solid rgba(0,200,255,0.15); padding: 6px 16px; border-radius: 100px;">
+                    <span style="font-weight: bold; color: var(--color-primary);">&#11088; Average Rating:</span>
+                    <span style="font-weight: 800; color: #FFFFFF;">4.9/5</span>
+                    <span style="color: var(--color-primary);">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                </div>
+            </div>
+            <div style="position: relative; margin-top: 1.5rem;">
+                <button onclick="document.getElementById('reviews-carousel-fr').scrollBy({left: -320, behavior: 'smooth'})" style="position: absolute; left: -15px; top: 50%; transform: translateY(-50%); z-index: 10; background: rgba(5,15,26,0.9); color: var(--color-primary); border: 1px solid rgba(0,200,255,0.3); width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; backdrop-filter: blur(8px);">&#10094;</button>
+                <button onclick="document.getElementById('reviews-carousel-fr').scrollBy({left: 320, behavior: 'smooth'})" style="position: absolute; right: -15px; top: 50%; transform: translateY(-50%); z-index: 10; background: rgba(5,15,26,0.9); color: var(--color-primary); border: 1px solid rgba(0,200,255,0.3); width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; backdrop-filter: blur(8px);">&#10095;</button>
+
+                <div id="reviews-carousel-fr" style="display: flex; gap: 1.25rem; overflow-x: auto; padding: 0.5rem 0.25rem 1rem; scroll-snap-type: x mandatory; scroll-behavior: smooth; -webkit-overflow-scrolling: touch;">
+                    <div class="glass-card" style="flex: 0 0 300px; max-width: 85vw; scroll-snap-align: center; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1rem;">
+                                <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(0,200,255,0.1); border: 2px solid var(--color-primary); display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--color-primary); font-size: 1.2rem;">A</div>
+                                <div>
+                                    <h4 style="font-size: 1rem; color: #fff; margin: 0;">Arjun</h4>
+                                    <span style="color: var(--color-primary); font-size: 0.75rem;">&#9733;&#9733;&#9733;&#9733;&#9733; Verified Reader</span>
+                                </div>
+                            </div>
+                            <p style="font-size: 0.88rem; line-height: 1.55; color: var(--color-text-slate);">"Phone ki wajah se raat ko 2-3 baje tak jaagta tha. Focus Reset mein jo Night Detox Ritual diya hai, usne meri neend aur subah dono badal di. Ab 10 baje so jaata hoon!"</p>
+                        </div>
+                        <span style="font-size: 0.72rem; color: var(--color-primary); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; display: block; margin-top: 1rem;">Sleep &amp; Focus Recovery</span>
+                    </div>
+                    <div class="glass-card" style="flex: 0 0 300px; max-width: 85vw; scroll-snap-align: center; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1rem;">
+                                <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(0,200,255,0.1); border: 2px solid var(--color-primary); display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--color-primary); font-size: 1.2rem;">S</div>
+                                <div>
+                                    <h4 style="font-size: 1rem; color: #fff; margin: 0;">Shruti</h4>
+                                    <span style="color: var(--color-primary); font-size: 0.75rem;">&#9733;&#9733;&#9733;&#9733;&#9733; Verified Reader</span>
+                                </div>
+                            </div>
+                            <p style="font-size: 0.88rem; line-height: 1.55; color: var(--color-text-slate);">"Exam preparation ke time Instagram scroll karte rehna main weakness samajhti thi. Is book ne samjhaya ki ye brain ka dopamine loop hai. 21-day challenge se padhai pe focus aa gaya."</p>
+                        </div>
+                        <span style="font-size: 0.72rem; color: var(--color-primary); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; display: block; margin-top: 1rem;">Study Focus Restored</span>
+                    </div>
+                    <div class="glass-card" style="flex: 0 0 300px; max-width: 85vw; scroll-snap-align: center; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1rem;">
+                                <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(0,200,255,0.1); border: 2px solid var(--color-primary); display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--color-primary); font-size: 1.2rem;">R</div>
+                                <div>
+                                    <h4 style="font-size: 1rem; color: #fff; margin: 0;">Ravi</h4>
+                                    <span style="color: var(--color-primary); font-size: 0.75rem;">&#9733;&#9733;&#9733;&#9733;&#9733; Verified Reader</span>
+                                </div>
+                            </div>
+                            <p style="font-size: 0.88rem; line-height: 1.55; color: var(--color-text-slate);">"Work from home mein productivity zero thi. Har 10 min mein phone dekhta tha. Deep Work Blueprint follow kiya — pehle week mein hi 3x productive feel kiya. Highly recommend!"</p>
+                        </div>
+                        <span style="font-size: 0.72rem; color: var(--color-primary); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; display: block; margin-top: 1rem;">Work Productivity 3x</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 11: FAQ -->
+    <section id="faq" class="section-pad" style="background: var(--color-bg-2);">
+        <div class="container">
+            <div class="section-head">
+                <span class="tag">FAQs</span>
+                <h2>&#2310;&#2346;&#2325;&#2375; &#2360;&#2357;&#2366;&#2354;, &#2361;&#2350;&#2366;&#2352;&#2375; &#2332;&#2357;&#2366;&#2348;</h2>
+                <p>&#2325;&#2379;&#2312; doubt &#2361;&#2376; &#2340;&#2379; &#2351;&#2361;&#2366;&#2306; check &#2325;&#2352;&#2375;&#2306;&#0046;</p>
+            </div>
+            <div class="faq-box" style="max-width: 700px; margin: 0 auto;">
+                <div class="faq-card">
+                    <div class="faq-trigger"><span>&#2325;&#2381;&#2351;&#2366; &#2350;&#2369;&#2360;&#2375; Phone completely &#2331;&#2379;&#2397;&#2344;&#2368; &#2361;&#2379;&#2327;&#2368;?</span><i data-lucide="chevron-down"></i></div>
+                    <div class="faq-content"><p>&#2348;&#2367;&#2354;&#2381;&#2325;&#2369;&#2354; &#2344;&#2361;&#2368;&#2306;! Focus Reset &#2310;&#2346;&#2325;&#2379; phone smart &#2340;&#2352;&#2368;&#2325;&#2375; &#2360;&#2375; use &#2325;&#2352;&#2344;&#2366; &#2360;&#2367;&#2326;&#2366;&#2340;&#2368; &#2361;&#2376; &#8212; addiction &#2344;&#2361;&#2368;&#2306;, control&#0046; Goal &#2361;&#2376; mindful usage, total ban &#2344;&#2361;&#2368;&#2306;&#0046;</p></div>
+                </div>
+                <div class="faq-card">
+                    <div class="faq-trigger"><span>&#2351;&#2361; E-Book &#2325;&#2367;&#2340;&#2344;&#2375; &#2342;&#2367;&#2344; &#2350;&#2375;&#2306; results &#2342;&#2375;&#2327;&#2368;?</span><i data-lucide="chevron-down"></i></div>
+                    <div class="faq-content"><p>&#2346;&#2361;&#2354;&#2375; 7 &#2342;&#2367;&#2344; &#2350;&#2375;&#2306; screen time reduce &#2361;&#2379;&#2344;&#2375; &#2354;&#2327;&#2340;&#2368; &#2361;&#2376;&#0046; 21-Day Challenge complete &#2325;&#2352;&#2344;&#2375; &#2346;&#2352; brain &#2325;&#2368; dopamine cycle reset &#2361;&#2379; &#2332;&#2366;&#2340;&#2368; &#2361;&#2376;&#0046; Consistency &#2361;&#2368; key &#2361;&#2376;&#0046;</p></div>
+                </div>
+                <div class="faq-card">
+                    <div class="faq-trigger"><span>PDF file &#2325;&#2376;&#2360;&#2375; &#2350;&#2367;&#2354;&#2375;&#2327;&#2368;? Process &#2325;&#2381;&#2351;&#2366; &#2361;&#2376;?</span><i data-lucide="chevron-down"></i></div>
+                    <div class="faq-content"><p>Payment complete &#2361;&#2379;&#2340;&#2375; &#2361;&#2368; screen &#2346;&#2352; download link show &#2361;&#2379;&#2327;&#2368;&#0046; Email inbox &#2350;&#2375;&#2306; &#2349;&#2368; backup link &#2332;&#2366;&#2319;&#2327;&#2368;&#0046; Direct single-tap &#2350;&#2375;&#2306; download &#2325;&#2352; &#2360;&#2325;&#2340;&#2375; &#2361;&#2376;&#2306;&#0046;</p></div>
+                </div>
+                <div class="faq-card">
+                    <div class="faq-trigger"><span>Mobile &#2346;&#2352; &#2346;&#2397; &#2360;&#2325;&#2340;&#2375; &#2361;&#2376;&#2306;?</span><i data-lucide="chevron-down"></i></div>
+                    <div class="faq-content"><p>&#2361;&#2366;&#2305;! PDF format mobile, tablet, laptop &#2324;&#2352; e-readers &#2360;&#2349;&#2368; &#2346;&#2352; perfectly readable &#2361;&#2376;&#0046; &#2325;&#2379;&#2312; special app &#2325;&#2368; &#2332;&#2352;&#2370;&#2352;&#2340; &#2344;&#2361;&#2368;&#2306;&#0046;</p></div>
+                </div>
+                <div class="faq-card">
+                    <div class="faq-trigger"><span>Refund policy &#2325;&#2381;&#2351;&#2366; &#2361;&#2376;?</span><i data-lucide="chevron-down"></i></div>
+                    <div class="faq-content"><p>&#2309;&#2327;&#2352; E-Book &#2360;&#2375; &#2310;&#2346;&#2325;&#2379; &#2325;&#2379;&#2312; value &#2344;&#2361;&#2368;&#2306; &#2350;&#2367;&#2354;&#2340;&#2368;, &#2340;&#2379; 7 &#2342;&#2367;&#2344; &#2325;&#2375; &#2309;&#2306;&#2342;&#2352; support@tatvam.shop &#2346;&#2352; mail &#2325;&#2352;&#2375;&#2306;&#0046; 100% secure refund process available &#2361;&#2376;&#0046;</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 12: FINAL CTA -->
+    <section class="section-pad" style="border-top: 1px solid var(--border-light); background: radial-gradient(circle at center, rgba(0,200,255,0.05), var(--color-bg-1) 100%);">
+        <div class="container hero-grid" style="align-items: center;">
+            <div class="bottom-cta-content">
+                <span class="tag">Immediate Access</span>
+                <h2 class="bottom-cta-title gradient-cyan-text">&#2310;&#2332; Phone &#2325;&#2379; Control &#2325;&#2352;&#2379; &#8212; &#2309;&#2346;&#2344;&#2368; Life &#2357;&#2366;&#2346;&#2360; &#2354;&#2379;&#0046;</h2>
+                <p style="margin-bottom: var(--space-md); color: var(--color-text-slate);">Focus Reset E-Book + Complete Bonus Toolkit &#8212; &#2360;&#2367;&#2352;&#2381;&#2347; &#8377;199 &#2350;&#2375;&#2306;&#0046;</p>
+
+                <div style="font-size: 2.25rem; font-weight: 800; color: var(--color-primary); margin-bottom: var(--space-md);">
+                    <span class="dynamic-price-val">&#8377;199</span>
+                    <del class="dynamic-orig-price-val" style="font-size: 1.15rem; color: var(--color-text-slate); margin-left: 8px;">&#8377;1499</del>
+                    <span style="font-size: 0.9rem; background: rgba(16,185,129,0.1); color: #10B981; border: 1px solid rgba(16,185,129,0.2); padding: 4px 10px; border-radius: 100px; margin-left: 8px; font-weight: 600;">87% OFF</span>
+                </div>
+
+                <button class="btn btn-primary btn-pulse checkout-trigger dynamic-buy-btn-text" data-product-slug="focus-reset" style="padding: 1.25rem 4rem; font-size: 1.15rem; display: flex; align-items: center; gap: 8px;">
+                    &#128275; Buy Now &#8211; &#8377;199
+                </button>
+
+                <div class="hero-trust-bullets" style="margin-top: var(--space-sm); gap: 12px;">
+                    <span><i data-lucide="zap" style="color: var(--color-primary); width: 14px; height: 14px;"></i> &#9889; Instant Download</span>
+                    <span><i data-lucide="infinity" style="color: var(--color-primary); width: 14px; height: 14px;"></i> &#9854; Lifetime Access</span>
+                    <span><i data-lucide="lock" style="color: var(--color-primary); width: 14px; height: 14px;"></i> &#128274; Secure Payment</span>
+                </div>
+            </div>
+            <div class="showcase-wrapper">
+                <div class="glow-ambient" style="background: radial-gradient(circle, rgba(0,200,255,0.12) 0%, transparent 60%);"></div>
+                <div class="book-shadow-wrapper">
+                    <div class="book-3d">
+                        <div class="book-front">
+                            <img src="assets/focus-reset-cover.jpg" alt="Focus Reset E-Book" loading="lazy">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer style="background: var(--color-bg-2); color: var(--color-text-slate); padding: var(--space-lg) 0 var(--space-md); border-top: 1px solid var(--border-light); position: relative; z-index: 2;">
+        <div class="container">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-sm);">
+                <h3 style="color: #fff; font-size: 1.35rem;">TATVAM<span style="color: var(--color-primary);">.</span>SHOP</h3>
+                <p>&copy; 2026 tatvam.shop. All rights reserved. Support: support@tatvam.shop</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Desktop floating card -->
+    <div class="floating-checkout-card" id="desktop-floating-card">
+        <div class="floating-book-row">
+            <img src="assets/focus-reset-cover.jpg" alt="Focus Reset Cover">
+            <div>
+                <h4 style="font-size: 0.9rem; font-weight: bold; line-height: 1.2;">Focus Reset E-Book</h4>
+                <span style="font-size: 0.75rem; color: var(--color-primary); font-weight: 500;">87% Special Off</span>
+            </div>
+        </div>
+        <div class="floating-pricing-box">
+            <div>
+                <span class="dynamic-price-val" style="font-size: 1.15rem; font-weight: 700; color: var(--color-primary);">&#8377;199</span>
+                <del class="dynamic-orig-price-val" style="font-size: 0.8rem; color: var(--color-text-slate); margin-left: 4px;">&#8377;1499</del>
+            </div>
+            <div id="desktop-floating-timer" style="font-size: 0.85rem; font-family: var(--font-heading); color: var(--color-primary); font-weight: bold;">15:00</div>
+        </div>
+        <button class="btn btn-primary btn-sm checkout-trigger dynamic-buy-btn-text" data-product-slug="focus-reset" style="width: 100%; justify-content: center; box-shadow: none;">&#128275; Buy Now &#8211; &#8377;199</button>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast-container">
+        <div class="toast" id="purchase-toast">
+            <div class="toast-img-wrapper">
+                <img src="assets/focus-reset-cover.jpg" id="toast-product-img" alt="Product Cover">
+            </div>
+            <div class="toast-content">
+                <div class="toast-header-row">
+                    <span class="verified-badge-pill">
+                        <svg class="verified-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        Verified Purchase
+                    </span>
+                    <span id="toast-time-val" class="toast-time">3m ago</span>
+                </div>
+                <div class="toast-text">
+                    <span id="toast-buyer-name">Kiran</span> from <span id="toast-buyer-location">Pune</span> bought <strong id="toast-product-name" class="highlight">Focus Reset (Phone &#2325;&#2368; &#2354;&#2340; &#2340;&#2379;&#2395;&#2379;)</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sticky bar -->
+    <div class="sticky-buy-bar">
+        <div class="container buy-bar-container">
+            <div class="buy-bar-info">
+                <h4 style="font-size: 0.85rem; line-height: 1.2; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px;">Focus Reset</h4>
+                <span class="price dynamic-price-val" style="color: var(--color-secondary);">&#8377;199</span>
+            </div>
+            <button class="btn btn-primary btn-sm checkout-trigger dynamic-buy-btn-text" data-product-slug="focus-reset">Buy Now <i data-lucide="arrow-right"></i></button>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="modal-overlay">
+        <div class="modal-card">
+            <button class="modal-close" aria-label="Close Checkout Modal">&times;</button>
+            <h2 style="background: linear-gradient(135deg, #fff 0%, #00C8FF 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Fill Your Details</h2>
+            <p>E-book instantly deliver karne ke liye details enter karein.</p>
+            <form id="checkout-form">
+                <input type="hidden" name="product_slug" id="target-product-slug" value="focus-reset">
+                <div class="form-group">
+                    <input type="text" name="name" id="name" class="form-input" placeholder=" " required>
+                    <label for="name" class="form-label">Your Name</label>
+                </div>
+                <div class="form-group">
+                    <input type="email" name="email" id="email" class="form-input" placeholder=" " required>
+                    <label for="email" class="form-label">Email Address</label>
+                </div>
+                <div class="form-group">
+                    <input type="tel" name="phone" id="phone" class="form-input" placeholder=" " required>
+                    <label for="phone" class="form-label">WhatsApp Phone Number</label>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: var(--space-xs); color: #020810 !important;">
+                    Proceed to Payment <i data-lucide="credit-card"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Wishlist Drawer -->
+    <div class="wishlist-sidebar">
+        <div class="wishlist-header">
+            <h3><i data-lucide="heart" style="color: #EF4444; fill: #EF4444; vertical-align: middle; margin-right: 6px;"></i> My Wishlist</h3>
+            <button class="wishlist-close" aria-label="Close Wishlist">&times;</button>
+        </div>
+        <div class="wishlist-items" id="wishlist-items-container"></div>
+    </div>
+
+    <!-- WhatsApp Widget -->
+    <div class="whatsapp-widget">
+        <a href="https://wa.me/918417894808?text=Hello%20TATVAM%20Support,%20I%20have%20a%20question%20about%20the%20Focus%20Reset%20E-Book." target="_blank" rel="noopener" class="whatsapp-btn" aria-label="WhatsApp Support">
+            <i data-lucide="message-circle"></i>
+        </a>
+    </div>
+
+    <script>
+        window.addEventListener('load', () => {
+            if (typeof lucide !== 'undefined') { lucide.createIcons(); }
+        });
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-trigger').forEach(trigger => {
+            trigger.addEventListener('click', () => {
+                const card = trigger.closest('.faq-card');
+                const isActive = card.classList.contains('active');
+                document.querySelectorAll('.faq-card').forEach(c => c.classList.remove('active'));
+                if (!isActive) card.classList.add('active');
+            });
+        });
+
+        // Visitor count
+        const visitorEl = document.getElementById('visitor-count-text');
+        if (visitorEl) {
+            setInterval(() => {
+                visitorEl.textContent = (200 + Math.floor(Math.random() * 30)) + ' people are viewing this right now';
+            }, 8000);
+        }
+
+        // Floating timer
+        const timerEl = document.getElementById('desktop-floating-timer');
+        if (timerEl) {
+            let secs = 15 * 60;
+            setInterval(() => {
+                secs--;
+                if (secs < 0) secs = 15 * 60;
+                const m = Math.floor(secs / 60), s = secs % 60;
+                timerEl.textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+            }, 1000);
+        }
+    </script>
+    <script src="script.js?v=10.2" defer></script>
+</body>
+</html>
