@@ -1,1002 +1,2781 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-    <script>if(location.protocol!=='https:'){location.replace('https://'+location.host+location.pathname+location.search);}</script>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-    <title>Positive Thinking E-Book | TATVAM.SHOP</title>
-    <meta name="description" content="क्या आपकी सोच ही आपकी सबसे बड़ी दुश्मन बन गई है? नकारात्मक सोच से बाहर निकलें और सकारात्मक, शांत एवं आत्मविश्वासी जीवन की ओर बढ़ें।">
-    
-    <!-- Performance Optimizations & Preconnects -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Positive Thinking — Practical Hindi Self-Growth Guide | TATVAM</title>
+    <meta name="description" content="Overthinking और Negative Thoughts के Loop से बाहर निकलें। Positive Thinking Hindi eBook + Bonus Toolkit — Practical Exercises & Real Reframes सिर्फ ₹199 में।">
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="dns-prefetch" href="https://sdk.cashfree.com">
-    <link rel="dns-prefetch" href="https://unpkg.com">
-    <link rel="dns-prefetch" href="https://connect.facebook.net">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Lucide Icons & Cashfree JS SDK -->
-    <script src="https://unpkg.com/lucide@latest" defer></script>
-    <script src="https://sdk.cashfree.com/js/v3/cashfree.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-    <!-- Master CSS -->
-    <link rel="stylesheet" href="styles.css?v=2.3">
-    
+    <!-- Scripts -->
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
+
     <style>
-        /* World-Class Rich Midnight & Gold Luxury Theme */
+        /* ── RESET & DESIGN TOKENS ── */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         :root {
-            --color-bg-1: #03050c; /* Midnight Blue */
-            --color-bg-2: #070b19; /* Deep Navy */
-            --color-bg-3: #0c132c; /* Midnight Slate */
-            --color-primary: #C5A880; /* Premium Luxury Gold accent */
-            --color-primary-hover: #B0946D;
-            --color-secondary: #FFFFFF; /* White text on dark navy background */
-            --color-text-white: #FFFFFF;
-            --color-text-slate: #CBD5E1; /* Light Slate copy text */
-            --color-text-gray: #94A3B8;
-            --border-light: rgba(255, 255, 255, 0.08); /* Frosted border */
-            --border-glowing: rgba(197, 168, 128, 0.35); /* Glowing Gold border */
-            --panel-bg: rgba(12, 19, 44, 0.75); /* Frosted Midnight glass */
-            --card-bg: rgba(28, 37, 65, 0.45);
-            --font-heading: 'Outfit', sans-serif;
-            --font-body: 'Inter', sans-serif;
-            --blur-overlay: blur(28px);
-            --shadow-soft: 0 15px 35px rgba(0, 0, 0, 0.4), 0 0 1px rgba(255, 255, 255, 0.1);
-            --shadow-glow: 0 0 25px rgba(197, 168, 128, 0.15);
+            --bg-base: #060913;
+            --bg-surface: #0a1124;
+            --bg-elevated: #101b37;
+            --bg-card: rgba(16, 27, 55, 0.72);
+            --bg-card-hover: rgba(22, 38, 77, 0.85);
+
+            --accent-gold: #e5c583;
+            --accent-gold-light: #f5e4bd;
+            --accent-gold-dark: #b8954b;
+            --gold-gradient: linear-gradient(135deg, #f5e4bd 0%, #e5c583 50%, #b8954b 100%);
+            
+            --color-text: #ffffff;
+            --color-text-muted: #94a3b8;
+            --color-text-subtle: #64748b;
+            --color-text-body: #cbd5e1;
+
+            --emerald: #10b981;
+            --emerald-bg: rgba(16, 185, 129, 0.1);
+            --emerald-border: rgba(16, 185, 129, 0.25);
+
+            --crimson: #f87171;
+            --crimson-bg: rgba(239, 68, 68, 0.08);
+            --crimson-border: rgba(239, 68, 68, 0.22);
+
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-gold: rgba(229, 197, 131, 0.3);
+
+            --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+            --shadow-subtle: 0 10px 30px rgba(0, 0, 0, 0.35);
+            --shadow-gold: 0 12px 35px rgba(229, 197, 131, 0.18);
+            --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.45);
+
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 20px;
+            --radius-pill: 9999px;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            background-color: var(--bg-base);
+            color: var(--color-text);
+            font-family: var(--font-body);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         body {
-            background-color: var(--color-bg-1);
-            color: var(--color-secondary);
+            background-color: var(--bg-base);
+            color: var(--color-text-body);
+            line-height: 1.6;
+            font-size: 16px;
+            overflow-x: hidden;
+            padding-bottom: 74px; /* Space for mobile sticky CTA */
         }
 
-        .header {
-            background: rgba(3, 5, 12, 0.85);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+        @media (min-width: 769px) {
+            body {
+                padding-bottom: 0;
+            }
         }
 
-        .logo {
-            color: #FFFFFF;
-        }
-        .logo span {
-            color: var(--color-primary);
-        }
-
-        .nav-link {
-            color: var(--color-text-slate);
-        }
-        .nav-link:hover {
-            color: #FFFFFF;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--color-primary) 0%, #B0946D 100%);
-            color: #03050c !important; /* Dark text for high contrast on gold button */
-            box-shadow: 0 8px 20px rgba(197, 168, 128, 0.25);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        /* ── TYPOGRAPHY ── */
+        h1, h2, h3, h4 {
+            font-family: var(--font-heading);
+            color: var(--color-text);
             font-weight: 700;
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
-        }
-        .btn-primary:hover {
-            transform: scale(1.02);
-            box-shadow: 0 12px 25px rgba(197, 168, 128, 0.35);
-        }
-        .btn-primary:active {
-            transform: scale(0.96);
+            line-height: 1.25;
+            letter-spacing: -0.015em;
         }
 
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border-light);
-            color: #FFFFFF !important;
-        }
-
-        .gradient-gold-text {
-            background: linear-gradient(135deg, #FFFFFF 30%, #E2C9A1 70%, var(--color-primary) 100%);
+        .gold-gradient-text {
+            background: var(--gold-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            display: inline;
         }
 
-        .glass-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-light);
-            box-shadow: var(--shadow-soft);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease;
-        }
-        .glass-card:hover {
-            transform: translateY(-5px) scale(1.02);
-            border-color: var(--border-glowing);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.5), var(--shadow-glow);
-        }
-
-        .glass-panel {
-            background: var(--panel-bg);
-            border: 1px solid var(--border-light);
-            box-shadow: var(--shadow-soft);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-        }
-
-        /* Responsive Comparison Table */
-        .comparison-table-wrapper {
-            background: var(--color-bg-3);
-            border: 1px solid var(--border-light);
-            border-radius: var(--radius-md);
-            overflow: hidden;
-            box-shadow: var(--shadow-soft);
-        }
-
-        .comparison-table th {
-            background: rgba(255, 255, 255, 0.02);
-            color: #FFFFFF;
-            border-bottom: 1px solid var(--border-light);
-        }
-
-        .comparison-table td {
-            color: var(--color-text-slate);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-        }
-
-        /* Timelines light style */
-        .timeline-dot {
-            background: var(--color-primary);
-            box-shadow: 0 0 10px var(--color-primary);
-        }
-
-        /* Static banners and footer overrides */
-        footer {
-            background: #03050c !important;
-            border-top: 1px solid var(--border-light) !important;
-            color: var(--color-text-slate) !important;
-        }
-        footer h3 {
-            color: #FFFFFF !important;
-        }
-
-        .floating-checkout-card {
-            background: rgba(7, 11, 25, 0.95);
-            border: 1px solid var(--border-glowing);
-            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5), var(--shadow-glow);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
-
-        .sticky-buy-bar {
-            background: rgba(3, 5, 12, 0.95);
-            border-top: 1px solid var(--border-light);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
-
-        .modal-card {
-            background: #0b132b;
-            border: 1px solid var(--border-glowing);
-            color: #FFFFFF;
-        }
-
-        .form-input {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: #FFFFFF;
-        }
-        .form-input:focus {
-            border-color: var(--color-primary);
-            background: rgba(255, 255, 255, 0.05);
-        }
-        .form-label {
-            color: var(--color-text-gray);
-        }
-        .form-input:focus ~ .form-label,
-        .form-input:not(:placeholder-shown) ~ .form-label {
-            color: var(--color-primary);
-            background: #0b132b;
-        }
-
-        /* Gallery block & Blurred Preview Cards */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: var(--space-md);
-            margin-top: var(--space-md);
-        }
-        .gallery-card {
-            overflow: hidden;
-            border-radius: var(--radius-md);
-            border: 1px solid var(--border-light);
-            box-shadow: var(--shadow-soft);
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
-        }
-        .gallery-card img {
+        /* ── LAYOUT CONTAINERS ── */
+        .container {
             width: 100%;
-            height: 200px;
-            object-fit: cover;
-            transition: transform 0.6s ease;
-        }
-        .gallery-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-soft), var(--shadow-glow);
-        }
-        .gallery-card:hover img {
-            transform: scale(1.05);
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
 
-        .blurred-preview-card {
+        .section-pad {
+            padding: 56px 0;
             position: relative;
-            padding: 2rem 1.5rem;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--border-light);
-            border-radius: var(--radius-md);
-            overflow: hidden;
+        }
+
+        @media (min-width: 768px) {
+            .section-pad {
+                padding: 80px 0;
+            }
+        }
+
+        .section-header {
             text-align: center;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            min-height: 160px;
-            display: flex;
-            flex-direction: column;
+            max-width: 720px;
+            margin: 0 auto 36px;
+        }
+
+        @media (min-width: 768px) {
+            .section-header {
+                margin-bottom: 50px;
+            }
+        }
+
+        .badge-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: var(--radius-pill);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            background: rgba(229, 197, 131, 0.1);
+            color: var(--accent-gold);
+            border: 1px solid var(--border-gold);
+            margin-bottom: 14px;
+        }
+
+        .section-title {
+            font-size: clamp(1.65rem, 5vw, 2.4rem);
+            margin-bottom: 12px;
+        }
+
+        .section-subtext {
+            font-size: 0.95rem;
+            color: var(--color-text-muted);
+            line-height: 1.6;
+        }
+
+        @media (min-width: 768px) {
+            .section-subtext {
+                font-size: 1.05rem;
+            }
+        }
+
+        /* ── BUTTONS ── */
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
             justify-content: center;
+            gap: 10px;
+            background: var(--gold-gradient);
+            color: #060913 !important;
+            font-family: var(--font-heading);
+            font-weight: 800;
+            font-size: 1.05rem;
+            padding: 16px 28px;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: var(--shadow-gold);
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+            width: 100%;
+            max-width: 440px;
+            min-height: 54px;
+            text-align: center;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 40px rgba(229, 197, 131, 0.3);
+        }
+
+        .cta-btn:active {
+            transform: translateY(1px);
+        }
+
+        .cta-btn-sm {
+            padding: 10px 18px;
+            font-size: 0.9rem;
+            min-height: 42px;
+            max-width: none;
+            width: auto;
+        }
+
+        /* ── NAVBAR ── */
+        .site-nav {
+            position: sticky;
+            top: 0;
+            z-index: 90;
+            background: rgba(6, 9, 19, 0.88);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 12px 0;
+        }
+
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand-logo {
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #ffffff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .brand-logo span {
+            color: var(--accent-gold);
+        }
+
+        .nav-tagline {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+            border-left: 1px solid var(--border-subtle);
+            padding-left: 10px;
+            margin-left: 10px;
+            display: none;
+        }
+
+        @media (min-width: 520px) {
+            .nav-tagline {
+                display: inline;
+            }
+        }
+
+        .nav-action {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-price {
+            font-family: var(--font-heading);
+            font-weight: 800;
+            color: var(--accent-gold);
+            font-size: 1.1rem;
+        }
+
+        /* ── HERO SECTION ── */
+        .hero-section {
+            padding: 36px 0 48px;
+            background: radial-gradient(circle at 50% 10%, rgba(229, 197, 131, 0.08) 0%, transparent 70%);
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .hero-section {
+                padding: 60px 0 72px;
+            }
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 32px;
             align-items: center;
         }
-        .blurred-preview-card:hover {
-            transform: translateY(-8px) scale(1.03);
-            border-color: var(--border-glowing);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), var(--shadow-glow);
+
+        @media (min-width: 960px) {
+            .hero-grid {
+                grid-template-columns: 1.15fr 0.85fr;
+                gap: 48px;
+            }
         }
-        .blurred-text {
-            filter: blur(5.5px);
-            -webkit-filter: blur(5.5px);
-            user-select: none;
-            color: var(--color-text-slate);
+
+        .hero-content {
+            text-align: left;
+        }
+
+        .hero-title {
+            font-size: clamp(1.85rem, 6.5vw, 3rem);
+            line-height: 1.2;
+            margin-bottom: 16px;
+        }
+
+        .hero-subhead {
+            font-size: 1rem;
+            color: var(--color-text-body);
+            line-height: 1.65;
+            margin-bottom: 24px;
+        }
+
+        @media (min-width: 768px) {
+            .hero-subhead {
+                font-size: 1.12rem;
+            }
+        }
+
+        .hero-pricing-box {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .hero-current-price {
+            font-family: var(--font-heading);
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: var(--accent-gold);
+            line-height: 1;
+        }
+
+        .hero-original-price {
+            font-size: 1.1rem;
+            color: var(--color-text-subtle);
+            text-decoration: line-through;
+        }
+
+        .hero-savings-pill {
+            background: var(--emerald-bg);
+            border: 1px solid var(--emerald-border);
+            color: var(--emerald);
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: var(--radius-pill);
+        }
+
+        .hero-perks-list {
+            margin-top: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        @media (min-width: 480px) {
+            .hero-perks-list {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 16px;
+            }
+        }
+
+        .hero-perk-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
             font-size: 0.82rem;
-            line-height: 1.4;
-            margin-top: 0.5rem;
+            color: var(--color-text-muted);
         }
-        
-        .illustration-showcase {
+
+        .hero-perk-item i {
+            color: var(--emerald);
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+        }
+
+        /* Hero Visual & Product Card */
+        .hero-visual-card {
+            background: linear-gradient(145deg, rgba(16, 27, 55, 0.9), rgba(10, 17, 36, 0.95));
+            border: 1px solid var(--border-gold);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: var(--shadow-subtle), var(--shadow-gold);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hero-book-showcase {
+            position: relative;
             width: 100%;
+            max-width: 320px;
+            margin: 0 auto 16px;
             border-radius: var(--radius-md);
-            box-shadow: var(--shadow-soft);
-            border: 1px solid var(--border-light);
-            margin-bottom: var(--space-sm);
+            overflow: hidden;
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.12);
         }
 
-        /* 3D Floating Mockup Animation */
-        @keyframes floating-book {
-            0% { transform: translateY(0px) rotateY(-12deg) rotateX(6deg); }
-            50% { transform: translateY(-12px) rotateY(-6deg) rotateX(3deg); }
-            100% { transform: translateY(0px) rotateY(-12deg) rotateX(6deg); }
-        }
-        .book-3d {
-            animation: floating-book 6s ease-in-out infinite;
-            transform-style: preserve-3d;
-            will-change: transform;
+        .hero-book-showcase img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+            transition: transform 0.4s ease;
         }
 
-        /* ── FAQ Accordion ── */
-        .faq-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; margin-bottom: 0.75rem; overflow: hidden; transition: border-color 0.3s ease; }
-        .faq-card.active { border-color: rgba(251,191,36,0.4); }
-        .faq-trigger { display: flex; justify-content: space-between; align-items: center; padding: 1.1rem 1.25rem; cursor: pointer; user-select: none; font-weight: 600; font-size: 0.98rem; color: #fff; gap: 12px; }
-        .faq-trigger span { flex: 1; }
-        .faq-trigger i { width: 20px; height: 20px; flex-shrink: 0; color: #d4af37; transition: transform 0.35s ease; }
-        .faq-card.active .faq-trigger i { transform: rotate(180deg); }
-        .faq-content { max-height: 0 !important; overflow: hidden !important; opacity: 0 !important; padding: 0 1.25rem !important; transition: max-height 0.4s ease, padding 0.3s ease, opacity 0.3s ease; }
-        .faq-card.active .faq-content { max-height: 400px !important; padding: 0 1.25rem 1.1rem !important; opacity: 1 !important; }
-        .faq-content p { color: rgba(255,255,255,0.6); font-size: 0.95rem; line-height: 1.65; }
+        .hero-visual-card:hover .hero-book-showcase img {
+            transform: scale(1.02);
+        }
+
+        .hero-bundle-bar {
+            width: 100%;
+            background: rgba(6, 9, 19, 0.6);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .hero-bundle-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hero-bundle-thumb {
+            width: 42px;
+            height: 42px;
+            border-radius: 6px;
+            object-fit: cover;
+            border: 1px solid var(--border-gold);
+            flex-shrink: 0;
+        }
+
+        .hero-bundle-text h4 {
+            font-size: 0.85rem;
+            color: #ffffff;
+            margin-bottom: 2px;
+        }
+
+        .hero-bundle-text p {
+            font-size: 0.72rem;
+            color: var(--accent-gold);
+        }
+
+        .free-pill {
+            background: var(--gold-gradient);
+            color: #060913;
+            font-weight: 800;
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: var(--radius-pill);
+            text-transform: uppercase;
+        }
+
+        /* ── SECTION 2: RELATABLE PROBLEM ── */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        @media (min-width: 600px) {
+            .problem-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+        }
+
+        @media (min-width: 960px) {
+            .problem-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .problem-card {
+            background: var(--crimson-bg);
+            border: 1px solid var(--crimson-border);
+            border-radius: var(--radius-md);
+            padding: 18px 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+
+        .problem-icon-wrap {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(239, 68, 68, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: var(--crimson);
+        }
+
+        .problem-quote {
+            font-family: var(--font-heading);
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #ffffff;
+            line-height: 1.4;
+        }
+
+        .problem-insight-box {
+            background: linear-gradient(135deg, rgba(16, 27, 55, 0.9), rgba(10, 17, 36, 0.9));
+            border: 1px solid var(--border-gold);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            max-width: 820px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .problem-insight-text {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: var(--color-text-body);
+        }
+
+        .problem-insight-text strong {
+            color: var(--accent-gold);
+            font-weight: 700;
+        }
+
+        /* ── SECTION 3: PRODUCT INTRODUCTION ── */
+        .intro-features-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            align-items: center;
+        }
+
+        @media (min-width: 840px) {
+            .intro-features-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 40px;
+            }
+        }
+
+        .intro-mockup-wrap {
+            position: relative;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-subtle);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .intro-mockup-wrap img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .intro-points-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .intro-point-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 16px 18px;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .intro-point-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(229, 197, 131, 0.12);
+            color: var(--accent-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .intro-point-item h3 {
+            font-size: 1rem;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .intro-point-item p {
+            font-size: 0.88rem;
+            color: var(--color-text-muted);
+            line-height: 1.5;
+        }
+
+        /* ── SECTION 4: WHAT'S INSIDE MAIN EBOOK ── */
+        .chapters-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        @media (min-width: 768px) {
+            .chapters-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+        }
+
+        .chapter-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            transition: border-color 0.25s ease, transform 0.25s ease;
+        }
+
+        .chapter-card:hover {
+            border-color: var(--border-gold);
+            transform: translateY(-2px);
+        }
+
+        .chapter-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chapter-num {
+            font-family: var(--font-heading);
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: var(--accent-gold);
+            background: rgba(229, 197, 131, 0.12);
+            padding: 3px 8px;
+            border-radius: 6px;
+        }
+
+        .chapter-card h3 {
+            font-size: 1.1rem;
+            color: #ffffff;
+        }
+
+        .step-row {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 0.88rem;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            line-height: 1.5;
+        }
+
+        .step-label {
+            font-weight: 700;
+            font-size: 0.78rem;
+            padding: 2px 7px;
+            border-radius: 4px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .step-label.problem {
+            background: rgba(239, 68, 68, 0.15);
+            color: #fca5a5;
+        }
+
+        .step-label.learn {
+            background: rgba(59, 130, 246, 0.15);
+            color: #93c5fd;
+        }
+
+        .step-label.action {
+            background: rgba(16, 185, 129, 0.15);
+            color: #6ee7b7;
+        }
+
+        /* ── SECTION 5: REAL PAGE PREVIEWS GALLERY ── */
+        .preview-gallery-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        @media (min-width: 580px) {
+            .preview-gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 960px) {
+            .preview-gallery-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .preview-item-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.25s ease, border-color 0.25s ease;
+            cursor: pointer;
+        }
+
+        .preview-item-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--border-gold);
+        }
+
+        .preview-img-container {
+            width: 100%;
+            height: 310px;
+            background: #ffffff;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .preview-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top center;
+            transition: transform 0.3s ease;
+        }
+
+        .preview-item-card:hover .preview-img-container img {
+            transform: scale(1.04);
+        }
+
+        .preview-zoom-badge {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(6, 9, 19, 0.85);
+            color: var(--accent-gold);
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: var(--radius-pill);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            backdrop-filter: blur(6px);
+        }
+
+        .preview-card-body {
+            padding: 14px 16px;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .preview-tag {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--accent-gold);
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .preview-card-title {
+            font-size: 0.95rem;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .preview-card-desc {
+            font-size: 0.8rem;
+            color: var(--color-text-muted);
+            line-height: 1.4;
+        }
+
+        /* ── SECTION 6: BONUS TOOLKIT ── */
+        .toolkit-hero-box {
+            background: linear-gradient(135deg, rgba(229, 197, 131, 0.08) 0%, rgba(10, 17, 36, 0.95) 100%);
+            border: 1px solid var(--border-gold);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 32px;
+            box-shadow: var(--shadow-gold);
+        }
+
+        @media (min-width: 768px) {
+            .toolkit-hero-box {
+                padding: 36px;
+            }
+        }
+
+        .toolkit-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+            align-items: center;
+        }
+
+        @media (min-width: 860px) {
+            .toolkit-grid {
+                grid-template-columns: 0.9fr 1.1fr;
+                gap: 40px;
+            }
+        }
+
+        .toolkit-visual-wrapper {
+            position: relative;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-subtle);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .toolkit-visual-wrapper img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .toolkit-checklist {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        @media (min-width: 540px) {
+            .toolkit-checklist {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .toolkit-check-item {
+            background: rgba(6, 9, 19, 0.5);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 12px 14px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .toolkit-check-item i {
+            color: var(--accent-gold);
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .toolkit-check-item span {
+            font-size: 0.88rem;
+            color: #ffffff;
+            line-height: 1.4;
+        }
+
+        /* ── SECTION 7: BEFORE / AFTER MINDSET ── */
+        .before-after-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+            max-width: 880px;
+            margin: 0 auto;
+        }
+
+        .ba-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 14px;
+            align-items: center;
+        }
+
+        @media (min-width: 680px) {
+            .ba-row {
+                grid-template-columns: 1fr auto 1fr;
+                gap: 16px;
+                padding: 16px 20px;
+            }
+        }
+
+        .ba-before {
+            background: var(--crimson-bg);
+            border: 1px solid var(--crimson-border);
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            color: #fca5a5;
+            font-size: 0.92rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ba-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-gold);
+        }
+
+        .ba-arrow i {
+            width: 20px;
+            height: 20px;
+        }
+
+        @media (max-width: 679px) {
+            .ba-arrow {
+                transform: rotate(90deg);
+                padding: 2px 0;
+            }
+        }
+
+        .ba-after {
+            background: var(--emerald-bg);
+            border: 1px solid var(--emerald-border);
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            color: #6ee7b7;
+            font-size: 0.92rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* ── SECTION 8: WHO IS THIS FOR? ── */
+        .audience-checklist-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 640px) {
+            .audience-checklist-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+        }
+
+        .audience-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: border-color 0.2s ease;
+        }
+
+        .audience-card:hover {
+            border-color: var(--emerald-border);
+        }
+
+        .audience-icon {
+            color: var(--emerald);
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .audience-text {
+            font-size: 0.93rem;
+            color: #ffffff;
+            line-height: 1.4;
+        }
+
+        /* ── SECTION 9: WHAT YOU GET TODAY ── */
+        .offer-main-box {
+            background: linear-gradient(135deg, rgba(16, 27, 55, 0.95), rgba(6, 9, 19, 0.95));
+            border: 1.5px solid var(--border-gold);
+            border-radius: var(--radius-lg);
+            padding: 28px 20px;
+            max-width: 780px;
+            margin: 0 auto;
+            box-shadow: var(--shadow-subtle), var(--shadow-gold);
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .offer-main-box {
+                padding: 44px 36px;
+            }
+        }
+
+        .offer-items-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin: 28px 0;
+            text-align: left;
+        }
+
+        @media (min-width: 640px) {
+            .offer-items-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .offer-item-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .offer-item-badge {
+            font-family: var(--font-heading);
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--accent-gold);
+            display: inline-block;
+        }
+
+        .offer-item-card h3 {
+            font-size: 1.15rem;
+            color: #ffffff;
+        }
+
+        .offer-item-card p {
+            font-size: 0.88rem;
+            color: var(--color-text-muted);
+            line-height: 1.5;
+        }
+
+        .offer-price-callout {
+            margin-bottom: 24px;
+        }
+
+        .offer-final-price {
+            font-family: var(--font-heading);
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--accent-gold);
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+
+        .offer-subnote {
+            font-size: 0.95rem;
+            color: var(--color-text-body);
+        }
+
+        /* ── SECTION 10: TRUST & TRANSPARENCY ── */
+        .trust-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            max-width: 920px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 520px) {
+            .trust-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 14px;
+            }
+        }
+
+        @media (min-width: 860px) {
+            .trust-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .trust-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 20px 16px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .trust-card i {
+            color: var(--accent-gold);
+            width: 28px;
+            height: 28px;
+        }
+
+        .trust-card h3 {
+            font-size: 0.95rem;
+            color: #ffffff;
+        }
+
+        .trust-card p {
+            font-size: 0.8rem;
+            color: var(--color-text-muted);
+            line-height: 1.4;
+        }
+
+        /* ── SECTION 11: FAQ ── */
+        .faq-accordion-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-width: 780px;
+            margin: 0 auto;
+        }
+
+        .faq-accordion-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            transition: border-color 0.2s ease;
+        }
+
+        .faq-accordion-item.active {
+            border-color: var(--border-gold);
+        }
+
+        .faq-header {
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .faq-header h3 {
+            font-size: 0.98rem;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .faq-chevron {
+            color: var(--accent-gold);
+            transition: transform 0.25s ease;
+            flex-shrink: 0;
+            width: 20px;
+            height: 20px;
+        }
+
+        .faq-accordion-item.active .faq-chevron {
+            transform: rotate(180deg);
+        }
+
+        .faq-content {
+            display: none;
+            padding: 0 20px 18px;
+            font-size: 0.9rem;
+            color: var(--color-text-body);
+            line-height: 1.65;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            padding-top: 12px;
+        }
+
+        .faq-accordion-item.active .faq-content {
+            display: block;
+        }
+
+        /* ── SECTION 12: FINAL CTA ── */
+        .final-cta-section {
+            background: radial-gradient(circle at 50% 50%, rgba(229, 197, 131, 0.1) 0%, rgba(6, 9, 19, 0.95) 75%);
+            text-align: center;
+        }
+
+        .final-cta-card {
+            max-width: 720px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .final-cta-card .hero-pricing-box {
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        /* ── FOOTER ── */
+        .site-footer {
+            background: #03050c;
+            border-top: 1px solid var(--border-subtle);
+            padding: 40px 0 30px;
+            font-size: 0.82rem;
+            color: var(--color-text-subtle);
+        }
+
+        .footer-inner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .footer-inner {
+                flex-direction: row;
+                justify-content: space-between;
+                text-align: left;
+            }
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .footer-links a {
+            color: var(--color-text-muted);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-gold);
+        }
+
+        /* ── MOBILE STICKY BOTTOM BAR ── */
+        .mobile-sticky-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 99;
+            background: rgba(6, 9, 19, 0.95);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-top: 1px solid var(--border-gold);
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.6);
+            transform: translateY(120%);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .mobile-sticky-bar.visible {
+            transform: translateY(0);
+        }
+
+        @media (min-width: 769px) {
+            .mobile-sticky-bar {
+                display: none !important;
+            }
+        }
+
+        .sticky-bar-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sticky-bar-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 140px;
+        }
+
+        .sticky-bar-price {
+            font-family: var(--font-heading);
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--accent-gold);
+        }
+
+        /* ── DESKTOP FLOATING CARD ── */
+        .desktop-floating-pill {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 99;
+            background: rgba(10, 17, 36, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-gold);
+            border-radius: var(--radius-pill);
+            padding: 10px 18px;
+            display: none;
+            align-items: center;
+            gap: 16px;
+            box-shadow: var(--shadow-subtle), var(--shadow-gold);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+        }
+
+        .desktop-floating-pill.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        @media (min-width: 769px) {
+            .desktop-floating-pill {
+                display: flex;
+            }
+        }
+
+        /* ── CHECKOUT MODAL ── */
+        .checkout-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 999;
+            background: rgba(3, 5, 12, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+
+        .checkout-modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .checkout-modal-card {
+            background: #0b1328;
+            border: 1px solid var(--border-gold);
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 460px;
+            padding: 26px 22px;
+            position: relative;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), var(--shadow-gold);
+            animation: modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes modalPop {
+            0% { transform: scale(0.92); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--border-subtle);
+            color: #ffffff;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .modal-close-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .modal-product-summary {
+            background: rgba(6, 9, 19, 0.7);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 16px 0 20px;
+        }
+
+        .modal-summary-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .modal-summary-img {
+            width: 44px;
+            height: 52px;
+            border-radius: 4px;
+            object-fit: cover;
+            border: 1px solid var(--border-gold);
+        }
+
+        .modal-summary-title {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.3;
+        }
+
+        .modal-summary-sub {
+            font-size: 0.75rem;
+            color: var(--accent-gold);
+        }
+
+        .modal-summary-price {
+            font-family: var(--font-heading);
+            font-size: 1.35rem;
+            font-weight: 900;
+            color: var(--accent-gold);
+        }
+
+        .form-field {
+            margin-bottom: 14px;
+            text-align: left;
+        }
+
+        .form-field label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--color-text-muted);
+            margin-bottom: 6px;
+        }
+
+        .form-field input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: var(--radius-sm);
+            padding: 12px 14px;
+            color: #ffffff;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s ease, background 0.2s ease;
+        }
+
+        .form-field input:focus {
+            border-color: var(--accent-gold);
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        .modal-security-note {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            color: var(--color-text-subtle);
+            margin-top: 14px;
+        }
+
+        .modal-security-note i {
+            color: var(--emerald);
+            width: 14px;
+            height: 14px;
+        }
+
+        /* ── LIGHTBOX FOR REAL PREVIEWS ── */
+        .lightbox-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .lightbox-overlay.active {
+            display: flex;
+        }
+
+        .lightbox-container {
+            max-width: 800px;
+            max-height: 90vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .lightbox-img {
+            max-width: 100%;
+            max-height: 80vh;
+            object-fit: contain;
+            border-radius: var(--radius-md);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: #ffffff;
+        }
+
+        .lightbox-caption {
+            color: #ffffff;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-top: 12px;
+            text-align: center;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: #ffffff;
+            font-size: 1.8rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
     </style>
 </head>
-<body data-page-slug="positive-thinking">
+<body>
 
-    <!-- INFINITE SCROLLING TICKER BANNER -->
-    <div class="ticker-banner ticker-purple">
-        <div class="ticker-text-wrapper">
-            <div class="ticker-item">✨ TATVAM.SHOP EXCLUSIVE – PREMIUM MINDSET WORKBOOK & CHECKLISTS INCLUDED</div>
-            <div class="ticker-item">✨ TATVAM.SHOP EXCLUSIVE – PREMIUM MINDSET WORKBOOK & CHECKLISTS INCLUDED</div>
-            <div class="ticker-item">✨ TATVAM.SHOP EXCLUSIVE – PREMIUM MINDSET WORKBOOK & CHECKLISTS INCLUDED</div>
-            <div class="ticker-item">✨ TATVAM.SHOP EXCLUSIVE – PREMIUM MINDSET WORKBOOK & CHECKLISTS INCLUDED</div>
-        </div>
-    </div>
-
-    <!-- BACKGROUND CANVAS & AURORA EFFECTS -->
-    <div class="bg-canvas"></div>
-    <div class="noise-overlay"></div>
-
-    <!-- HEADER -->
-    <header class="header">
-        <div class="nav-glass">
-            <a href="index.html" class="logo">TATVAM<span>.</span></a>
-            <!-- Hamburger Button -->
-            <button class="mobile-menu-btn" aria-label="Toggle Menu">&#9776;</button>
-            <nav class="nav-links">
-                <a href="index.html" class="nav-link">Home</a>
-                <div class="nav-dropdown">
-                    <a href="library.php" class="nav-link dropdown-trigger">E-Books <i data-lucide="chevron-down" class="dropdown-icon"></i></a>
-                    <div class="dropdown-menu">
-                        <a href="positive-thinking.html" class="dropdown-item">Positive Thinking E-Book</a>
-                    </div>
-                </div>
-                <a href="index.html#faq" class="nav-link">About</a>
-                <div class="nav-dropdown">
-                    <span class="nav-link dropdown-trigger">Policies & Help <i data-lucide="chevron-down" class="dropdown-icon"></i></span>
-                    <div class="dropdown-menu">
-                        <a href="contact-us.html" class="dropdown-item">Contact Us</a>
-                        <a href="privacy.html" class="dropdown-item">Privacy Policy</a>
-                        <a href="refund-policy.html" class="dropdown-item">Refund Policy</a>
-                        <a href="terms-conditions.html" class="dropdown-item">Terms & Conditions</a>
-                    </div>
-                </div>
-                <a href="positive-thinking.html" class="btn btn-primary btn-sm"><i data-lucide="sparkles"></i> Get E-Book</a>
-            </nav>
+    <!-- ── NAVIGATION BAR ── -->
+    <header class="site-nav">
+        <div class="container nav-inner">
+            <div style="display: flex; align-items: center;">
+                <a href="#" class="brand-logo">TATVAM<span>.</span>SHOP</a>
+                <span class="nav-tagline">ज्ञान जो जीवन बदल दे</span>
+            </div>
+            <div class="nav-action">
+                <span class="nav-price">₹199</span>
+                <button class="cta-btn cta-btn-sm trigger-checkout" data-product-slug="positive-thinking">
+                    अभी लें <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
+                </button>
+            </div>
         </div>
     </header>
 
-    <!-- SECTION 1: HERO SECTION -->
-    <section class="hero" style="min-height: 95vh; padding-top: 150px;">
-        <div class="container hero-grid">
-            <div class="hero-content">
-                <div class="hero-badge" style="background: rgba(197, 168, 128, 0.08); border-color: var(--border-light); color: #b0946d;">
-                    <i data-lucide="sparkles"></i>
-                    <span>Premium Self-Growth E-Book</span>
-                </div>
+    <!-- ── SECTION 1: HERO (ABOVE THE FOLD) ── -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-grid">
                 
-                <h1 class="hero-title gradient-gold-text">
-                    क्या आपकी सोच ही आपकी सबसे बड़ी दुश्मन बन गई है?
-                </h1>
-                
-                <p class="lead" style="margin-top: 1.5rem; font-size: 1.15rem; color: var(--color-text-slate); line-height: 1.5;">
-                    अगर हर छोटी बात आपको परेशान करती है, Overthinking कभी खत्म नहीं होती और Negative Thoughts आपकी खुशी छीन रहे हैं... 
-                    <strong>तो अब समय है अपनी सोच बदलने का।</strong>
-                </p>
-                
-                <div class="hero-cta-wrapper" style="margin-top: 2.5rem;">
-                    <div class="visitor-badge" style="margin-bottom: var(--space-sm); background: rgba(197, 168, 128, 0.04); border-color: rgba(197,168,128,0.15); color: #b0946d;">
-                        <div class="visitor-dot" style="background: var(--color-primary); box-shadow: 0 0 6px var(--color-primary);"></div>
-                        <span id="visitor-count-text">148 people are viewing this luxury guide right now</span>
+                <!-- Left: Headline & Offer -->
+                <div class="hero-content">
+                    <span class="badge-tag">
+                        <i data-lucide="sparkles" style="width: 14px; height: 14px;"></i>
+                        PRACTICAL SELF-GROWTH EBOOK
+                    </span>
+
+                    <h1 class="hero-title">
+                        Overthinking और Negative Thoughts के उसी Loop में <span class="gold-gradient-text">बार-बार फँस जाते हैं?</span>
+                    </h1>
+
+                    <p class="hero-subhead">
+                        <strong>Positive Thinking</strong> एक practical Hindi guide है जो आपको अपने negative thought patterns को पहचानने, उन्हें logically reframe करने और रोज़मर्रा की life में healthier thinking habits practice करने में मदद करता है।
+                    </p>
+
+                    <div class="hero-pricing-box">
+                        <span class="hero-current-price">₹199</span>
+                        <span class="hero-original-price">₹999</span>
+                        <span class="hero-savings-pill">₹800 बचाएं (One-Time)</span>
                     </div>
 
-                    <div class="hero-cta">
-                        <button class="btn btn-primary checkout-trigger dynamic-buy-btn-text" data-product-slug="positive-thinking" style="padding: 1.25rem 4rem; font-size: 1.15rem; display: flex; align-items: center; gap: 8px;">
-                            🛒 Buy Now – ₹199
-                        </button>
-                    </div>
-                </div>
+                    <button class="cta-btn trigger-checkout" data-product-slug="positive-thinking">
+                        हाँ, मुझे Positive Thinking चाहिए — ₹199
+                    </button>
 
-                <div class="hero-trust-bullets" style="margin-top: var(--space-md); border-top: 1px solid rgba(197,168,128,0.08); padding-top: var(--space-sm);">
-                    <span><i data-lucide="zap" style="color: var(--color-primary);"></i> ⚡ Instant Download</span>
-                    <span><i data-lucide="lock" style="color: var(--color-primary);"></i> 🔒 Secure Checkout</span>
-                    <span><i data-lucide="infinity" style="color: var(--color-primary);"></i> ♾ Lifetime Access</span>
-                    <span><i data-lucide="smartphone" style="color: var(--color-primary);"></i> 📱 Works on Mobile, Tablet & Laptop</span>
-                </div>
-            </div>
-            
-            <div class="showcase-wrapper">
-                <div class="glow-ambient" style="background: radial-gradient(circle, rgba(197, 168, 128, 0.15) 0%, transparent 60%);"></div>
-                <div class="book-shadow-wrapper">
-                    <div class="book-3d">
-                        <div class="book-front">
-                            <img src="assets/calm-cover.jpg?v=1.1" alt="Positive Thinking Ebook Cover" loading="lazy">
+                    <div class="hero-perks-list">
+                        <div class="hero-perk-item">
+                            <i data-lucide="check-circle-2"></i>
+                            <span>Instant Digital Access</span>
+                        </div>
+                        <div class="hero-perk-item">
+                            <i data-lucide="check-circle-2"></i>
+                            <span>Mobile Friendly PDF</span>
+                        </div>
+                        <div class="hero-perk-item">
+                            <i data-lucide="check-circle-2"></i>
+                            <span>Main eBook + Bonus Toolkit</span>
                         </div>
                     </div>
                 </div>
+
+                <!-- Right: Visual Mockup -->
+                <div class="hero-visual-card">
+                    <div class="hero-book-showcase">
+                        <img src="assets/calm-cover.jpg" alt="Positive Thinking Ebook Cover" width="320" height="480">
+                    </div>
+
+                    <div class="hero-bundle-bar">
+                        <div class="hero-bundle-info">
+                            <img src="assets/bonus-workbook-mockup.jpg" alt="Bonus Toolkit" class="hero-bundle-thumb" width="42" height="42">
+                            <div class="hero-bundle-text">
+                                <h4>+ Bonus Toolkit Included</h4>
+                                <p>Reframes, Affirmations & Trackers</p>
+                            </div>
+                        </div>
+                        <span class="free-pill">FREE</span>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
 
-    <!-- SECTION 2: EMOTIONAL PAIN SECTION -->
-    <section id="problems" class="section-pad" style="border-top: 1px solid var(--border-light);">
+    <!-- ── SECTION 2: RELATABLE PROBLEM ── -->
+    <section class="section-pad" style="background: #080d1e;">
         <div class="container">
-            <div class="section-head">
-                <span class="tag">Psychology Loop</span>
-                <h2>क्या आप भी इन समस्याओं से परेशान हैं?</h2>
-                <p>Overthinking aur anxiety aapke progress and self-growth loop ko destroy kar dete hain.</p>
+            <div class="section-header">
+                <span class="badge-tag">Self Reflection</span>
+                <h2 class="section-title">अगर आपके दिमाग में ये बातें बार-बार चलती हैं…</h2>
+                <p class="section-subtext">हर इंसान के दिमाग में विचार आते हैं, लेकिन जब वही विचार एक ही ट्रैक पर घूमने लगें तो मानसिक ऊर्जा खत्म होने लगती है:</p>
             </div>
-            
-            <div class="hero-grid" style="align-items: center; margin-bottom: var(--space-lg);">
-                <img src="assets/stressed-woman.jpg" class="illustration-showcase" alt="Person trapped in negative thoughts" style="max-height: 400px; object-fit: cover;">
-                
-                <div class="review-grid" style="grid-template-columns: 1fr; gap: var(--space-sm);">
-                    <div class="glass-card" style="border-left: 3px solid #EF4444; padding: 1.25rem;">
-                        <i data-lucide="brain-circuit" style="color: #EF4444; width: 28px; height: 28px; margin-bottom: 0.25rem;"></i>
-                        <h3>हर समय Overthinking</h3>
-                        <p style="font-size: 0.9rem;">Faaltu ke loops me fas kar decisions ko complex banana aur actions na le paana.</p>
-                    </div>
-                    <div class="glass-card" style="border-left: 3px solid #EF4444; padding: 1.25rem;">
-                        <i data-lucide="shield-alert" style="color: #EF4444; width: 28px; height: 28px; margin-bottom: 0.25rem;"></i>
-                        <h3>Self Doubt & Low Confidence</h3>
-                        <p style="font-size: 0.9rem;">Apni success values par doubts aur public configurations social fears.</p>
-                    </div>
-                    <div class="glass-card" style="border-left: 3px solid #EF4444; padding: 1.25rem;">
-                        <i data-lucide="frown" style="color: #EF4444; width: 28px; height: 28px; margin-bottom: 0.25rem;"></i>
-                        <h3>Stress & Anxiety</h3>
-                        <p style="font-size: 0.9rem;">Constant future doubts and biological alerts keeping you unmotivated.</p>
-                    </div>
+
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon-wrap"><i data-lucide="help-circle"></i></div>
+                    <div class="problem-quote">“क्या होगा अगर सब गलत हो गया?”</div>
                 </div>
+
+                <div class="problem-card">
+                    <div class="problem-icon-wrap"><i data-lucide="rotate-ccw"></i></div>
+                    <div class="problem-quote">“मैंने ऐसा क्यों कहा? काश मैं चुप रहता।”</div>
+                </div>
+
+                <div class="problem-card">
+                    <div class="problem-icon-wrap"><i data-lucide="eye"></i></div>
+                    <div class="problem-quote">“लोग मेरे बारे में क्या सोचेंगे?”</div>
+                </div>
+
+                <div class="problem-card">
+                    <div class="problem-icon-wrap"><i data-lucide="alert-triangle"></i></div>
+                    <div class="problem-quote">“मुझसे नहीं होगा… मैं तैयार नहीं हूँ।”</div>
+                </div>
+
+                <div class="problem-card">
+                    <div class="problem-icon-wrap"><i data-lucide="trending-down"></i></div>
+                    <div class="problem-quote">“बाकी सब मुझसे आगे निकल गए हैं।”</div>
+                </div>
+
+                <div class="problem-card">
+                    <div class="problem-icon-wrap"><i data-lucide="clock"></i></div>
+                    <div class="problem-quote">“कल से शुरू करूँगा… आज मूड नहीं है।”</div>
+                </div>
+            </div>
+
+            <div class="problem-insight-box">
+                <p class="problem-insight-text">
+                    <strong>Problem यह नहीं कि आपके पास thoughts आते हैं।</strong><br>
+                    विचार आना स्वाभाविक है। Problem तब होती है जब वही thoughts बार-बार आपका <strong>focus, confidence और action control</strong> करने लगते हैं।
+                </p>
             </div>
         </div>
     </section>
 
-    <!-- SECTION 3: BEFORE VS AFTER (QUOTE CARDS) -->
-    <section class="section-pad" style="background: var(--color-bg-2); border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light);">
-        <div class="container">
-            <div class="section-head">
-                <span class="tag">Mind Rewire</span>
-                <h2>The True Transformation</h2>
-                <p>See how your focus shifts when you rewire your thoughts loop by loop.</p>
-            </div>
-            
-            <div class="review-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md);">
-                <!-- Quote Card 1 -->
-                <div class="glass-card" style="padding: 3rem 2rem; border: 1px solid var(--border-glowing); border-radius: var(--radius-md); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; min-height: 250px;">
-                    <span style="font-size: 3rem; color: var(--color-primary); font-family: Georgia, serif; line-height: 1; margin-bottom: 0.5rem;">❝</span>
-                    <h3 style="font-size: 1.45rem; font-family: var(--font-heading); color: #FFFFFF; font-weight: bold; line-height: 1.5; margin: 0;">
-                        आपकी सोच,<br>आपकी सबसे बड़ी शक्ति भी बन सकती है।
-                    </h3>
-                    <span style="font-size: 3rem; color: var(--color-primary); font-family: Georgia, serif; line-height: 1; margin-top: 0.5rem;">❞</span>
-                </div>
-
-                <!-- Quote Card 2 -->
-                <div class="glass-card" style="padding: 3rem 2rem; border: 1px solid var(--border-glowing); border-radius: var(--radius-md); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; min-height: 250px;">
-                    <span style="font-size: 3rem; color: var(--color-primary); font-family: Georgia, serif; line-height: 1; margin-bottom: 0.5rem;">❝</span>
-                    <h3 style="font-size: 1.45rem; font-family: var(--font-heading); color: #FFFFFF; font-weight: bold; line-height: 1.5; margin: 0;">
-                        जिस दिन सोच बदलती है,<br>उसी दिन जीवन बदलना शुरू हो जाता है।
-                    </h3>
-                    <span style="font-size: 3rem; color: var(--color-primary); font-family: Georgia, serif; line-height: 1; margin-top: 0.5rem;">❞</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- SECTION 4: WHY NEGATIVE THINKING HAPPENS -->
+    <!-- ── SECTION 3: PRODUCT INTRODUCTION ── -->
     <section class="section-pad">
         <div class="container">
-            <div class="section-head">
-                <span class="tag">Science & Psychology</span>
-                <h2>Why Negative Thinking Happens?</h2>
-                <p>Learn how the brain's default alert patterns create repetitive worry loops.</p>
+            <div class="section-header">
+                <span class="badge-tag">Practical Solution</span>
+                <h2 class="section-title">सिर्फ पढ़ने वाली किताब नहीं — सोच पर काम करने की Practical Guide</h2>
+                <p class="section-subtext">Positive Thinking को केवल थ्योरी पढ़ने के लिए नहीं, बल्कि रोज़मर्रा की ज़िंदगी में अपनी सोच को परखने और सही दिशा देने के लिए डिज़ाइन किया गया है।</p>
             </div>
-            
-            <div class="hero-grid" style="align-items: center;">
-                <img src="assets/mind-works-illustration.jpg" class="illustration-showcase" alt="How Your Mind Works Brain illustration" style="max-height: 350px; object-fit: cover;">
-                
-                <div>
-                    <h3 style="font-size: 1.45rem; margin-bottom: var(--space-xs); font-family: var(--font-heading);">Subconscious Alert Mechanism</h3>
-                    <p style="color: var(--color-text-slate); font-size: 0.95rem; line-height: 1.6; margin-bottom: var(--space-sm);">
-                        Hamare brain ka evolution safety warnings identify karne ke liye hua hai. Jab aap constant pressure me hote hain, to default mode network (DMN) positive possibilities ko filter out karke sirf alerts project karta hai.
-                    </p>
-                    <p style="color: var(--color-text-slate); font-size: 0.95rem; line-height: 1.6;">
-                        Is workbook me diye gaye systematic check templates DMN patterns ko override karke neuroplastic pathways reset karte hain.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- SECTION 5: WHAT YOU'LL LEARN -->
-    <section class="section-pad" style="background: var(--color-bg-2);">
-        <div class="container">
-            <div class="section-head">
-                <span class="tag">Workbook Value</span>
-                <h2>What You'll Learn</h2>
-                <p>Rewire your routines utilizing standard psychology guidelines.</p>
-            </div>
-            
-            <div class="review-grid">
-                <div class="glass-card">
-                    <i data-lucide="search" style="color: var(--color-primary); width: 32px; height: 32px; margin-bottom: 0.5rem;"></i>
-                    <h3>Thought Capture</h3>
-                    <p style="font-size: 0.9rem;">Identify specific cognitive loops the moment they trigger.</p>
+            <div class="intro-features-grid">
+                <!-- Left: Product Image on Desk / Phone -->
+                <div class="intro-mockup-wrap">
+                    <img src="assets/book-iphone-mockup.jpg" alt="Positive Thinking Mobile App Reading" loading="lazy" width="600" height="340">
                 </div>
-                <div class="glass-card">
-                    <i data-lucide="refresh-cw" style="color: var(--color-primary); width: 32px; height: 32px; margin-bottom: 0.5rem;"></i>
-                    <h3>Bedtime Reset</h3>
-                    <p style="font-size: 0.9rem;">Override negative programming before sleep map state triggers.</p>
-                </div>
-                <div class="glass-card">
-                    <i data-lucide="compass" style="color: var(--color-primary); width: 32px; height: 32px; margin-bottom: 0.5rem;"></i>
-                    <h3>Sensory Grounding</h3>
-                    <p style="font-size: 0.9rem;">Use 5-4-3-2-1 breathing logic to neutralize anxiety alerts instantly.</p>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- SECTION 6: INSIDE THIS EBOOK -->
-    <section id="whats-inside" class="section-pad">
-        <div class="container">
-            <div class="section-head">
-                <span class="tag">eBook Previews</span>
-                <h2>Inside the eBook</h2>
-                <p>This is not a theoretical essay book. It is a workbook with dynamic trackers.</p>
-            </div>
-            
-            <div class="review-grid">
-                <div class="glass-card" style="text-align: center;">
-                    <i data-lucide="check-square" style="color: var(--color-primary); width: 32px; height: 32px; margin: 0 auto 0.5rem;"></i>
-                    <h4>21-Day Habit Checklists</h4>
-                    <p style="font-size: 0.85rem; margin-top: 4px;">Monitor daily morning patterns.</p>
-                </div>
-                <div class="glass-card" style="text-align: center;">
-                    <i data-lucide="clipboard-list" style="color: var(--color-primary); width: 32px; height: 32px; margin: 0 auto 0.5rem;"></i>
-                    <h4>Action worksheets</h4>
-                    <p style="font-size: 0.85rem; margin-top: 4px;">Fillable questions for clarity.</p>
-                </div>
-                <div class="glass-card" style="text-align: center;">
-                    <i data-lucide="calendar" style="color: var(--color-primary); width: 32px; height: 32px; margin: 0 auto 0.5rem;"></i>
-                    <h4>Daily Mind Maps</h4>
-                    <p style="font-size: 0.85rem; margin-top: 4px;">Visual representation of cognitive logs.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- SECTION 7: WHAT YOU'LL GET INSIDE THIS EBOOK (CRO Curiosity Upgrade) -->
-    <section class="section-pad" style="background: var(--color-bg-2); border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light);">
-        <div class="container">
-            <div class="section-head">
-                <span class="tag">📖 Exclusive Content</span>
-                <h2>Inside This Premium eBook</h2>
-                <p>Miliye un powerful worksheets aur custom methods se jo aapke brain pathways transform karenge.</p>
-            </div>
-            
-            <div class="gallery-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--space-md);">
-                <!-- Card 1 -->
-                <div class="blurred-preview-card">
-                    <i data-lucide="brain" style="color: var(--color-primary); width: 28px; height: 28px; margin-bottom: 0.5rem;"></i>
-                    <h4 style="font-size: 1rem; color: #FFFFFF; font-weight: bold; margin: 0;">Mind Reset</h4>
-                    <div class="blurred-text">
-                        Identify daily cognitive blocks and execute instant rewiring checkpoints using standard clinical psychology methods.
-                    </div>
-                </div>
-                
-                <!-- Card 2 -->
-                <div class="blurred-preview-card">
-                    <i data-lucide="sun" style="color: var(--color-primary); width: 28px; height: 28px; margin-bottom: 0.5rem;"></i>
-                    <h4 style="font-size: 1rem; color: #FFFFFF; font-weight: bold; margin: 0;">Morning Routine</h4>
-                    <div class="blurred-text">
-                        Reclaim your subconscious focus nodes and terminate public performance fears loop by loop with actionable steps.
-                    </div>
-                </div>
-                
-                <!-- Card 3 -->
-                <div class="blurred-preview-card">
-                    <i data-lucide="shield-check" style="color: var(--color-primary); width: 28px; height: 28px; margin-bottom: 0.5rem;"></i>
-                    <h4 style="font-size: 1rem; color: #FFFFFF; font-weight: bold; margin: 0;">Confidence Builder</h4>
-                    <div class="blurred-text">
-                        A detailed visual checklist outlining how to silence active alert cycles and prevent somatic anxiety triggers.
-                    </div>
-                </div>
-                
-                <!-- Card 4 -->
-                <div class="blurred-preview-card">
-                    <i data-lucide="file-text" style="color: var(--color-primary); width: 28px; height: 28px; margin-bottom: 0.5rem;"></i>
-                    <h4 style="font-size: 1rem; color: #FFFFFF; font-weight: bold; margin: 0;">Worksheets</h4>
-                    <div class="blurred-text">
-                        Trackable routines structured specifically to increase focus and minimize morning procrastination cycles.
-                    </div>
-                </div>
-                
-                <!-- Card 5 -->
-                <div class="blurred-preview-card">
-                    <i data-lucide="check-square" style="color: var(--color-primary); width: 28px; height: 28px; margin-bottom: 0.5rem;"></i>
-                    <h4 style="font-size: 1rem; color: #FFFFFF; font-weight: bold; margin: 0;">Habit Tracker</h4>
-                    <div class="blurred-text">
-                        Nightly reflection worksheets mapping positive triggers and capturing daily somatic relaxation parameters.
-                    </div>
-                </div>
-                
-                <!-- Card 6 -->
-                <div class="blurred-preview-card">
-                    <i data-lucide="edit-3" style="color: var(--color-primary); width: 28px; height: 28px; margin-bottom: 0.5rem;"></i>
-                    <h4 style="font-size: 1rem; color: #FFFFFF; font-weight: bold; margin: 0;">Reflection Journal</h4>
-                    <div class="blurred-text">
-                        Set up the ultimate clean energy dashboard in the first 10 minutes of your waking hours for active day planning.
-                    </div>
-                </div>
-                
-                <!-- Card 7 -->
-                <div class="blurred-preview-card">
-                    <i data-lucide="heart" style="color: var(--color-primary); width: 28px; height: 28px; margin-bottom: 0.5rem;"></i>
-                    <h4 style="font-size: 1rem; color: #FFFFFF; font-weight: bold; margin: 0;">Affirmations</h4>
-                    <div class="blurred-text">
-                        Disconnect sensory inputs completely to prevent residual overthinking maps from interrupting recovery.
-                    </div>
-                </div>
-                
-                <!-- Card 8 -->
-                <div class="blurred-preview-card">
-                    <i data-lucide="message-circle" style="color: var(--color-primary); width: 28px; height: 28px; margin-bottom: 0.5rem;"></i>
-                    <h4 style="font-size: 1rem; color: #FFFFFF; font-weight: bold; margin: 0;">Self Talk</h4>
-                    <div class="blurred-text">
-                        Question blocks targeting career anxiety, relationship worries, and financial scarcity blocks.
-                    </div>
-                </div>
-                
-                <!-- Card 9 -->
-                <div class="blurred-preview-card">
-                    <i data-lucide="smile" style="color: var(--color-primary); width: 28px; height: 28px; margin-bottom: 0.5rem;"></i>
-                    <h4 style="font-size: 1rem; color: #FFFFFF; font-weight: bold; margin: 0;">Gratitude</h4>
-                    <div class="blurred-text">
-                        5-Minute grounding breath rules and bio-feedback mapping logs to restore focus baseline.
-                    </div>
-                </div>
-                
-                <!-- Card 10 -->
-                <div class="blurred-preview-card">
-                    <i data-lucide="zap" style="color: var(--color-primary); width: 28px; height: 28px; margin-bottom: 0.5rem;"></i>
-                    <h4 style="font-size: 1rem; color: #FFFFFF; font-weight: bold; margin: 0;">Overthinking Reset</h4>
-                    <div class="blurred-text">
-                        Fillable templates for daily cognitive restructuring to systematically replace negative alert patterns.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- SECTION 8: FREE PREMIUM BONUS -->
-    <section class="section-pad" style="background: var(--color-bg-1);">
-        <div class="container">
-            <div class="section-head">
-                <span class="tag">Gift Package</span>
-                <h2>🎁 FREE PREMIUM BONUS</h2>
-                <p>Claim the complete workbook kit along with your purchase today.</p>
-            </div>
-            
-            <div class="hero-grid" style="align-items: center;">
-                <div class="glass-card" style="padding: 2.5rem; border-color: var(--border-glowing); background: var(--card-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);">
-                    <h3 style="font-size: 1.45rem; color: var(--color-primary); margin-bottom: 1rem;">The Complete Bonus Toolkit</h3>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-xs); margin-bottom: 1.5rem; text-align: left;">
-                        <span style="font-size: 0.9rem; color: var(--color-text-slate);"><i data-lucide="check" style="color: var(--color-primary); width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i> ✔️ Mind Reset Workbook</span>
-                        <span style="font-size: 0.9rem; color: var(--color-text-slate);"><i data-lucide="check" style="color: var(--color-primary); width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i> ✔️ 101 Affirmations</span>
-                        <span style="font-size: 0.9rem; color: var(--color-text-slate);"><i data-lucide="check" style="color: var(--color-primary); width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i> ✔️ Habit Tracker</span>
-                        <span style="font-size: 0.9rem; color: var(--color-text-slate);"><i data-lucide="check" style="color: var(--color-primary); width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i> ✔️ Mood Tracker</span>
-                        <span style="font-size: 0.9rem; color: var(--color-text-slate);"><i data-lucide="check" style="color: var(--color-primary); width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i> ✔️ Daily Planner</span>
-                        <span style="font-size: 0.9rem; color: var(--color-text-slate);"><i data-lucide="check" style="color: var(--color-primary); width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i> ✔️ Gratitude Journal</span>
-                        <span style="font-size: 0.9rem; color: var(--color-text-slate);"><i data-lucide="check" style="color: var(--color-primary); width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i> ✔️ Reflection Pages</span>
-                        <span style="font-size: 0.9rem; color: var(--color-text-slate);"><i data-lucide="check" style="color: var(--color-primary); width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i> ✔️ Confidence Exercises</span>
-                        <span style="font-size: 0.9rem; color: var(--color-text-slate);"><i data-lucide="check" style="color: var(--color-primary); width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i> ✔️ Printable Worksheets</span>
-                    </div>
-                    <span style="font-size: 0.8rem; background: rgba(16, 185, 129, 0.08); color: var(--color-success); padding: 6px 12px; border-radius: var(--radius-full); font-weight: bold; border: 1px solid rgba(16,185,129,0.15);">FREE BONUS (Value: ₹999)</span>
-                </div>
-                <img src="assets/bonus-workbook-mockup.jpg" class="illustration-showcase" alt="Bonus Workbook gift box mockup" style="max-height: 320px; object-fit: cover;">
-            </div>
-        </div>
-    </section>
-
-    <!-- SECTION 9: STEPS SEQUENCE SECTION -->
-    <section class="section-pad" style="background: var(--color-bg-2);">
-        <div class="container">
-            <div class="section-head">
-                <span class="tag">Steps</span>
-                <h2>⚡ Get Instant Access in 3 Simple Steps</h2>
-                <p>How you access and deploy the resources instantly.</p>
-            </div>
-            
-            <div class="review-grid" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));">
-                <div class="glass-card" style="background: var(--card-bg);">
-                    <div style="font-size: 1.5rem; color: var(--color-primary); margin-bottom: 0.5rem;">01</div>
-                    <h4>Buy Securely</h4>
-                    <p style="font-size: 0.85rem; margin-top: 4px; color: var(--color-text-slate);">Pay safely using UPI, NetBanking, or Credit Cards with SSL encryption.</p>
-                </div>
-                <div class="glass-card" style="background: var(--card-bg);">
-                    <div style="font-size: 1.5rem; color: var(--color-primary); margin-bottom: 0.5rem;">02</div>
-                    <h4>Receive Download Link Instantly</h4>
-                    <p style="font-size: 0.85rem; margin-top: 4px; color: var(--color-text-slate);">Access download link immediately on screen and via inbox backup mail.</p>
-                </div>
-                <div class="glass-card" style="background: var(--card-bg);">
-                    <div style="font-size: 1.5rem; color: var(--color-primary); margin-bottom: 0.5rem;">03</div>
-                    <h4>Read Anywhere Anytime</h4>
-                    <p style="font-size: 0.85rem; margin-top: 4px; color: var(--color-text-slate);">Compatible with mobile, tablets, desktop, and e-readers layout.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- SECTION 10: TRUST SECTION (Our Promise) -->
-    <section id="promise" class="section-pad">
-        <div class="container">
-            <div class="section-head">
-                <span class="tag">Trust</span>
-                <h2>🛡️ Our Promise</h2>
-                <p>We stand by the depth and value of our self-growth workbooks.</p>
-            </div>
-            
-            <div class="review-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--space-md);">
-                <div class="glass-card" style="padding: 1.5rem; border-top: 2px solid var(--color-primary);">
-                    <h4>✔️ Original Premium Content</h4>
-                    <p style="font-size: 0.85rem; color: var(--color-text-slate); margin-top: 4px;">Crafted by experienced content creators, no AI fluff or generic text.</p>
-                </div>
-                <div class="glass-card" style="padding: 1.5rem; border-top: 2px solid var(--color-primary);">
-                    <h4>✔️ Practical Exercises</h4>
-                    <p style="font-size: 0.85rem; color: var(--color-text-slate); margin-top: 4px;">Action sheets designed to guide you step-by-step out of overthinking.</p>
-                </div>
-                <div class="glass-card" style="padding: 1.5rem; border-top: 2px solid var(--color-primary);">
-                    <h4>✔️ Easy Hindi Language</h4>
-                    <p style="font-size: 0.85rem; color: var(--color-text-slate); margin-top: 4px;">70% Simple conversational Hindi blended with 30% modern English.</p>
-                </div>
-                <div class="glass-card" style="padding: 1.5rem; border-top: 2px solid var(--color-primary);">
-                    <h4>✔️ Instant Delivery</h4>
-                    <p style="font-size: 0.85rem; color: var(--color-text-slate); margin-top: 4px;">Link delivered directly to checkout confirmation and backup email.</p>
-                </div>
-                <div class="glass-card" style="padding: 1.5rem; border-top: 2px solid var(--color-primary);">
-                    <h4>✔️ Lifetime Access</h4>
-                    <p style="font-size: 0.85rem; color: var(--color-text-slate); margin-top: 4px;">One-time payment grants you unlimited downloads and updates.</p>
-                </div>
-                <div class="glass-card" style="padding: 1.5rem; border-top: 2px solid var(--color-primary);">
-                    <h4>✔️ Premium Bonus Included</h4>
-                    <p style="font-size: 0.85rem; color: var(--color-text-slate); margin-top: 4px;">Mind reset workbook checklists and trackers bundled completely free.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- SECTION 11: CUSTOMER TESTIMONIALS (CRO Upgrade) -->
-    <section id="reviews" class="section-pad" style="border-top: 1px solid var(--border-light); background: var(--color-bg-2);">
-        <div class="container">
-            <div class="section-head">
-                <span class="tag">Social Proof</span>
-                <h2>What Our Readers Say</h2>
-                <p>Read early feedback from people who rewired their default overthinking loop.</p>
-                
-                <div style="margin-top: 1.5rem; display: inline-flex; align-items: center; gap: 8px; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-light); padding: 6px 16px; border-radius: var(--radius-full);">
-                    <span style="font-weight: bold; color: var(--color-primary);">⭐ Average Rating:</span>
-                    <span style="font-weight: 800; color: #FFFFFF;">4.8/5</span>
-                    <span style="color: var(--color-primary); font-size: 0.85rem;">★★★★★</span>
-                    <span style="font-size: 0.75rem; color: var(--color-text-gray); font-style: italic;">(Design element placeholder)</span>
-                </div>
-            </div>
-            
-            <div style="position: relative; margin-top: 1.5rem;">
-                <!-- Carousel Scroll Control Arrows -->
-                <button id="review-prev-btn" onclick="document.getElementById('reviews-carousel').scrollBy({left: -320, behavior: 'smooth'})" style="position: absolute; left: -15px; top: 50%; transform: translateY(-50%); z-index: 10; background: rgba(15, 23, 42, 0.85); color: var(--color-gold); border: 1px solid rgba(251, 191, 36, 0.4); width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; backdrop-filter: blur(8px); box-shadow: 0 4px 15px rgba(0,0,0,0.5); transition: all 0.3s ease;">
-                    ❮
-                </button>
-                <button id="review-next-btn" onclick="document.getElementById('reviews-carousel').scrollBy({left: 320, behavior: 'smooth'})" style="position: absolute; right: -15px; top: 50%; transform: translateY(-50%); z-index: 10; background: rgba(15, 23, 42, 0.85); color: var(--color-gold); border: 1px solid rgba(251, 191, 36, 0.4); width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; backdrop-filter: blur(8px); box-shadow: 0 4px 15px rgba(0,0,0,0.5); transition: all 0.3s ease;">
-                    ❯
-                </button>
-
-                <div id="reviews-carousel" class="review-grid" style="display: flex; gap: 1.25rem; overflow-x: auto; padding: 0.5rem 0.25rem 1rem 0.25rem; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scroll-behavior: smooth;">
-                    <!-- Review 1 -->
-                    <div class="glass-card" style="flex: 0 0 300px; max-width: 85vw; scroll-snap-align: center; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; border-color: rgba(255,255,255,0.08); background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(12px);">
+                <!-- Right: Actionable Points -->
+                <div class="intro-points-list">
+                    <div class="intro-point-item">
+                        <div class="intro-point-icon"><i data-lucide="brain"></i></div>
                         <div>
-                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: var(--space-sm);">
-                                <img src="assets/profile-rahul.jpg" alt="Rahul" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid var(--color-gold);">
-                                <div>
-                                    <h4 style="font-size: 1rem; color: #FFFFFF; font-weight: bold; margin: 0;">Rahul</h4>
-                                    <span style="color: var(--color-gold); font-size: 0.75rem;">★★★★★ Verified Reader</span>
-                                </div>
-                            </div>
-                            <p style="font-size: 0.88rem; line-height: 1.55; color: var(--color-text-slate);">
-                                "Overthinking loop me phasa rehta tha tab ye book mili. Subconscious control techniques directly daily routines track karne me help karti hain. Highly recommended!"
-                            </p>
+                            <h3>Scientific Neuroplasticity Principles</h3>
+                            <p>सीखें कि कैसे बार-बार दोहराए जाने वाले विचार दिमाग में न्यूरल पाथवे बनाते हैं और उन्हें सचेत रूप से कैसे तोड़ा जा सकता है।</p>
                         </div>
-                        <span style="font-size: 0.72rem; color: var(--color-gold); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; display: block; margin-top: 1rem;">Mind Reset Focus</span>
                     </div>
 
-                    <!-- Review 2 -->
-                    <div class="glass-card" style="flex: 0 0 300px; max-width: 85vw; scroll-snap-align: center; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; border-color: rgba(255,255,255,0.08); background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(12px);">
+                    <div class="intro-point-item">
+                        <div class="intro-point-icon"><i data-lucide="clipboard-edit"></i></div>
                         <div>
-                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: var(--space-sm);">
-                                <img src="assets/profile-priya.jpg" alt="Priya" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid var(--color-gold);">
-                                <div>
-                                    <h4 style="font-size: 1rem; color: #FFFFFF; font-weight: bold; margin: 0;">Priya</h4>
-                                    <span style="color: var(--color-gold); font-size: 0.75rem;">★★★★★ Verified Reader</span>
-                                </div>
-                            </div>
-                            <p style="font-size: 0.88rem; line-height: 1.55; color: var(--color-text-slate);">
-                                "Hinglish language simple aur clean hai. Visual illustrations brain relaxation patterns samajhne me visual support dete hain. Mindset clarity ab daily active hai!"
-                            </p>
+                            <h3>Real Worksheets & Action Tables</h3>
+                            <p>किताब में खाली जगहें और टेबल्स दी गई हैं जहाँ आप अपने डरावने विचारों को लिखकर उनकी तार्किक जांच कर सकते हैं।</p>
                         </div>
-                        <span style="font-size: 0.72rem; color: var(--color-gold); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; display: block; margin-top: 1rem;">Anxiety Control</span>
                     </div>
 
-                    <!-- Review 3 -->
-                    <div class="glass-card" style="flex: 0 0 300px; max-width: 85vw; scroll-snap-align: center; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; border-color: rgba(255,255,255,0.08); background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(12px);">
+                    <div class="intro-point-item">
+                        <div class="intro-point-icon"><i data-lucide="message-square"></i></div>
                         <div>
-                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: var(--space-sm);">
-                                <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(251, 191, 36, 0.15); border: 2px solid var(--color-gold); display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--color-gold);">N</div>
-                                <div>
-                                    <h4 style="font-size: 1rem; color: #FFFFFF; font-weight: bold; margin: 0;">Neha</h4>
-                                    <span style="color: var(--color-gold); font-size: 0.75rem;">★★★★★ Verified Reader</span>
-                                </div>
-                            </div>
-                            <p style="font-size: 0.88rem; line-height: 1.55; color: var(--color-text-slate);">
-                                "Sensory grounding hack is awesome! Sleep quality improve ho gayi aur negative thoughts sleep latency break hone se pehle check ho jaate hain."
-                            </p>
+                            <h3>Real-Life Hindi Case Studies</h3>
+                            <p>राहुल की 'एनालिसिस पैरालिसिस' और नेहा की 'अतीत की जुगाली' जैसे असल उदाहरणों से अपनी समस्याओं को गहराई से समझें।</p>
                         </div>
-                        <span style="font-size: 0.72rem; color: var(--color-gold); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; display: block; margin-top: 1rem;">Self-Confidence Rewire</span>
+                    </div>
+
+                    <div class="intro-point-item">
+                        <div class="intro-point-icon"><i data-lucide="compass"></i></div>
+                        <div>
+                            <h3>Simple Hinglish Conversational Language</h3>
+                            <p>कोई भारी-भरकम किताबी शब्द नहीं — 70-80% सरल हिंदी/हिंग्लिश जो दिल तक सीधे पहुँचती है।</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- SECTION 12: FAQ -->
-    <section id="faq" class="section-pad">
+    <!-- ── SECTION 4: WHAT'S INSIDE THE MAIN EBOOK ── -->
+    <section class="section-pad" style="background: #080d1e;">
         <div class="container">
-            <div class="section-head">
-                <span class="tag">FAQs</span>
-                <h2>Frequently Asked Questions</h2>
-                <p>Have query nodes? Read direct answers below.</p>
+            <div class="section-header">
+                <span class="badge-tag">Inside The 117-Page Guide</span>
+                <h2 class="section-title">पुस्तक में क्या-क्या कवर किया गया है?</h2>
+                <p class="section-subtext">Positive Thinking मुख्य पुस्तक के वास्तविक अध्यायों, मनोवैज्ञानिक अंतर्दृष्टि और व्यावहारिक अभ्यासों की पूरी रूपरेखा:</p>
             </div>
-            
-            <div class="faq-box" style="max-width: 700px; margin: 0 auto;">
-                <div class="faq-card">
-                    <div class="faq-trigger"><span>PDF file access kaise hoga?</span><i data-lucide="chevron-down"></i></div>
-                    <div class="faq-content"><p>Checkout complete hone par link immediately display ho jayegi. Aap use direct single-tap me download kar sakte hain. Email inbox me bhi backup link drop ho jayegi.</p></div>
-                </div>
-                <div class="faq-card">
-                    <div class="faq-trigger"><span>Kya mobile screen par support readable clear hai?</span><i data-lucide="chevron-down"></i></div>
-                    <div class="faq-content"><p>Haan, ye dynamic PDF formats screen sizing compatibility ke saath design hai. Mobile aur desktop screens par reader layout perfect readable hai.</p></div>
-                </div>
-                <div class="faq-card">
-                    <div class="faq-trigger"><span>Refund policies support terms kya hain?</span><i data-lucide="chevron-down"></i></div>
-                    <div class="faq-content"><p>Agar E-book parameters se aapko changes nahi milte, to 7 days parameters ke andar mail support desk par coordinate karein. 100% payments secure returns available hai.</p></div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- SECTION 13: FINAL CTA -->
-    <section class="section-pad" style="border-top: 1px solid var(--border-light); background: radial-gradient(circle at center, rgba(197, 168, 128, 0.05), var(--color-bg-1) 100%);">
-        <div class="container hero-grid" style="align-items: center;">
-            <div class="bottom-cta-content">
-                <span class="tag">Immediate Access</span>
-                <h2 class="bottom-cta-title gradient-gold-text">आपकी नई सोच, आपका नया जीवन यहीं से शुरू होता है।</h2>
-                <p style="margin-bottom: var(--space-md); color: var(--color-text-slate);">Get the complete Positive Thinking E-Book, trackers, and worksheets today.</p>
+            <div class="chapters-grid">
                 
-                <div style="font-size: 2.25rem; font-weight: 800; color: var(--color-primary); margin-bottom: var(--space-md);">
-                <div style="font-size: 2.25rem; font-weight: 800; color: var(--color-primary); margin-bottom: var(--space-md);">
-                    <span class="dynamic-price-val">₹199</span> <del class="dynamic-orig-price-val" style="font-size: 1.15rem; color: var(--color-text-slate); margin-left: 4px;">₹999</del>
+                <!-- Topic 1: Overthinking & Rumination -->
+                <div class="chapter-card">
+                    <div class="chapter-header">
+                        <span class="chapter-num">अध्याय 1</span>
+                        <h3>Overthinking & Rumination</h3>
+                    </div>
+                    <div class="step-row">
+                        <div class="step-item">
+                            <span class="step-label problem">समस्या</span>
+                            <span>दिमाग का Default Mode Network अनियंत्रित होकर एक ही बात को बार-बार दोहराता है।</span>
+                        </div>
+                        <div class="step-item">
+                            <span class="step-label learn">सीख</span>
+                            <span>विचारों को बलपूर्वक दबाने की जगह योजनाबद्ध तरीके से शेड्यूल करना।</span>
+                        </div>
+                        <div class="step-item">
+                            <span class="step-label action">अभ्यास</span>
+                            <span><strong>Worry Postponement Protocol</strong> और दैनिक चिंता स्थगन कार्यपत्रक।</span>
+                        </div>
+                    </div>
                 </div>
 
-                <button class="btn btn-primary checkout-trigger dynamic-buy-btn-text" data-product-slug="positive-thinking" style="padding: 1.25rem 4rem; font-size: 1.15rem; display: flex; align-items: center; gap: 8px;">
-                    🛒 Buy Now – ₹199
+                <!-- Topic 2: Catastrophizing & Fear of Failure -->
+                <div class="chapter-card">
+                    <div class="chapter-header">
+                        <span class="chapter-num">अध्याय 2</span>
+                        <h3>Catastrophizing & Fear of Failure</h3>
+                    </div>
+                    <div class="step-row">
+                        <div class="step-item">
+                            <span class="step-label problem">समस्या</span>
+                            <span>हर छोटी चुनौती में सीधे 'Worst-Case Scenario' (विनाशकारी अंत) की कल्पना करना।</span>
+                        </div>
+                        <div class="step-item">
+                            <span class="step-label learn">सीख</span>
+                            <span>तथ्यों और काल्पनिक डरों के बीच स्पष्ट अंतर करना।</span>
+                        </div>
+                        <div class="step-item">
+                            <span class="step-label action">अभ्यास</span>
+                            <span><strong>The Evidence Investigation</strong> — डरावने विचार की अदालती जांच।</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Topic 3: Mind Reading & Social Anxiety -->
+                <div class="chapter-card">
+                    <div class="chapter-header">
+                        <span class="chapter-num">अध्याय 3</span>
+                        <h3>Mind Reading & Social Doubts</h3>
+                    </div>
+                    <div class="step-row">
+                        <div class="step-item">
+                            <span class="step-label problem">समस्या</span>
+                            <span>यह मान लेना कि दूसरे लोग आपके बारे में बुरा सोच रहे हैं या मज़ाक बना रहे हैं।</span>
+                        </div>
+                        <div class="step-item">
+                            <span class="step-label learn">सीख</span>
+                            <span>Spotlight Effect को समझना — लोग आपको उतना नोटिस नहीं करते जितना आप सोचते हैं।</span>
+                        </div>
+                        <div class="step-item">
+                            <span class="step-label action">अभ्यास</span>
+                            <span><strong>3-Step Assumption Reality Check</strong> और संवाद तकनीक।</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Topic 4: All-or-Nothing & Perfectionism -->
+                <div class="chapter-card">
+                    <div class="chapter-header">
+                        <span class="chapter-num">अध्याय 4</span>
+                        <h3>All-or-Nothing & Perfectionism</h3>
+                    </div>
+                    <div class="step-row">
+                        <div class="step-item">
+                            <span class="step-label problem">समस्या</span>
+                            <span>"या तो 100% सही होगा या मैं पूरी तरह फेल हूँ" — यह सोच काम टालने पर मजबूर करती है।</span>
+                        </div>
+                        <div class="step-item">
+                            <span class="step-label learn">सीख</span>
+                            <span>पूर्णता की जगह 80% प्रगति पर ध्यान केंद्रित करना।</span>
+                        </div>
+                        <div class="step-item">
+                            <span class="step-label action">अभ्यास</span>
+                            <span><strong>The Spectrum Scale Activity</strong> — ब्लैक एंड व्हाइट सोच से बाहर निकलना।</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Topic 5: Personalization & Guilt -->
+                <div class="chapter-card">
+                    <div class="chapter-header">
+                        <span class="chapter-num">अध्याय 5</span>
+                        <h3>Personalization & Unnecessary Guilt</h3>
+                    </div>
+                    <div class="step-row">
+                        <div class="step-item">
+                            <span class="step-label problem">समस्या</span>
+                            <span>दूसरों के खराब मूड या अनपेक्षित परिस्थितियों के लिए खुद को 100% ज़िम्मेदार मानना।</span>
+                        </div>
+                        <div class="step-item">
+                            <span class="step-label learn">सीख</span>
+                            <span>नियंत्रण के दायरे (Circle of Control) की स्पष्ट पहचान करना।</span>
+                        </div>
+                        <div class="step-item">
+                            <span class="step-label action">अभ्यास</span>
+                            <span><strong>Responsibility Pie Chart Log</strong> — वास्तविक ज़िम्मेदारी का बंटवारा।</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Topic 6: Emotional Reasoning & Self-Doubt -->
+                <div class="chapter-card">
+                    <div class="chapter-header">
+                        <span class="chapter-num">अध्याय 6</span>
+                        <h3>Emotional Reasoning & Self-Doubt</h3>
+                    </div>
+                    <div class="step-row">
+                        <div class="step-item">
+                            <span class="step-label problem">समस्या</span>
+                            <span>"मुझे डर लग रहा है, इसलिए ज़रूर कुछ बुरा होने वाला है" — भावना को सच मान लेना।</span>
+                        </div>
+                        <div class="step-item">
+                            <span class="step-label learn">सीख</span>
+                            <span>भावनाएं केवल शारीरिक प्रतिक्रियाएं हैं, वे अंतिम सच नहीं हैं।</span>
+                        </div>
+                        <div class="step-item">
+                            <span class="step-label action">अभ्यास</span>
+                            <span><strong>90-Second Emotional Reset</strong> और न्यूट्रल ऑब्जर्वेशन तकनीक।</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div style="text-align: center; margin-top: 36px;">
+                <button class="cta-btn trigger-checkout" data-product-slug="positive-thinking">
+                    हाँ, मुझे Positive Thinking चाहिए — ₹199
                 </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── SECTION 5: REAL PAGE PREVIEWS ── -->
+    <section class="section-pad">
+        <div class="container">
+            <div class="section-header">
+                <span class="badge-tag">100% Genuine Material</span>
+                <h2 class="section-title">पुस्तक के वास्तविक पन्नों की एक झलक</h2>
+                <p class="section-subtext">कोई काल्पनिक डिज़ाइन नहीं — नीचे मुख्य PDF के असली पन्ने दिए गए हैं। किसी भी पेज पर टैप करके उसे पूरा पढ़ें:</p>
+            </div>
+
+            <div class="preview-gallery-grid">
                 
-                <div class="hero-trust-bullets" style="margin-top: var(--space-sm); gap: 12px;">
-                    <span><i data-lucide="zap" style="color: var(--color-primary); width: 14px; height: 14px; display: inline-block;"></i> ⚡ Instant Download</span>
-                    <span><i data-lucide="infinity" style="color: var(--color-primary); width: 14px; height: 14px; display: inline-block;"></i> ♾ Lifetime Access</span>
-                    <span><i data-lucide="lock" style="color: var(--color-primary); width: 14px; height: 14px; display: inline-block;"></i> 🔒 Secure Payment</span>
+                <!-- Preview 1 -->
+                <div class="preview-item-card trigger-lightbox" data-img="assets/previews/preview_page_2.png" data-caption="नकारात्मक सोच के 4 प्रभाव — खुशियाँ, आत्मविश्वास, रिश्ते और सफलता">
+                    <div class="preview-img-container">
+                        <img src="assets/previews/preview_page_2.png" alt="Ebook Page Preview" loading="lazy" width="300" height="310">
+                        <div class="preview-zoom-badge"><i data-lucide="zoom-in" style="width: 14px; height: 14px;"></i> बड़ा देखें</div>
+                    </div>
+                    <div class="preview-card-body">
+                        <span class="preview-tag">Inside The Book</span>
+                        <h4 class="preview-card-title">नकारात्मक सोच के जैविक प्रभाव</h4>
+                        <p class="preview-card-desc">कोर्टिसोल, वेगस नर्व और नींद पर नकारात्मक सोच का असर।</p>
+                    </div>
+                </div>
+
+                <!-- Preview 2 -->
+                <div class="preview-item-card trigger-lightbox" data-img="assets/previews/preview_page_13.png" data-caption="अभ्यास 1: दैनिक चिंता स्थगन कार्यपत्रक (The Daily Worry Deconstruction Sheet)">
+                    <div class="preview-img-container">
+                        <img src="assets/previews/preview_page_13.png" alt="Action Worksheet Preview" loading="lazy" width="300" height="310">
+                        <div class="preview-zoom-badge"><i data-lucide="zoom-in" style="width: 14px; height: 14px;"></i> बड़ा देखें</div>
+                    </div>
+                    <div class="preview-card-body">
+                        <span class="preview-tag">Action Worksheet</span>
+                        <h4 class="preview-card-title">चिंता स्थगन कार्यपत्रक</h4>
+                        <p class="preview-card-desc">Time, Trigger Thought और 5-Minute Action Plan तालिका।</p>
+                    </div>
+                </div>
+
+                <!-- Preview 3 -->
+                <div class="preview-item-card trigger-lightbox" data-img="assets/previews/preview_page_15.png" data-caption="5. चिंतन प्रश्न (Deep Reflection Questions) — अपनी डायरी में लिखने हेतु">
+                    <div class="preview-img-container">
+                        <img src="assets/previews/preview_page_15.png" alt="Reflection Questions Preview" loading="lazy" width="300" height="310">
+                        <div class="preview-zoom-badge"><i data-lucide="zoom-in" style="width: 14px; height: 14px;"></i> बड़ा देखें</div>
+                    </div>
+                    <div class="preview-card-body">
+                        <span class="preview-tag">Reflection Questions</span>
+                        <h4 class="preview-card-title">गहरे चिंतन प्रश्न</h4>
+                        <p class="preview-card-desc">पिछले महीने के काल्पनिक डरों और शारीरिक तनाव का विश्लेषण।</p>
+                    </div>
+                </div>
+
+                <!-- Preview 4 -->
+                <div class="preview-item-card trigger-lightbox" data-img="assets/previews/preview_page_23.png" data-caption="अभ्यास 2: सबूतों की अदालती जांच (The Evidence Investigation)">
+                    <div class="preview-img-container">
+                        <img src="assets/previews/preview_page_23.png" alt="CBT Exercise Preview" loading="lazy" width="300" height="310">
+                        <div class="preview-zoom-badge"><i data-lucide="zoom-in" style="width: 14px; height: 14px;"></i> बड़ा देखें</div>
+                    </div>
+                    <div class="preview-card-body">
+                        <span class="preview-tag">Practical Exercise</span>
+                        <h4 class="preview-card-title">सबूतों की अदालती जांच</h4>
+                        <p class="preview-card-desc">डरावने विचार के पक्ष और खिलाफ वास्तविक सबूतों की पड़ताल।</p>
+                    </div>
+                </div>
+
+                <!-- Preview 5 -->
+                <div class="preview-item-card trigger-lightbox" data-img="assets/previews/preview_page_49.png" data-caption="अभ्यास 1: ज़िम्मेदारी का पाई-चार्ट कार्यपत्रक (The Responsibility Pie Chart Log)">
+                    <div class="preview-img-container">
+                        <img src="assets/previews/preview_page_49.png" alt="Worksheet Preview" loading="lazy" width="300" height="310">
+                        <div class="preview-zoom-badge"><i data-lucide="zoom-in" style="width: 14px; height: 14px;"></i> बड़ा देखें</div>
+                    </div>
+                    <div class="preview-card-body">
+                        <span class="preview-tag">Action Worksheet</span>
+                        <h4 class="preview-card-title">ज़िम्मेदारी का पाई-चार्ट</h4>
+                        <p class="preview-card-desc">अपराध बोध कम करने और वास्तविक कारणों को बांटने की शीट।</p>
+                    </div>
+                </div>
+
+                <!-- Preview 6 -->
+                <div class="preview-item-card trigger-lightbox" data-img="assets/previews/preview_page_7.png" data-caption="यह पुस्तक कैसे काम करती है? — सक्रिय लेखन और दैनिक कार्यान्वयन नियम">
+                    <div class="preview-img-container">
+                        <img src="assets/previews/preview_page_7.png" alt="Guide Framework Preview" loading="lazy" width="300" height="310">
+                        <div class="preview-zoom-badge"><i data-lucide="zoom-in" style="width: 14px; height: 14px;"></i> बड़ा देखें</div>
+                    </div>
+                    <div class="preview-card-body">
+                        <span class="preview-tag">Real Page Preview</span>
+                        <h4 class="preview-card-title">सक्रिय अभ्यास नियम</h4>
+                        <p class="preview-card-desc">किताब से सर्वश्रेष्ठ परिणाम पाने के 3 मुख्य सिद्धांत।</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ── SECTION 6: BONUS TOOLKIT ── -->
+    <section class="section-pad" style="background: #080d1e;">
+        <div class="container">
+            <div class="section-header">
+                <span class="badge-tag" style="background: rgba(229, 197, 131, 0.2); border-color: var(--accent-gold);">Special Companion Bonus</span>
+                <h2 class="section-title">और साथ में मिलेगा BONUS — Positive Thinking Toolkit</h2>
+                <p class="section-subtext">This companion toolkit turns ideas into daily practice. 65 पन्नों की यह प्रैक्टिकल टूलकिट आपको मुख्य गाइड के साथ बिल्कुल साथ में मिलेगी।</p>
+            </div>
+
+            <div class="toolkit-hero-box">
+                <div class="toolkit-grid">
+                    <!-- Visual Mockup -->
+                    <div class="toolkit-visual-wrapper">
+                        <img src="assets/bonus-workbook-mockup.jpg" alt="Positive Thinking Toolkit Companion" loading="lazy" width="480" height="270">
+                    </div>
+
+                    <!-- Checklist -->
+                    <div>
+                        <h3 style="font-size: 1.35rem; color: #ffffff; margin-bottom: 16px;">टूलकिट में क्या-क्या शामिल है?</h3>
+                        <div class="toolkit-checklist">
+                            <div class="toolkit-check-item">
+                                <i data-lucide="check-circle"></i>
+                                <span><strong>101 Positive Affirmations</strong> (आत्मविश्वास, सफलता, कृतज्ञता, आत्म-प्रेम)</span>
+                            </div>
+
+                            <div class="toolkit-check-item">
+                                <i data-lucide="check-circle"></i>
+                                <span><strong>50 Cognitive Reframes</strong> (50 आम नकारात्मक विचारों के तार्किक विकल्प)</span>
+                            </div>
+
+                            <div class="toolkit-check-item">
+                                <i data-lucide="check-circle"></i>
+                                <span><strong>Morning & Night Mind Reset</strong> (दिन की शांत शुरुआत और तनावमुक्त नींद)</span>
+                            </div>
+
+                            <div class="toolkit-check-item">
+                                <i data-lucide="check-circle"></i>
+                                <span><strong>Printable Journals</strong> (दैनिक आभार और माइंडफुलनेस जर्नल्स)</span>
+                            </div>
+
+                            <div class="toolkit-check-item">
+                                <i data-lucide="check-circle"></i>
+                                <span><strong>Trackers & Habit Logs</strong> (प्रगति मापने के लिए प्रिंट करने योग्य शीट्स)</span>
+                            </div>
+
+                            <div class="toolkit-check-item">
+                                <i data-lucide="check-circle"></i>
+                                <span><strong>Reflection Sheets</strong> (स्वयं के व्यवहार की साप्ताहिक समीक्षा)</span>
+                            </div>
+
+                            <div class="toolkit-check-item">
+                                <i data-lucide="check-circle"></i>
+                                <span><strong>Practical Exercises</strong> (तुरंत मूड स्थिर करने वाली कसरतें)</span>
+                            </div>
+
+                            <div class="toolkit-check-item">
+                                <i data-lucide="check-circle"></i>
+                                <span><strong>Emergency Mind-Reset Scripts</strong> (डर और तीव्र घबराहट के लिए तत्काल स्क्रिप्ट्स)</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            
-            <div class="showcase-wrapper">
-                <div class="book-shadow-wrapper">
-                    <div class="book-3d">
-                        <div class="book-front">
-                            <img src="assets/calm-cover.jpg?v=1.1" alt="Positive Thinking Ebook Cover" loading="lazy">
+
+            <!-- Toolkit Previews Grid -->
+            <div style="margin-top: 24px;">
+                <h4 style="font-size: 1.05rem; color: #ffffff; text-align: center; margin-bottom: 18px;">टूलकिट के अंदर के वास्तविक पृष्ठ:</h4>
+                <div class="preview-gallery-grid">
+                    
+                    <div class="preview-item-card trigger-lightbox" data-img="assets/previews/toolkit/preview_page_4.png" data-caption="खंड 1: 101 शक्तिशाली सकारात्मक प्रतिज्ञाएं — सफलता, कृतज्ञता और आत्म-प्रेम">
+                        <div class="preview-img-container">
+                            <img src="assets/previews/toolkit/preview_page_4.png" alt="Affirmations Preview" loading="lazy" width="300" height="310">
+                            <div class="preview-zoom-badge"><i data-lucide="zoom-in" style="width: 14px; height: 14px;"></i> बड़ा देखें</div>
                         </div>
+                        <div class="preview-card-body">
+                            <span class="preview-tag">Toolkit Bonus</span>
+                            <h4 class="preview-card-title">101 Affirmations Sheet</h4>
+                            <p class="preview-card-desc">सफलता, कृतज्ञता और आत्म-प्रेम की शक्तिशाली प्रतिज्ञाएं।</p>
+                        </div>
+                    </div>
+
+                    <div class="preview-item-card trigger-lightbox" data-img="assets/previews/toolkit/preview_page_9.png" data-caption="खंड 2: 50 नकारात्मक विचार ──> तार्किक रीफ्रेम (Cognitive Reframes)">
+                        <div class="preview-img-container">
+                            <img src="assets/previews/toolkit/preview_page_9.png" alt="Reframes Preview" loading="lazy" width="300" height="310">
+                            <div class="preview-zoom-badge"><i data-lucide="zoom-in" style="width: 14px; height: 14px;"></i> बड़ा देखें</div>
+                        </div>
+                        <div class="preview-card-body">
+                            <span class="preview-tag">Toolkit Bonus</span>
+                            <h4 class="preview-card-title">50 Cognitive Reframes</h4>
+                            <p class="preview-card-desc">नकारात्मक विचार ➔ तार्किक विचार ➔ व्यावहारिक अभ्यास।</p>
+                        </div>
+                    </div>
+
+                    <div class="preview-item-card trigger-lightbox" data-img="assets/previews/toolkit/preview_page_26.png" data-caption="खंड 5: सचेत आभार जर्नल (Printable Gratitude Journal)">
+                        <div class="preview-img-container">
+                            <img src="assets/previews/toolkit/preview_page_26.png" alt="Printable Journal Preview" loading="lazy" width="300" height="310">
+                            <div class="preview-zoom-badge"><i data-lucide="zoom-in" style="width: 14px; height: 14px;"></i> बड़ा देखें</div>
+                        </div>
+                        <div class="preview-card-body">
+                            <span class="preview-tag">Toolkit Bonus</span>
+                            <h4 class="preview-card-title">Printable Gratitude Journal</h4>
+                            <p class="preview-card-desc">दैनिक आभार और सकारात्मक क्षणों को दर्ज करने का टेम्पलेट।</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 36px;">
+                <button class="cta-btn trigger-checkout" data-product-slug="positive-thinking">
+                    Get eBook + Bonus Toolkit — ₹199
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── SECTION 7: BEFORE / AFTER MINDSET ── -->
+    <section class="section-pad">
+        <div class="container">
+            <div class="section-header">
+                <span class="badge-tag">Mindset Shift</span>
+                <h2 class="section-title">सोच में आने वाला बदलाव</h2>
+                <p class="section-subtext">यह गाइड कोई जादुई गोली नहीं है। यह उन तार्किक बदलावों का अभ्यास है जो रोज़ाना की सोच को हल्का और स्पष्ट बनाते हैं:</p>
+            </div>
+
+            <div class="before-after-grid">
+                
+                <div class="ba-row">
+                    <div class="ba-before">
+                        <i data-lucide="x" style="width: 18px; height: 18px; flex-shrink: 0;"></i>
+                        <span>“मैं हमेशा ऐसा ही सोचता हूँ, मैं कभी नहीं बदल सकता।”</span>
+                    </div>
+                    <div class="ba-arrow"><i data-lucide="arrow-right"></i></div>
+                    <div class="ba-after">
+                        <i data-lucide="check" style="width: 18px; height: 18px; flex-shrink: 0;"></i>
+                        <span>“मैं अपने thought को question कर सकता हूँ और नया विकल्प चुन सकता हूँ।”</span>
+                    </div>
+                </div>
+
+                <div class="ba-row">
+                    <div class="ba-before">
+                        <i data-lucide="x" style="width: 18px; height: 18px; flex-shrink: 0;"></i>
+                        <span>“अगर मैं fail हुआ तो सब खत्म हो जाएगा।”</span>
+                    </div>
+                    <div class="ba-arrow"><i data-lucide="arrow-right"></i></div>
+                    <div class="ba-after">
+                        <i data-lucide="check" style="width: 18px; height: 18px; flex-shrink: 0;"></i>
+                        <span>“Worst-case के साथ मैं realistic outcome और सीख भी देख सकता हूँ।”</span>
+                    </div>
+                </div>
+
+                <div class="ba-row">
+                    <div class="ba-before">
+                        <i data-lucide="x" style="width: 18px; height: 18px; flex-shrink: 0;"></i>
+                        <span>“सब मेरे खिलाफ हैं और मेरी कमियां देख रहे हैं।”</span>
+                    </div>
+                    <div class="ba-arrow"><i data-lucide="arrow-right"></i></div>
+                    <div class="ba-after">
+                        <i data-lucide="check" style="width: 18px; height: 18px; flex-shrink: 0;"></i>
+                        <span>“हर thought fact नहीं होता। मेरे अनुमान मेरी कल्पना भी हो सकते हैं।”</span>
+                    </div>
+                </div>
+
+                <div class="ba-row">
+                    <div class="ba-before">
+                        <i data-lucide="x" style="width: 18px; height: 18px; flex-shrink: 0;"></i>
+                        <span>“मैं इसे बाद में करूँगा, अभी सही समय नहीं है।”</span>
+                    </div>
+                    <div class="ba-arrow"><i data-lucide="arrow-right"></i></div>
+                    <div class="ba-after">
+                        <i data-lucide="check" style="width: 18px; height: 18px; flex-shrink: 0;"></i>
+                        <span>“मूड का इंतज़ार किए बिना, मैं 5 मिनट का छोटा action अभी ले सकता हूँ।”</span>
+                    </div>
+                </div>
+
+                <div class="ba-row">
+                    <div class="ba-before">
+                        <i data-lucide="x" style="width: 18px; height: 18px; flex-shrink: 0;"></i>
+                        <span>“बाकी लोग मुझसे बहुत आगे निकल गए हैं।”</span>
+                    </div>
+                    <div class="ba-arrow"><i data-lucide="arrow-right"></i></div>
+                    <div class="ba-after">
+                        <i data-lucide="check" style="width: 18px; height: 18px; flex-shrink: 0;"></i>
+                        <span>“हर किसी की यात्रा अलग है। मैं केवल अपनी आज की progress पर focus करूँगा।”</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ── SECTION 8: WHO IS THIS FOR? ── -->
+    <section class="section-pad" style="background: #080d1e;">
+        <div class="container">
+            <div class="section-header">
+                <span class="badge-tag">Self Check</span>
+                <h2 class="section-title">क्या यह eBook आपके लिए है?</h2>
+                <p class="section-subtext">यह गाइड विशेष रूप से उन लोगों के लिए तैयार की गई है जो इन स्थितियों से गुज़र रहे हैं:</p>
+            </div>
+
+            <div class="audience-checklist-grid">
+                <div class="audience-card">
+                    <i data-lucide="check-circle-2" class="audience-icon"></i>
+                    <div class="audience-text">आप छोटी-छोटी बातों को बहुत ज़्यादा overthink करते हैं</div>
+                </div>
+
+                <div class="audience-card">
+                    <i data-lucide="check-circle-2" class="audience-icon"></i>
+                    <div class="audience-text">दिमाग में negative thoughts बार-बार बिना बुलाए आते हैं</div>
+                </div>
+
+                <div class="audience-card">
+                    <i data-lucide="check-circle-2" class="audience-icon"></i>
+                    <div class="audience-text">कोई भी कदम उठाने से पहले self-doubt घेर लेता है</div>
+                </div>
+
+                <div class="audience-card">
+                    <i data-lucide="check-circle-2" class="audience-icon"></i>
+                    <div class="audience-text">छोटी-मोटी समस्याओं को लेकर बहुत जल्दी stress महसूस होता है</div>
+                </div>
+
+                <div class="audience-card">
+                    <i data-lucide="check-circle-2" class="audience-icon"></i>
+                    <div class="audience-text">Past की गलतियों और बातचीत को दिमाग में बार-बार replay करते हैं</div>
+                </div>
+
+                <div class="audience-card">
+                    <i data-lucide="check-circle-2" class="audience-icon"></i>
+                    <div class="audience-text">Future को लेकर unnecessary worry और डर बना रहता है</div>
+                </div>
+
+                <div class="audience-card">
+                    <i data-lucide="check-circle-2" class="audience-icon"></i>
+                    <div class="audience-text">अपने confidence, focus और clarity पर काम करना चाहते हैं</div>
+                </div>
+
+                <div class="audience-card">
+                    <i data-lucide="check-circle-2" class="audience-icon"></i>
+                    <div class="audience-text">किताबी थ्योरी की जगह practical exercises पसंद करते हैं</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── SECTION 9: WHAT YOU GET TODAY ── -->
+    <section class="section-pad">
+        <div class="container">
+            <div class="offer-main-box">
+                <span class="badge-tag">Complete Package</span>
+                <h2 class="section-title" style="margin-bottom: 8px;">₹199 में आपको क्या मिलेगा?</h2>
+                <p class="section-subtext" style="color: var(--color-text-body);">एक बार खरीदें और आजीवन अपने पास रखें — कोई सब्सक्रिप्शन नहीं, कोई छुपा शुल्क नहीं।</p>
+
+                <div class="offer-items-grid">
+                    
+                    <div class="offer-item-card">
+                        <span class="offer-item-badge">01 — MAIN EBOOK</span>
+                        <h3>Positive Thinking Main Guide</h3>
+                        <p>117 पन्नों की व्यावहारिक हिंदी गाइड जिसमें ओवरथिंकिंग, विनाशकारी सोच, आत्म-संदेह और मानसिक शांति पर 12 मुख्य अध्याय और कार्यपत्रक शामिल हैं।</p>
+                    </div>
+
+                    <div class="offer-item-card">
+                        <span class="offer-item-badge">02 — COMPANION BONUS</span>
+                        <h3>Positive Thinking Toolkit</h3>
+                        <p>65 पन्नों की सहयोगी टूलकिट जिसमें 101 सकारात्मक प्रतिज्ञाएं, 50 संज्ञानात्मक रीफ्रेम, मॉर्निंग/नाईट रूटीन, आभार जर्नल्स और आपातकालीन स्क्रिप्ट्स शामिल हैं।</p>
+                    </div>
+
+                </div>
+
+                <div class="offer-price-callout">
+                    <div class="offer-final-price">₹199</div>
+                    <p class="offer-subnote">एक बार खरीदें और अपने पास रखें (Instant Download + Email Access)</p>
+                </div>
+
+                <button class="cta-btn trigger-checkout" data-product-slug="positive-thinking" style="max-width: 480px; margin: 0 auto;">
+                    Get Positive Thinking — ₹199
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── SECTION 10: TRUST & TRANSPARENCY ── -->
+    <section class="section-pad" style="background: #080d1e;">
+        <div class="container">
+            <div class="section-header">
+                <span class="badge-tag">100% Secure & Reliable</span>
+                <h2 class="section-title">हमारा भरोसा और पारदर्शिता</h2>
+                <p class="section-subtext">TATVAM.SHOP पर हम स्पष्टता और सुरक्षित डिजिटल डिलीवरी को प्राथमिकता देते हैं:</p>
+            </div>
+
+            <div class="trust-grid">
+                <div class="trust-card">
+                    <i data-lucide="shield-check"></i>
+                    <h3>Secure Payment</h3>
+                    <p>UPI, Cards, NetBanking और Wallets — 256-bit एन्क्रिप्शन द्वारा पूरी तरह सुरक्षित।</p>
+                </div>
+
+                <div class="trust-card">
+                    <i data-lucide="zap"></i>
+                    <h3>Instant Digital Access</h3>
+                    <p>पेमेंट होते ही स्क्रीन पर डाउनलोड लिंक और आपकी ईमेल पर तुरंत कॉपी भेजी जाती है।</p>
+                </div>
+
+                <div class="trust-card">
+                    <i data-lucide="smartphone"></i>
+                    <h3>All Devices Friendly</h3>
+                    <p>Mobile (390px+), Tablet और Laptop — सभी स्क्रीन्स पर आसानी से पढ़े जाने योग्य PDF।</p>
+                </div>
+
+                <div class="trust-card">
+                    <i data-lucide="headphones"></i>
+                    <h3>Dedicated Support</h3>
+                    <p>किसी भी सवाल या डाउनलोड समस्या के लिए support@tatvam.shop पर त्वरित सहायता।</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── SECTION 11: FAQ ── -->
+    <section class="section-pad">
+        <div class="container">
+            <div class="section-header">
+                <span class="badge-tag">Got Questions?</span>
+                <h2 class="section-title">अक्सर पूछे जाने वाले सवाल (FAQ)</h2>
+                <p class="section-subtext">खरीदने से पहले आपके मन में जो भी सवाल हो सकते हैं, उनके स्पष्ट और ईमानदार उत्तर:</p>
+            </div>
+
+            <div class="faq-accordion-list">
+                
+                <div class="faq-accordion-item active">
+                    <div class="faq-header">
+                        <h3>1. Purchase करने के बाद eBook कैसे मिलेगा?</h3>
+                        <i data-lucide="chevron-down" class="faq-chevron"></i>
+                    </div>
+                    <div class="faq-content">
+                        Payment पूरा होते ही आपके सामने 'Thank You' पेज पर तुरंत डाउनलोड बटन आ जाएगा। साथ ही, आपकी दर्ज की गई Email ID पर भी PDF का डायरेक्ट डाउनलोड लिंक भेज दिया जाता है, जिससे आप इसे कभी भी दोबारा डाउनलोड कर सकते हैं।
+                    </div>
+                </div>
+
+                <div class="faq-accordion-item">
+                    <div class="faq-header">
+                        <h3>2. क्या इसे mobile पर पढ़ सकता हूँ?</h3>
+                        <i data-lucide="chevron-down" class="faq-chevron"></i>
+                    </div>
+                    <div class="faq-content">
+                        जी हाँ, बिल्कुल! यह PDF फॉर्मेट में है और इसका फॉन्ट साइज़ और लेआउट इस तरह तैयार किया गया है कि इसे किसी भी Android या iPhone पर बिना ज़ूम किए आराम से पढ़ा जा सकता है। आप चाहें तो इसे टैबलेट या लैपटॉप पर भी खोल सकते हैं।
+                    </div>
+                </div>
+
+                <div class="faq-accordion-item">
+                    <div class="faq-header">
+                        <h3>3. Main eBook और Toolkit में क्या difference है?</h3>
+                        <i data-lucide="chevron-down" class="faq-chevron"></i>
+                    </div>
+                    <div class="faq-content">
+                        Main eBook (117 पन्ने) में नकारात्मक सोच के कारणों, न्यूरोसाइंस और 12 मुख्य मनोवैज्ञानिक सिद्धांतों की विस्तृत व्याख्या और केस स्टडीज़ हैं। जबकि Bonus Toolkit (65 पन्ने) एक व्यावहारिक साथी है जिसमें 101 Affirmations, 50 Cognitive Reframes, प्रिंट करने योग्य आभार जर्नल्स और इमरजेंसी माइंड-रीसेट कसरतें दी गई हैं।
+                    </div>
+                </div>
+
+                <div class="faq-accordion-item">
+                    <div class="faq-header">
+                        <h3>4. क्या यह Hindi में है?</h3>
+                        <i data-lucide="chevron-down" class="faq-chevron"></i>
+                    </div>
+                    <div class="faq-content">
+                        हाँ, यह सरल बोलचाल की हिंदी/हिंग्लिश (लगभग 75% हिंदी और 25% सरल अंग्रेजी शब्द) में लिखी गई है। इसमें कोई जटिल तकनीकी या मनोवैज्ञानिक भाषा नहीं है, ताकि कोई भी सामान्य पाठक इसे आसानी से समझकर लागू कर सके।
+                    </div>
+                </div>
+
+                <div class="faq-accordion-item">
+                    <div class="faq-header">
+                        <h3>5. क्या payment secure है?</h3>
+                        <i data-lucide="chevron-down" class="faq-chevron"></i>
+                    </div>
+                    <div class="faq-content">
+                        हाँ, 100% सुरक्षित है। पेमेंट भारत के सबसे भरोसेमंद पेमेंट गेटवे (Razorpay) के माध्यम से प्रोसेस की जाती है। आप Google Pay, PhonePe, Paytm, UPI, Debit/Credit Card या NetBanking से सुरक्षित भुगतान कर सकते हैं।
+                    </div>
+                </div>
+
+                <div class="faq-accordion-item">
+                    <div class="faq-header">
+                        <h3>6. क्या मुझे instant access मिलेगा?</h3>
+                        <i data-lucide="chevron-down" class="faq-chevron"></i>
+                    </div>
+                    <div class="faq-content">
+                        हाँ, यह एक डिजिटल उत्पाद है। पेमेंट कन्फर्म होते ही बिना किसी इंतज़ार के तुरंत एक्सेस मिल जाता है। किसी कूरियर या डिलीवरी का इंतज़ार करने की ज़रूरत नहीं है।
+                    </div>
+                </div>
+
+                <div class="faq-accordion-item">
+                    <div class="faq-header">
+                        <h3>7. Refund policy क्या है?</h3>
+                        <i data-lucide="chevron-down" class="faq-chevron"></i>
+                    </div>
+                    <div class="faq-content">
+                        क्योंकि यह एक इंस्टेंट डिजिटल डाउनलोड उत्पाद (PDF) है जिसे पेमेंट के तुरंत बाद पूरी तरह एक्सेस किया जा सकता है, इसलिए हमारी नीति के अनुसार डिजिटल उत्पादों पर रिफंड लागू नहीं होता। कृपया खरीदने से पहले इस पेज पर दी गई सभी जानकारी को ध्यान से पढ़ें। किसी भी समस्या के लिए हमारी सपोर्ट टीम हमेशा उपलब्ध है।
+                    </div>
+                </div>
+
+                <div class="faq-accordion-item">
+                    <div class="faq-header">
+                        <h3>8. क्या इसे दोबारा पढ़ सकता हूँ?</h3>
+                        <i data-lucide="chevron-down" class="faq-chevron"></i>
+                    </div>
+                    <div class="faq-content">
+                        हाँ, यह लाइफटाइम एक्सेस के साथ आता है। एक बार डाउनलोड करने के बाद यह फाइल हमेशा आपके मोबाइल या कंप्यूटर में सेव रहेगी। आप जब चाहें इसे दोबारा खोलकर पढ़ सकते हैं और जर्नल्स का प्रिंट भी ले सकते हैं।
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ── SECTION 12: FINAL CTA ── -->
+    <section class="section-pad final-cta-section">
+        <div class="container">
+            <div class="final-cta-card">
+                <span class="badge-tag">Start Today</span>
+                
+                <h2 class="section-title" style="font-size: clamp(1.8rem, 5.5vw, 2.7rem); margin-bottom: 14px;">
+                    अपनी सोच पर काम करने की शुरुआत <span class="gold-gradient-text">आज से करें।</span>
+                </h2>
+
+                <p class="section-subtext" style="max-width: 600px; margin-bottom: 24px;">
+                    आपको अपनी पूरी जिंदगी एक दिन में बदलने की जरूरत नहीं है। शुरुआत एक छोटे step से की जा सकती है।
+                </p>
+
+                <div style="background: rgba(16, 27, 55, 0.8); border: 1px solid var(--border-gold); border-radius: var(--radius-md); padding: 16px 24px; margin-bottom: 24px; text-align: center;">
+                    <div style="font-size: 1rem; color: #ffffff; font-weight: 700;">Positive Thinking Main eBook + Bonus Toolkit</div>
+                    <div style="font-size: 0.85rem; color: var(--accent-gold); margin-top: 2px;">117-Page Practical Guide + 65-Page Action Companion</div>
+                </div>
+
+                <div class="hero-pricing-box">
+                    <span class="hero-current-price">₹199</span>
+                    <span class="hero-original-price">₹999</span>
+                </div>
+
+                <button class="cta-btn trigger-checkout" data-product-slug="positive-thinking">
+                    हाँ, मुझे Positive Thinking चाहिए — ₹199
+                </button>
+
+                <div class="hero-perks-list" style="justify-content: center; margin-top: 18px;">
+                    <div class="hero-perk-item">
+                        <i data-lucide="check-circle-2"></i>
+                        <span>Instant Access</span>
+                    </div>
+                    <div class="hero-perk-item">
+                        <i data-lucide="check-circle-2"></i>
+                        <span>Main eBook + Bonus Toolkit</span>
+                    </div>
+                    <div class="hero-perk-item">
+                        <i data-lucide="check-circle-2"></i>
+                        <span>Secure Payment</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- SECTION 14: PREMIUM FOOTER -->
-    <footer style="background: var(--color-bg-2); color: var(--color-text-slate); padding: var(--space-lg) 0 var(--space-md); border-top: var(--border-light) 1px solid; position: relative; z-index: 2;">
-        <div class="container">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-sm);">
-                <h3 style="color: var(--color-secondary); font-size: 1.35rem;">TATVAM<span>.</span>SHOP</h3>
-                <p>&copy; 2026 tatvam.shop. All rights reserved. Support Desk: support@tatvam.shop</p>
+    <!-- ── FOOTER ── -->
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div>
+                <h3 style="color: #ffffff; font-size: 1.1rem; margin-bottom: 4px;">TATVAM<span style="color: var(--accent-gold);">.</span>SHOP</h3>
+                <p>ज्ञान जो जीवन बदल दे &bull; support@tatvam.shop</p>
+            </div>
+
+            <div class="footer-links">
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms-conditions.html">Terms &amp; Conditions</a>
+                <a href="refund-policy.html">Refund Policy</a>
+                <a href="contact-us.html">Contact Us</a>
+            </div>
+
+            <div>
+                <p>&copy; 2026 tatvam.shop. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-    <!-- STICKY FLOATING BUY WIDGETS -->
-    <!-- Desktop floating corner trigger card -->
-    <div class="floating-checkout-card" id="desktop-floating-card">
-        <div class="floating-book-row">
-            <img src="assets/calm-cover.jpg?v=1.1" alt="Ebook Cover">
+    <!-- ── MOBILE STICKY BOTTOM BAR ── -->
+    <div class="mobile-sticky-bar" id="mobile-sticky-cta">
+        <div class="sticky-bar-info">
+            <span class="sticky-bar-title">Positive Thinking</span>
+            <span class="sticky-bar-price">₹199</span>
+        </div>
+        <button class="cta-btn cta-btn-sm trigger-checkout" data-product-slug="positive-thinking">
+            Get Guide — ₹199
+        </button>
+    </div>
+
+    <!-- ── DESKTOP FLOATING PILL ── -->
+    <div class="desktop-floating-pill" id="desktop-floating-cta">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="assets/calm-cover.jpg" alt="Cover" style="width: 28px; height: 38px; border-radius: 3px; object-fit: cover;">
             <div>
-                <h4 style="font-size: 0.9rem; font-weight: bold; line-height: 1.2;">Positive Thinking E-Book</h4>
-                <span style="font-size: 0.75rem; color: var(--color-primary); font-weight: 500;">90% Special Off</span>
+                <div style="font-size: 0.82rem; font-weight: 700; color: #ffffff;">Positive Thinking</div>
+                <div style="font-size: 0.95rem; font-weight: 800; color: var(--accent-gold);">₹199 <del style="font-size: 0.75rem; color: var(--color-text-subtle); font-weight: 400;">₹999</del></div>
             </div>
         </div>
-        
-        <div class="floating-pricing-box">
-            <div>
-                <span class="dynamic-price-val" style="font-size: 1.15rem; font-weight: 700; color: var(--color-primary);">₹199</span>
-                <del class="dynamic-orig-price-val" style="font-size: 0.8rem; color: var(--color-text-slate); margin-left: 4px;">₹999</del>
-            </div>
-            <div id="desktop-floating-timer" style="font-size: 0.85rem; font-family: var(--font-heading); color: var(--color-primary); font-weight: bold;">15:00</div>
-        </div>
-        
-        <button class="btn btn-primary btn-sm checkout-trigger dynamic-buy-btn-text" data-product-slug="positive-thinking" style="width: 100%; justify-content: center; box-shadow: none;">🛒 Buy Now – ₹199</button>
+        <button class="cta-btn cta-btn-sm trigger-checkout" data-product-slug="positive-thinking">
+            हाँ, मुझे चाहिए <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+        </button>
     </div>
 
-    <!-- LIVE PURCHASE ACTIVITY TOAST -->
-    <div class="toast-container">
-        <div class="toast" id="purchase-toast">
-            <div class="toast-img-wrapper">
-                <img src="assets/calm-cover.jpg?v=1.1" id="toast-product-img" alt="Product Cover">
-            </div>
-            <div class="toast-content">
-                <div class="toast-header-row">
-                    <span class="verified-badge-pill">
-                        <svg class="verified-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                        Verified Purchase
-                    </span>
-                    <span id="toast-time-val" class="toast-time">2m ago</span>
-                </div>
-                <div class="toast-text">
-                    <span id="toast-buyer-name">Amit</span> from <span id="toast-buyer-location">Delhi</span> bought <strong id="toast-product-name" class="highlight">Positive Thinking (नकारात्मक सोच से बाहर निकलें)</strong>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Mobile sticky bottom bar -->
-    <div class="sticky-buy-bar">
-        <div class="container buy-bar-container">
-            <div class="buy-bar-info">
-                <h4 style="font-size: 0.85rem; line-height: 1.2; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px;">Positive Thinking</h4>
-                <span class="price dynamic-price-val" style="color: var(--color-secondary);">₹199</span>
-            </div>
-            <button class="btn btn-primary btn-sm checkout-trigger dynamic-buy-btn-text" data-product-slug="positive-thinking">Buy Now <i data-lucide="arrow-right"></i></button>
-        </div>
-    </div>
-
-    <!-- ONE STEP GLASS CHECKOUT MODAL -->
-    <div class="modal-overlay">
-        <div class="modal-card">
-            <button class="modal-close" aria-label="Close Checkout Modal">&times;</button>
-            <h2 class="gradient-gold" style="background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-primary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Fill Your Details</h2>
-            <p>E-book instantly deliver karne ke liye details enter karein.</p>
+    <!-- ── CHECKOUT MODAL ── -->
+    <div class="checkout-modal-overlay" id="checkout-modal">
+        <div class="checkout-modal-card">
+            <button class="modal-close-btn" id="modal-close-trigger" aria-label="Close Modal">&times;</button>
             
-            <form id="checkout-form">
-                <input type="hidden" name="product_slug" id="target-product-slug" value="positive-thinking">
-                
-                <div class="form-group">
-                    <input type="text" name="name" id="name" class="form-input" placeholder=" " required>
-                    <label for="name" class="form-label">Your Name</label>
+            <h2 style="font-size: 1.35rem; color: #ffffff; text-align: center; margin-bottom: 4px;">Complete Your Order</h2>
+            <p style="font-size: 0.85rem; color: var(--color-text-muted); text-align: center;">Instant digital access के लिए अपनी जानकारी भरें:</p>
+
+            <div class="modal-product-summary">
+                <div class="modal-summary-left">
+                    <img src="assets/calm-cover.jpg" alt="Book Thumbnail" class="modal-summary-img">
+                    <div>
+                        <div class="modal-summary-title">Positive Thinking Pack</div>
+                        <div class="modal-summary-sub">Main eBook + Bonus Toolkit</div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <input type="email" name="email" id="email" class="form-input" placeholder=" " required>
-                    <label for="email" class="form-label">Email Address</label>
+                <div class="modal-summary-price">₹199</div>
+            </div>
+
+            <form id="checkout-modal-form">
+                <input type="hidden" name="product_slug" id="checkout-product-slug" value="positive-thinking">
+
+                <div class="form-field">
+                    <label for="cust-name">आपका नाम (Full Name)</label>
+                    <input type="text" id="cust-name" name="name" placeholder="उदा. Rahul Sharma" required autocomplete="name">
                 </div>
-                <div class="form-group">
-                    <input type="tel" name="phone" id="phone" class="form-input" placeholder=" " required>
-                    <label for="phone" class="form-label">WhatsApp Phone Number</label>
+
+                <div class="form-field">
+                    <label for="cust-email">Email Address (यहाँ PDF भेजा जाएगा)</label>
+                    <input type="email" id="cust-email" name="email" placeholder="rahul@gmail.com" required autocomplete="email">
                 </div>
-                
-                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: var(--space-xs); color: #03050c !important;">
-                    Proceed to Payment <i data-lucide="credit-card"></i>
+
+                <div class="form-field">
+                    <label for="cust-phone">WhatsApp Phone Number</label>
+                    <input type="tel" id="cust-phone" name="phone" placeholder="9876543210" pattern="[0-9]{10}" maxlength="10" required autocomplete="tel">
+                </div>
+
+                <button type="submit" id="checkout-submit-btn" class="cta-btn" style="width: 100%; margin-top: 10px; max-width: none;">
+                    Proceed to Payment — ₹199 <i data-lucide="lock" style="width: 16px; height: 16px;"></i>
                 </button>
             </form>
+
+            <div class="modal-security-note">
+                <i data-lucide="shield-check"></i>
+                <span>256-Bit SSL Secured &bull; Razorpay / UPI / Cards</span>
+            </div>
         </div>
     </div>
 
-    <!-- WISHLIST DRAWER -->
-    <div class="wishlist-sidebar">
-        <div class="wishlist-header">
-            <h3><i data-lucide="heart" style="color: #EF4444; fill: #EF4444; vertical-align: middle; margin-right: 6px;"></i> My Wishlist</h3>
-            <button class="wishlist-close" aria-label="Close Wishlist">&times;</button>
-        </div>
-        <div class="wishlist-items" id="wishlist-items-container">
-            <!-- Renders dynamically -->
+    <!-- ── REAL PREVIEW LIGHTBOX ── -->
+    <div class="lightbox-overlay" id="preview-lightbox">
+        <div class="lightbox-container">
+            <button class="lightbox-close" id="lightbox-close-btn">&times;</button>
+            <img src="" alt="Real Page Preview" id="lightbox-target-img" class="lightbox-img">
+            <div id="lightbox-target-caption" class="lightbox-caption"></div>
         </div>
     </div>
 
-    <!-- WHATSAPP FLOATING WIDGET -->
-    <div class="whatsapp-widget">
-        <a href="https://wa.me/918417894808?text=Hello%20TATVAM%20Support,%20I%20have%20a%20question%20about%20the%20Positive%20Thinking%20E-Book." target="_blank" rel="noopener" class="whatsapp-btn" aria-label="WhatsApp Support">
-            <i data-lucide="message-circle"></i>
-        </a>
-    </div>
-
+    <!-- ── SCRIPTS ── -->
     <script>
-        window.addEventListener('load', () => {
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Initialize Icons
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
             }
+
+            // 2. FAQ Accordion Toggle
+            const faqItems = document.querySelectorAll('.faq-accordion-item');
+            faqItems.forEach(item => {
+                const header = item.querySelector('.faq-header');
+                header.addEventListener('click', () => {
+                    const isActive = item.classList.contains('active');
+                    faqItems.forEach(other => other.classList.remove('active'));
+                    if (!isActive) {
+                        item.classList.add('active');
+                    }
+                });
+            });
+
+            // 3. Sticky Bottom Bar & Desktop Floating Pill on Scroll
+            const mobileSticky = document.getElementById('mobile-sticky-cta');
+            const desktopFloating = document.getElementById('desktop-floating-cta');
+            const scrollThreshold = 420;
+
+            const handleScroll = () => {
+                if (window.scrollY > scrollThreshold) {
+                    if (window.innerWidth <= 768) {
+                        if (mobileSticky) mobileSticky.classList.add('visible');
+                        if (desktopFloating) desktopFloating.classList.remove('visible');
+                    } else {
+                        if (desktopFloating) desktopFloating.classList.add('visible');
+                        if (mobileSticky) mobileSticky.classList.remove('visible');
+                    }
+                } else {
+                    if (mobileSticky) mobileSticky.classList.remove('visible');
+                    if (desktopFloating) desktopFloating.classList.remove('visible');
+                }
+            };
+
+            window.addEventListener('scroll', handleScroll, { passive: true });
+            window.addEventListener('resize', handleScroll, { passive: true });
+
+            // 4. Real Preview Lightbox
+            const lightbox = document.getElementById('preview-lightbox');
+            const lightboxImg = document.getElementById('lightbox-target-img');
+            const lightboxCaption = document.getElementById('lightbox-target-caption');
+            const lightboxClose = document.getElementById('lightbox-close-btn');
+
+            document.querySelectorAll('.trigger-lightbox').forEach(card => {
+                card.addEventListener('click', () => {
+                    const imgUrl = card.getAttribute('data-img');
+                    const caption = card.getAttribute('data-caption');
+                    if (lightbox && lightboxImg) {
+                        lightboxImg.src = imgUrl;
+                        if (lightboxCaption) lightboxCaption.innerText = caption || '';
+                        lightbox.classList.add('active');
+                        document.body.style.overflow = 'hidden';
+                    }
+                });
+            });
+
+            if (lightboxClose && lightbox) {
+                lightboxClose.addEventListener('click', () => {
+                    lightbox.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+
+                lightbox.addEventListener('click', (e) => {
+                    if (e.target === lightbox) {
+                        lightbox.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                });
+            }
+
+            // 5. Checkout Modal Flow
+            const checkoutModal = document.getElementById('checkout-modal');
+            const modalClose = document.getElementById('modal-close-trigger');
+            const checkoutForm = document.getElementById('checkout-modal-form');
+            const submitBtn = document.getElementById('checkout-submit-btn');
+
+            const openCheckout = () => {
+                if (checkoutModal) {
+                    checkoutModal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                }
+            };
+
+            const closeCheckout = () => {
+                if (checkoutModal) {
+                    checkoutModal.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            };
+
+            document.querySelectorAll('.trigger-checkout').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    openCheckout();
+                });
+            });
+
+            if (modalClose) {
+                modalClose.addEventListener('click', closeCheckout);
+            }
+
+            if (checkoutModal) {
+                checkoutModal.addEventListener('click', (e) => {
+                    if (e.target === checkoutModal) {
+                        closeCheckout();
+                    }
+                });
+            }
+
+            // 6. Checkout Submission & Razorpay Integration
+            if (checkoutForm) {
+                checkoutForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+
+                    const origText = submitBtn.innerHTML;
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = `<i data-lucide="loader" class="animate-spin"></i> Processing Checkout...`;
+                    if (typeof lucide !== 'undefined') lucide.createIcons();
+
+                    const formData = new FormData(checkoutForm);
+
+                    fetch('create-order.php', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            if (data.sandbox) {
+                                submitBtn.innerHTML = `<i data-lucide="check"></i> Redirecting to Access...`;
+                                if (typeof lucide !== 'undefined') lucide.createIcons();
+
+                                setTimeout(() => {
+                                    const successForm = document.createElement('form');
+                                    successForm.method = 'POST';
+                                    successForm.action = 'thank-you.php';
+
+                                    const inputs = {
+                                        'razorpay_order_id': data.razorpay_order_id,
+                                        'razorpay_payment_id': 'pay_sim_' + Math.random().toString(36).substr(2, 9),
+                                        'sandbox': 'true'
+                                    };
+
+                                    for (const [key, val] of Object.entries(inputs)) {
+                                        const input = document.createElement('input');
+                                        input.type = 'hidden';
+                                        input.name = key;
+                                        input.value = val;
+                                        successForm.appendChild(input);
+                                    }
+
+                                    document.body.appendChild(successForm);
+                                    successForm.submit();
+                                }, 1000);
+                            } else {
+                                // Live Razorpay Gate
+                                const options = {
+                                    "key": data.key,
+                                    "amount": data.amount,
+                                    "currency": "INR",
+                                    "name": "TATVAM Store",
+                                    "description": "Positive Thinking Guide + Bonus Toolkit",
+                                    "image": data.cover_image || "assets/calm-cover.jpg",
+                                    "order_id": data.razorpay_order_id,
+                                    "handler": function (response) {
+                                        const form = document.createElement('form');
+                                        form.method = 'POST';
+                                        form.action = 'thank-you.php';
+
+                                        const params = {
+                                            'razorpay_order_id': response.razorpay_order_id,
+                                            'razorpay_payment_id': response.razorpay_payment_id,
+                                            'razorpay_signature': response.razorpay_signature
+                                        };
+
+                                        for (const [key, value] of Object.entries(params)) {
+                                            const hiddenField = document.createElement('input');
+                                            hiddenField.type = 'hidden';
+                                            hiddenField.name = key;
+                                            hiddenField.value = value;
+                                            form.appendChild(hiddenField);
+                                        }
+
+                                        document.body.appendChild(form);
+                                        form.submit();
+                                    },
+                                    "prefill": {
+                                        "name": data.customer_name,
+                                        "email": data.customer_email,
+                                        "contact": data.customer_phone
+                                    },
+                                    "theme": {
+                                        "color": "#C5A880"
+                                    }
+                                };
+                                const rzp = new Razorpay(options);
+                                rzp.open();
+                                closeCheckout();
+                                submitBtn.innerHTML = origText;
+                                submitBtn.disabled = false;
+                                if (typeof lucide !== 'undefined') lucide.createIcons();
+                            }
+                        } else {
+                            alert("Error: " + data.message);
+                            submitBtn.innerHTML = origText;
+                            submitBtn.disabled = false;
+                            if (typeof lucide !== 'undefined') lucide.createIcons();
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert("Checkout error. Please check your connection and try again.");
+                        submitBtn.innerHTML = origText;
+                        submitBtn.disabled = false;
+                        if (typeof lucide !== 'undefined') lucide.createIcons();
+                    });
+                });
+            }
         });
     </script>
-    <script src="script.js?v=10.2" defer></script>
 </body>
 </html>

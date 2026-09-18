@@ -1,96 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // ==========================================================================
-    // TOP LOADING PROGRESS BAR CONTROLLER
-    // ==========================================================================
-    let topBar = document.getElementById('top-loading-bar');
-    if (!topBar) {
-        topBar = document.createElement('div');
-        topBar.id = 'top-loading-bar';
-        document.body.prepend(topBar);
-    }
-    
-    window.startTopLoading = () => {
-        if (!topBar) return;
-        topBar.style.opacity = '1';
-        topBar.style.width = '35%';
-        setTimeout(() => { if (topBar) topBar.style.width = '75%'; }, 120);
-    };
-
-    window.finishTopLoading = () => {
-        if (!topBar) return;
-        topBar.style.width = '100%';
-        setTimeout(() => {
-            topBar.style.opacity = '0';
-            setTimeout(() => { if (topBar) topBar.style.width = '0%'; }, 350);
-        }, 150);
-    };
-
-    // Trigger initial finish on page ready
-    window.finishTopLoading();
-
-    // Attach to all link clicks for instant loading feedback
-    document.querySelectorAll('a[href]').forEach(link => {
-        link.addEventListener('click', (e) => {
-            const href = link.getAttribute('href');
-            if (href && !href.startsWith('#') && !href.startsWith('javascript:')) {
-                window.startTopLoading();
-            }
-        });
-    });
-
-    // ==========================================================================
-    // 0. META PIXEL UNIVERSAL TRACKER (Client-Side)
-    // ==========================================================================
-    const metaPixelId = window.META_PIXEL_ID || '123456789012345';
-    if (metaPixelId && metaPixelId !== '123456789012345' && typeof fbq !== 'function') {
-        !function(f,b,e,v,n,t,s)
-        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-        n.queue=[];t=b.createElement(e);t.async=!0;
-        t.src=v;s=b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t,s)}(window, document,'script',
-        'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', metaPixelId);
-        fbq('track', 'PageView');
-        fbq('track', 'ViewContent', {
-            content_name: document.title || 'TATVAM E-Book',
-            currency: 'INR',
-            value: 199.00
-        });
-    } else if (typeof fbq === 'function') {
-        fbq('track', 'ViewContent', {
-            content_name: document.title || 'TATVAM E-Book',
-            currency: 'INR',
-            value: 199.00
-        });
-    }
-
-    // Dynamic Product Details & Price Sync from Database
-    const currentSlug = document.body.getAttribute('data-page-slug') || 'positive-thinking';
-    fetch(`get-product.php?slug=${encodeURIComponent(currentSlug)}`)
-        .then(res => res.json())
-        .then(prod => {
-            if (prod && prod.success && prod.price) {
-                const livePrice = Math.round(prod.price);
-                const origPrice = Math.round(prod.original_price || (livePrice * 5));
-
-                // Update all price tags on the landing page dynamically
-                document.querySelectorAll('.dynamic-price-val').forEach(el => {
-                    el.textContent = '₹' + livePrice;
-                });
-                document.querySelectorAll('.dynamic-orig-price-val').forEach(el => {
-                    el.textContent = '₹' + origPrice;
-                });
-                document.querySelectorAll('.dynamic-buy-btn-text').forEach(el => {
-                    el.innerHTML = `🛒 Buy Now – ₹${livePrice}`;
-                });
-            }
-        })
-        .catch(err => console.log('Dynamic price sync fallback to default HTML values.'));
-
-    // ==========================================================================
     // 1. DUAL-MODE STICKY BUY WIDGET VISIBILITY CONTROLLER
     // ==========================================================================
     const desktopFloatingCard = document.getElementById('desktop-floating-card');
@@ -299,94 +209,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const buyerNameSpan = document.getElementById('toast-buyer-name');
     const buyerLocationSpan = document.getElementById('toast-buyer-location');
     const toastProductSpan = document.getElementById('toast-product-name');
-    const toastProductImg = document.getElementById('toast-product-img');
-    const toastTimeSpan = document.getElementById('toast-time-val');
 
     if (toast) {
-        const names = ['Amit', 'Rahul', 'Sneha', 'Vikram', 'Aditya', 'Priya', 'Pooja', 'Nikhil', 'Siddharth', 'Karan', 'Deepak', 'Anjali', 'Neha', 'Rohan', 'Manish'];
-        const locations = ['Delhi', 'Mumbai', 'Bangalore', 'Pune', 'Jaipur', 'Lucknow', 'Ahmedabad', 'Indore', 'Patna', 'Ranchi', 'Kolkata', 'Chennai', 'Bhopal', 'Surat'];
-        const product = 'Positive Thinking (नकारात्मक सोच से बाहर निकलें)';
-        const productCover = 'assets/calm-cover.jpg?v=1.1';
-        const times = ['just now', '1m ago', '2m ago', '3m ago', '4m ago'];
-
-        // Web Audio API Synthesizer for Notification Pop Chime Sound
-        let audioCtx = null;
-        const playNotificationSound = () => {
-            try {
-                const AudioContext = window.AudioContext || window.webkitAudioContext;
-                if (!AudioContext) return;
-                if (!audioCtx) audioCtx = new AudioContext();
-                
-                if (audioCtx.state === 'suspended') {
-                    audioCtx.resume();
-                }
-
-                const now = audioCtx.currentTime;
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-
-                osc.type = 'sine';
-                // Two-tone subtle luxury pop chime (E5 -> B5)
-                osc.frequency.setValueAtTime(659.25, now); // E5
-                osc.frequency.exponentialRampToValueAtTime(987.77, now + 0.08); // B5
-
-                gain.gain.setValueAtTime(0.12, now);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
-
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-
-                osc.start(now);
-                osc.stop(now + 0.35);
-            } catch (e) {
-                // Ignore audio restriction errors gracefully
-            }
-        };
-
-        // Initialize AudioContext on first user interaction to satisfy browser autoplay policy
-        const initAudioOnUserInteraction = () => {
-            if (!audioCtx) {
-                const AudioContext = window.AudioContext || window.webkitAudioContext;
-                if (AudioContext) audioCtx = new AudioContext();
-            }
-            if (audioCtx && audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-            document.removeEventListener('click', initAudioOnUserInteraction);
-            document.removeEventListener('touchstart', initAudioOnUserInteraction);
-            document.removeEventListener('keydown', initAudioOnUserInteraction);
-        };
-
-        document.addEventListener('click', initAudioOnUserInteraction, { once: true });
-        document.addEventListener('touchstart', initAudioOnUserInteraction, { once: true });
-        document.addEventListener('keydown', initAudioOnUserInteraction, { once: true });
+        const names = ['Amit', 'Rahul', 'Sneha', 'Vikram', 'Aditya', 'Priya', 'Pooja', 'Nikhil', 'Siddharth', 'Karan'];
+        const locations = ['Delhi', 'Mumbai', 'Bangalore', 'Pune', 'Jaipur', 'Lucknow', 'Ahmedabad', 'Indore', 'Patna', 'Ranchi'];
+        const products = ['मन की शांति', 'चिंता मुक्ति', 'अनुशासन क्रांति', 'समृद्धि सूत्र', 'Mega Mindset Bundle'];
 
         const triggerActivityAlert = () => {
             if (document.hidden) return;
 
             const name = names[Math.floor(Math.random() * names.length)];
             const location = locations[Math.floor(Math.random() * locations.length)];
-            const timeVal = times[Math.floor(Math.random() * times.length)];
+            const product = products[Math.floor(Math.random() * products.length)];
 
             if (buyerNameSpan) buyerNameSpan.innerText = name;
             if (buyerLocationSpan) buyerLocationSpan.innerText = location;
             if (toastProductSpan) toastProductSpan.innerText = product;
-            if (toastTimeSpan) toastTimeSpan.innerText = timeVal;
-            if (toastProductImg) {
-                toastProductImg.src = productCover;
-                toastProductImg.alt = product;
-            }
 
             toast.classList.add('show');
-            playNotificationSound();
 
             setTimeout(() => {
                 toast.classList.remove('show');
             }, 4500);
         };
 
-        setInterval(triggerActivityAlert, 15000);
-        setTimeout(triggerActivityAlert, 1000);
+        setInterval(triggerActivityAlert, 14000);
+        setTimeout(triggerActivityAlert, 3000);
     }
 
     // ==========================================================================
@@ -430,36 +278,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Automatic Pageview Analytics Logger
-    fetch('track-analytics.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `event_type=pageview&page_slug=${encodeURIComponent(currentSlug)}`
-    }).catch(err => {});
-
-    // Periodic Heartbeat (Every 30s) to track Real Active Live Visitors
-    setInterval(() => {
-        if (!document.hidden) {
-            fetch('track-analytics.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `event_type=heartbeat&page_slug=${encodeURIComponent(currentSlug)}`
-            }).catch(err => {});
-        }
-    }, 30000);
-
     checkoutTriggers.forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
-            const productSlug = btn.getAttribute('data-product-slug') || 'positive-thinking';
-            
-            // Track Buy Now button click event
-            fetch('track-analytics.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `event_type=buy_click&page_slug=${encodeURIComponent(productSlug)}`
-            }).catch(err => {});
-
+            const productSlug = btn.getAttribute('data-product-slug') || 'mega-bundle';
             openCheckoutModal(productSlug);
         });
     });
@@ -477,9 +299,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (checkoutForm) {
-        checkoutForm.addEventListener('submit', async (e) => {
+        checkoutForm.addEventListener('submit', (e) => {
             e.preventDefault();
-
+            
             const submitBtn = checkoutForm.querySelector('button[type="submit"]');
             const originalText = submitBtn.innerHTML;
             submitBtn.innerHTML = `<i data-lucide="loader" class="animate-spin" style="width: 18px; height: 18px; display: inline-block;"></i> Processing Checkout...`;
@@ -488,123 +310,99 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const formData = new FormData(checkoutForm);
 
-            try {
-                const res = await fetch('create-order.php', {
-                    method: 'POST',
-                    body: formData,
-                });
-                
-                const responseText = await res.text();
-                let data;
-                try {
-                    data = JSON.parse(responseText);
-                } catch (jsonErr) {
-                    console.error('Non-JSON response from server:', responseText);
-                    alert('Server Response Error: ' + responseText.substring(0, 200));
+            fetch('create-order.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    if (data.sandbox) {
+                        submitBtn.innerHTML = `<i data-lucide="check"></i> Sandbox Success! Redirecting...`;
+                        if (typeof lucide !== 'undefined') lucide.createIcons();
+                        
+                        setTimeout(() => {
+                            const successForm = document.createElement('form');
+                            successForm.method = 'POST';
+                            successForm.action = 'thank-you.php';
+
+                            const inputs = {
+                                'razorpay_order_id': data.razorpay_order_id,
+                                'razorpay_payment_id': 'pay_sim_' + Math.random().toString(36).substr(2, 9),
+                                'sandbox': 'true'
+                            };
+
+                            for (const [key, val] of Object.entries(inputs)) {
+                                const input = document.createElement('input');
+                                input.type = 'hidden';
+                                input.name = key;
+                                input.value = val;
+                                successForm.appendChild(input);
+                            }
+
+                            document.body.appendChild(successForm);
+                            successForm.submit();
+                        }, 1200);
+                    } else {
+                        // LIVE RAZORPAY PAYMENT GATEWAY POPUP
+                        const options = {
+                            "key": data.key,
+                            "amount": data.amount,
+                            "currency": "INR",
+                            "name": "TATVAM Store",
+                            "description": "Payment for " + data.product_name,
+                            "image": data.cover_image || "./assets/bundle-cover.jpg",
+                            "order_id": data.razorpay_order_id,
+                            "handler": function (response) {
+                                const form = document.createElement('form');
+                                form.method = 'POST';
+                                form.action = 'thank-you.php';
+
+                                const params = {
+                                    'razorpay_order_id': response.razorpay_order_id,
+                                    'razorpay_payment_id': response.razorpay_payment_id,
+                                    'razorpay_signature': response.razorpay_signature
+                                };
+
+                                for (const [key, value] of Object.entries(params)) {
+                                    const hiddenField = document.createElement('input');
+                                    hiddenField.type = 'hidden';
+                                    hiddenField.name = key;
+                                    hiddenField.value = value;
+                                    form.appendChild(hiddenField);
+                                }
+
+                                document.body.appendChild(form);
+                                form.submit();
+                            },
+                            "prefill": {
+                                "name": data.customer_name,
+                                "email": data.customer_email,
+                                "contact": data.customer_phone
+                            },
+                            "theme": {
+                                "color": "#8b5cf6"
+                            }
+                        };
+                        const rzp = new Razorpay(options);
+                        rzp.open();
+                        closeCheckoutModal();
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                    }
+                } else {
+                    alert("Error: " + data.message);
                     submitBtn.innerHTML = originalText;
                     submitBtn.disabled = false;
-                    return;
                 }
-
-                if (!data.success) {
-                    alert('Checkout Error: ' + (data.message || 'Payment session creation failed'));
-                    submitBtn.innerHTML = originalText;
-                    submitBtn.disabled = false;
-                    return;
-                }
-
-                // Determine Cashfree mode & initialize SDK instance
-                const cfMode = (data.environment === 'PRODUCTION') ? 'production' : 'sandbox';
-                let cashfreeObj = null;
-
-                if (typeof Cashfree !== 'undefined') {
-                    cashfreeObj = Cashfree({ mode: cfMode });
-                } else if (typeof window.Cashfree !== 'undefined') {
-                    cashfreeObj = window.Cashfree({ mode: cfMode });
-                }
-
-                if (!cashfreeObj) {
-                    alert('Cashfree Payment SDK failed to load. Please refresh the page or check ad-blockers.');
-                    submitBtn.innerHTML = originalText;
-                    submitBtn.disabled = false;
-                    return;
-                }
-
-                // Trigger Meta Pixel InitiateCheckout Event
-                if (typeof fbq === 'function') {
-                    fbq('track', 'InitiateCheckout', {
-                        content_name: data.product_name || 'E-Book',
-                        currency: 'INR',
-                        value: 199.00
-                    });
-                }
-
-                closeCheckoutModal();
-
-                // Launch Cashfree Drop checkout
-                cashfreeObj.checkout({
-                    paymentSessionId: data.payment_session_id,
-                    redirectTarget: '_self',
-                });
-
-            } catch (err) {
-                console.error('Checkout Submit Exception:', err);
-                alert('Checkout Error: ' + (err.message || 'Network issue. Please try again.'));
+            })
+            .catch(err => {
+                console.error(err);
+                alert("Checkout communication error. Please try again.");
                 submitBtn.innerHTML = originalText;
                 submitBtn.disabled = false;
-            }
-        });
-    }
-
-    // ==========================================================================
-    // 8. MOBILE NAVIGATION DRAWER & ACCORDIONS
-    // ==========================================================================
-    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-    const navLinks = document.querySelector('.nav-links');
-    
-    if (mobileMenuBtn && navLinks) {
-        mobileMenuBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            navLinks.classList.toggle('active');
-            
-            // Toggle icon between '☰' and '✖'
-            if (navLinks.classList.contains('active')) {
-                mobileMenuBtn.innerHTML = '&#10006;'; // ✖ (Cross)
-            } else {
-                mobileMenuBtn.innerHTML = '&#9776;'; // ☰ (Hamburger)
-            }
-        });
-
-        // Close menu drawer if clicking outside
-        document.addEventListener('click', (e) => {
-            if (navLinks.classList.contains('active') && !navLinks.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
-                navLinks.classList.remove('active');
-                mobileMenuBtn.innerHTML = '&#9776;'; // ☰ (Hamburger)
-            }
-        });
-    }
-
-    // Handle dropdown toggling on mobile (accordion click)
-    const dropdowns = document.querySelectorAll('.nav-dropdown');
-    dropdowns.forEach(dropdown => {
-        const trigger = dropdown.querySelector('.dropdown-trigger');
-        if (trigger) {
-            trigger.addEventListener('click', (e) => {
-                if (window.innerWidth <= 768) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    // Close other dropdowns
-                    dropdowns.forEach(d => {
-                        if (d !== dropdown) {
-                            d.classList.remove('active');
-                        }
-                    });
-                    
-                    dropdown.classList.toggle('active');
-                }
             });
-        }
-    });
+        });
+    }
 
 });

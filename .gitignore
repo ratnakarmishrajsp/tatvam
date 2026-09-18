@@ -1,12 +1,12 @@
-# Local SQLite Database
-tatvam.db
-
-# Windows Local PHP Binary (Not needed on Hostinger Linux server)
+# Local binaries and databases
 php-bin/
+*.db
+*.sqlite
+*.sqlite3
+*.backup.html
 
-# OS generated files
-.DS_Store
+# OS and Editor
 Thumbs.db
-
-# Secret credentials — NEVER commit this file
-config.secret.php
+.DS_Store
+.vscode/
+.idea/

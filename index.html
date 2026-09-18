@@ -1,39 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script>if(location.protocol!=='https:'){location.replace('https://'+location.host+location.pathname+location.search);}</script>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-    <title>TATVAM | Premium Hinglish Self-Growth E-Books</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TATVAM Mega Mindset Bundle | Rewire Your Thinking & Habits</title>
     <meta name="description" content="Ultimate Hinglish self-improvement bundle designed to destroy overthinking, procrastination, and money blocks. Download instantly.">
     
-    <!-- Performance Optimizations & Preconnects -->
+    <!-- Preload Outfit font for maximum load performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="dns-prefetch" href="https://sdk.cashfree.com">
-    <link rel="dns-prefetch" href="https://unpkg.com">
-    <link rel="dns-prefetch" href="https://connect.facebook.net">
-    <link rel="preload" as="image" href="assets/calm-cover.jpg?v=1.1">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
     
-    <!-- Lucide Icons & Cashfree SDK -->
+    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest" defer></script>
-    <script src="https://sdk.cashfree.com/js/v3/cashfree.js" defer></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
 
     <!-- Master CSS -->
-    <link rel="stylesheet" href="styles.css?v=2.3">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body data-page-slug="mega-bundle">
 
-    <!-- INFINITE SCROLLING TICKER BANNER -->
-    <div class="ticker-banner">
-        <div class="ticker-text-wrapper">
-            <div class="ticker-item">⚡ OFFER ENDING SOON – CLAIM YOUR 95% LAUNCH DISCOUNT TODAY!</div>
-            <div class="ticker-item">⚡ OFFER ENDING SOON – CLAIM YOUR 95% LAUNCH DISCOUNT TODAY!</div>
-            <div class="ticker-item">⚡ OFFER ENDING SOON – CLAIM YOUR 95% LAUNCH DISCOUNT TODAY!</div>
-            <div class="ticker-item">⚡ OFFER ENDING SOON – CLAIM YOUR 95% LAUNCH DISCOUNT TODAY!</div>
-        </div>
+    <!-- STATIC LOW STOCK STYLE BANNER -->
+    <div style="background: linear-gradient(90deg, #b45309, #d97706); text-align: center; color: white; padding: 0.5rem 0; font-size: 0.85rem; font-weight: 700; position: relative; z-index: 1001; letter-spacing: 0.05em; text-transform: uppercase;">
+        ⚡ OFFER ENDING SOON – CLAIM YOUR 95% LAUNCH DISCOUNT TODAY!
     </div>
 
     <!-- BACKGROUND CANVAS -->
@@ -44,55 +33,51 @@
     <header class="header">
         <div class="nav-glass">
             <a href="index.html" class="logo">TATVAM<span>.</span></a>
-            <!-- Hamburger Button -->
-            <button class="mobile-menu-btn" aria-label="Toggle Menu">&#9776;</button>
             <nav class="nav-links">
                 <a href="index.html" class="nav-link">Home</a>
-                <div class="nav-dropdown">
-                    <a href="library.php" class="nav-link dropdown-trigger">E-Books <i data-lucide="chevron-down" class="dropdown-icon"></i></a>
-                    <div class="dropdown-menu">
-                        <a href="library.php" class="dropdown-item">📚 All E-Books</a>
-                        <a href="positive-thinking.html" class="dropdown-item">मन की शांति (Calm)</a>
-                        <a href="stress-worry.html" class="dropdown-item">चिंता मुक्ति (Anxiety Relief)</a>
-                        <a href="habit-freedom.html" class="dropdown-item">अनुशासन क्रांति (Discipline)</a>
-                        <a href="wealth-mindset.html" class="dropdown-item">समृद्धि सूत्र (Wealth)</a>
-                        <a href="bundle.html" class="dropdown-item">⚡ Mega Bundle (4-in-1)</a>
-                    </div>
-                </div>
+                <a href="library.php" class="nav-link">E-Books</a>
+                <a href="bundle.html" class="nav-link">Bundles</a>
                 <a href="index.html#faq" class="nav-link">About</a>
-                <div class="nav-dropdown">
-                    <span class="nav-link dropdown-trigger">Policies & Help <i data-lucide="chevron-down" class="dropdown-icon"></i></span>
-                    <div class="dropdown-menu">
-                        <a href="contact-us.html" class="dropdown-item">Contact Us</a>
-                        <a href="privacy.html" class="dropdown-item">Privacy Policy</a>
-                        <a href="refund-policy.html" class="dropdown-item">Refund Policy</a>
-                        <a href="terms-conditions.html" class="dropdown-item">Terms & Conditions</a>
-                    </div>
-                </div>
-                <a href="positive-thinking.html" class="btn btn-primary btn-sm"><i data-lucide="sparkles"></i> Get E-Book</a>
+                <a href="contact-us.html" class="nav-link">Contact</a>
+                <a href="bundle.html" class="btn btn-primary btn-sm"><i data-lucide="sparkles"></i> Claim Offer</a>
             </nav>
         </div>
     </header>
 
     <!-- 1. PREMIUM HERO -->
-    <section class="hero" style="min-height: 85vh; padding-top: 150px;">
+    <section class="hero">
         <div class="container hero-grid">
             <div class="hero-content">
                 <div class="hero-badge">
                     <i data-lucide="sparkles"></i>
-                    <span>Premium Self-Growth Library</span>
+                    <span>Premium 4-in-1 Mindset Bundle</span>
                 </div>
-                <h1>Apne Mindset Aur Skills Ko <span class="gradient-gold" style="background: linear-gradient(135deg, #FFE082 0%, var(--color-gold) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Upgrade Karo</span></h1>
-                <p class="lead" style="margin-top: 1.5rem; color: var(--color-text-slate); font-size: 1.15rem; line-height: 1.6;">
-                    Explore practical digital guides written in Hinglish to help you eliminate chronic overthinking, master daily discipline, and achieve mental clarity. Read them on any device instantly.
-                </p>
+                <h1>Apne Mind Ko <span class="gradient-gold" style="background: linear-gradient(135deg, #FFE082 0%, var(--color-gold) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Rewire Karo</span> - Overthinking Se Azaadi!</h1>
+                <p class="lead" style="margin-top: 1rem; color: var(--color-text-slate);">Destroy anxiety, build unstoppable daily routines, and resolve limiting money blocks with India's highest-rated Hinglish self-growth library.</p>
                 
-                <div class="hero-cta-wrapper" style="margin-top: 2.5rem;">
-                    <div class="hero-cta">
-                        <a href="#featured-book" class="btn btn-primary" style="padding: 1.1rem 3rem; font-size: 1.05rem; display: inline-flex; align-items: center; gap: 8px; text-decoration: none;">
-                            Explore Featured Release <i data-lucide="arrow-down"></i>
-                        </a>
+                <div class="hero-cta-wrapper" style="margin-top: 2rem;">
+                    <div class="visitor-badge" style="margin-bottom: var(--space-sm);">
+                        <div class="visitor-dot"></div>
+                        <span id="visitor-count-text">142 people are viewing this offer right now</span>
                     </div>
+
+                    <div class="hero-cta">
+                        <button class="btn btn-primary checkout-trigger" data-product-slug="mega-bundle">
+                            Claim All 4 Guides for ₹199 <i data-lucide="sparkles"></i>
+                        </button>
+                    </div>
+                    <div style="margin-top: 0.75rem; font-size: 0.95rem; font-weight: 500; display: flex; align-items: center; gap: 8px;">
+                        <span style="color: var(--color-gold); font-size: 1.15rem; font-weight: 700;">₹199</span>
+                        <del style="color: var(--color-text-slate);">₹3,996</del>
+                        <span style="background: rgba(16, 185, 129, 0.1); color: var(--color-success); font-size: 0.75rem; padding: 2px 8px; border-radius: var(--radius-full); font-weight: 700;">Save 95%</span>
+                    </div>
+                </div>
+
+                <div class="hero-trust-bullets" style="margin-top: var(--space-md);">
+                    <span><i data-lucide="check"></i> Instant PDF Delivery</span>
+                    <span><i data-lucide="check"></i> Works on Mobile & Kindle</span>
+                    <span><i data-lucide="check"></i> Lifetime Access</span>
+                    <span><i data-lucide="check"></i> 100% Secure Payment</span>
                 </div>
             </div>
             
@@ -101,7 +86,7 @@
                 <div class="book-shadow-wrapper">
                     <div class="book-3d">
                         <div class="book-front">
-                            <img src="assets/calm-cover.jpg?v=1.1" alt="TATVAM Premium Ebook Cover" loading="lazy">
+                            <img src="assets/bundle-cover.jpg" alt="TATVAM Premium Ebook Showcase" loading="lazy">
                         </div>
                     </div>
                 </div>
@@ -109,36 +94,31 @@
         </div>
     </section>
 
-    <!-- FEATURED E-BOOK SECTION -->
-    <section id="featured-book" class="section-pad" style="border-top: 1px solid var(--border-light); background: radial-gradient(circle at top right, rgba(251, 191, 36, 0.03) 0%, rgba(3, 5, 12, 0) 70%);">
-        <div class="container featured-grid">
-            <div class="showcase-wrapper" style="justify-self: center;">
-                <div class="book-shadow-wrapper">
-                    <div class="book-3d" style="width: 180px; height: 250px;">
-                        <div class="book-front">
-                            <img src="assets/calm-cover.jpg?v=1.1" alt="Calm Ebook Cover" style="width: 100%; height: 100%; object-fit: cover;">
-                        </div>
-                    </div>
-                </div>
+    <!-- 3. PROBLEM SECTION -->
+    <section id="problems" class="section-pad">
+        <div class="container">
+            <div class="section-head">
+                <span class="tag">The Silent Loop</span>
+                <h2>Are You Suffering From These?</h2>
+                <p>Procrastination, overthinking, and stress block mental growth and daily progress.</p>
             </div>
-            <div>
-                <span class="tag" style="background: rgba(16, 185, 129, 0.08); color: var(--color-success); border: 1px solid rgba(16, 185, 129, 0.15); font-size: 0.75rem; padding: 4px 10px; border-radius: var(--radius-full); font-weight: bold; letter-spacing: 0.05em; text-transform: uppercase;">★ Featured Release</span>
-                <h2 class="featured-title">मन की शांति (The Power of Calm)</h2>
-                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: var(--space-md); font-size: 0.95rem;">
-                    <span style="color: var(--color-gold);">⭐⭐⭐⭐⭐</span>
-                    <span style="color: var(--color-text-slate); font-weight: 500;">4.9/5 (1,200+ Readers)</span>
+            
+            <div class="review-grid">
+                <div class="glass-card" style="border-left: 2px solid #EF4444;">
+                    <div style="font-size: 1.5rem; margin-bottom: 0.5rem;"><i data-lucide="brain-circuit" style="color: #EF4444; width: 32px; height: 32px;"></i></div>
+                    <h3>Chronic Overthinking</h3>
+                    <p style="font-size: 0.95rem; margin-top: 0.5rem;">Constant thoughts running patterns in your head. Pre-planning every conversation and losing sleep over past details.</p>
                 </div>
-                <p style="color: var(--color-text-gray); font-size: 1.05rem; line-height: 1.6; margin-bottom: var(--space-md);">
-                    Kya aap overthinking aur mental stress se pareshan hain? <strong>मन की शांति</strong> is our signature Hinglish guide designed to help you quiet your mind, master focus, and rebuild mental clarity with daily action worksheets.
-                </p>
-                <div style="display: flex; align-items: center; gap: var(--space-xs); margin-bottom: 2rem; font-size: 1.5rem; font-weight: bold;">
-                    <span style="color: var(--color-gold);">₹199 Only</span>
-                    <del style="font-size: 1rem; color: var(--color-text-slate);">₹999</del>
-                    <span style="background: rgba(16, 185, 129, 0.1); color: var(--color-success); font-size: 0.75rem; padding: 2px 8px; border-radius: var(--radius-full); font-weight: 700; margin-left: 8px;">Save 80%</span>
+                <div class="glass-card" style="border-left: 2px solid #EF4444;">
+                    <div style="font-size: 1.5rem; margin-bottom: 0.5rem;"><i data-lucide="hourglass-alert" style="color: #EF4444; width: 32px; height: 32px;"></i></div>
+                    <h3>Severe Procrastination</h3>
+                    <p style="font-size: 0.95rem; margin-top: 0.5rem;">Delaying important goals, choosing minor social media scrolling over real tasks, and feeling lazy throughout the day.</p>
                 </div>
-                <a href="positive-thinking.html" class="btn btn-primary" style="padding: 1.1rem 3.5rem; font-size: 1.05rem; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
-                    Read Details & Buy <i data-lucide="arrow-right"></i>
-                </a>
+                <div class="glass-card" style="border-left: 2px solid #EF4444;">
+                    <div style="font-size: 1.5rem; margin-bottom: 0.5rem;"><i data-lucide="frown" style="color: #EF4444; width: 32px; height: 32px;"></i></div>
+                    <h3>Anxiety & Worry</h3>
+                    <p style="font-size: 0.95rem; margin-top: 0.5rem;">Constantly worrying about tomorrow's stability, feeling chest tightness under load, and losing focus when targets approach.</p>
+                </div>
             </div>
         </div>
     </section>
@@ -215,170 +195,63 @@
         </div>
     </section>
 
-    <!-- 6. ALL E-BOOKS SECTION -->
-    <section id="all-ebooks" class="section-pad" style="background: rgba(255,255,255,0.003);">
+    <!-- 6. WHAT'S INSIDE -->
+    <section id="whats-inside" class="section-pad" style="background: rgba(255,255,255,0.003);">
         <div class="container">
             <div class="section-head">
-                <span class="tag">📚 Our Complete Library</span>
-                <h2>सारी E-Books — एक जगह</h2>
-                <p>हर किताब एक खास problem solve करने के लिए लिखी गई है। अपनी जरूरत के हिसाब से choose करो।</p>
+                <span class="tag">Mindset Timeline</span>
+                <h2>4 Books Included In The Bundle</h2>
+                <p>Here is what you will unlock inside this high-value growth bundle.</p>
             </div>
+            
+            <div class="timeline-container">
+                <!-- Step 1 -->
+                <div class="timeline-step">
+                    <div class="timeline-dot"></div>
+                    <a href="positive-thinking.html" class="glass-panel timeline-card" style="padding: 1.5rem; text-decoration: none; display: grid;">
+                        <img src="assets/calm-cover.jpg" alt="Calmness Ebook">
+                        <div>
+                            <h3 style="font-size: 1.25rem; color: var(--color-gold);">मन की शांति: The Power of Calm</h3>
+                            <p style="font-size: 0.95rem; margin-top: 0.35rem; color: var(--color-text-slate);">Silences internal overthinking loops, stops negative projections, and teaches somatic grounding techniques to achieve immediate focus.</p>
+                        </div>
+                    </a>
+                </div>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+                <!-- Step 2 -->
+                <div class="timeline-step">
+                    <div class="timeline-dot"></div>
+                    <a href="stress-worry.html" class="glass-panel timeline-card" style="padding: 1.5rem; text-decoration: none; display: grid;">
+                        <img src="assets/anxiety-cover.jpg" alt="Anxiety Relief Ebook">
+                        <div>
+                            <h3 style="font-size: 1.25rem; color: var(--color-primary);">चिंता मुक्ति: Anxiety Relief</h3>
+                            <p style="font-size: 0.95rem; margin-top: 0.35rem; color: var(--color-text-slate);">Breaks patterns of future worry, controls biological panic symptoms, and implements daily emotional self-repair checks.</p>
+                        </div>
+                    </a>
+                </div>
 
-                <!-- Book 1: मन की शांति -->
-                <a href="positive-thinking.html" style="text-decoration: none;">
-                    <div class="glass-card" style="display: flex; flex-direction: column; height: 100%; transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s ease; cursor: pointer;">
-                        <div style="height: 200px; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, rgba(197,168,128,0.08) 0%, transparent 70%); border-radius: var(--radius-md) var(--radius-md) 0 0; perspective: 1000px;">
-                            <div style="width: 110px; height: 155px; transform: rotateY(-12deg) rotateX(5deg); box-shadow: -8px 12px 20px rgba(0,0,0,0.5); border-radius: 3px; overflow: hidden;">
-                                <img src="assets/calm-cover.jpg?v=1.1" alt="मन की शांति" style="width:100%; height:100%; object-fit:cover;">
-                            </div>
+                <!-- Step 3 -->
+                <div class="timeline-step">
+                    <div class="timeline-dot"></div>
+                    <a href="habit-freedom.html" class="glass-panel timeline-card" style="padding: 1.5rem; text-decoration: none; display: grid;">
+                        <img src="assets/discipline-cover.jpg" alt="Discipline Ebook">
+                        <div>
+                            <h3 style="font-size: 1.25rem; color: var(--color-secondary);">अनुशासन क्रांति: Ultimate Discipline</h3>
+                            <p style="font-size: 0.95rem; margin-top: 0.35rem; color: var(--color-text-slate);">Teaches the 2-Minute Action Gate, traces procrastination loops, and builds morning habits that stick without relying on raw willpower.</p>
                         </div>
-                        <div style="padding: 1.25rem; display: flex; flex-direction: column; flex: 1;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                                <span style="font-size: 0.7rem; text-transform: uppercase; color: var(--color-gold); font-weight: 700; letter-spacing: 0.05em;">Mindset</span>
-                                <span style="background: rgba(16,185,129,0.08); color: #10B981; border: 1px solid rgba(16,185,129,0.15); font-size: 0.65rem; padding: 2px 7px; border-radius: 100px; font-weight: 700;">Instant Delivery</span>
-                            </div>
-                            <h3 style="font-size: 1.1rem; color: #fff; margin-bottom: 0.4rem; line-height: 1.3;">मन की शांति (The Power of Calm)</h3>
-                            <p style="font-size: 0.82rem; color: var(--color-text-slate); line-height: 1.45; flex: 1; margin-bottom: 1rem;">Overthinking aur negative thoughts se bahar niklein. Daily worksheets se mind rewire karein.</p>
-                            <div style="display: flex; align-items: center; gap: 8px; border-top: 1px solid rgba(255,255,255,0.04); padding-top: 0.75rem;">
-                                <span style="font-size: 1.15rem; font-weight: 700; color: var(--color-gold);">₹199</span>
-                                <del style="font-size: 0.8rem; color: var(--color-text-slate);">₹999</del>
-                                <span style="margin-left: auto; font-size: 0.75rem; color: var(--color-gold); font-weight: 600;">View Details →</span>
-                            </div>
-                        </div>
-                    </div>
-                </a>
+                    </a>
+                </div>
 
-                <!-- Book 2: चिंता मुक्ति -->
-                <a href="stress-worry.html" style="text-decoration: none;">
-                    <div class="glass-card" style="display: flex; flex-direction: column; height: 100%; transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s ease; cursor: pointer;">
-                        <div style="height: 200px; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 70%); border-radius: var(--radius-md) var(--radius-md) 0 0; perspective: 1000px;">
-                            <div style="width: 110px; height: 155px; transform: rotateY(-12deg) rotateX(5deg); box-shadow: -8px 12px 20px rgba(0,0,0,0.5); border-radius: 3px; overflow: hidden;">
-                                <img src="assets/anxiety-cover.jpg" alt="चिंता मुक्ति" style="width:100%; height:100%; object-fit:cover;" onerror="this.parentElement.style.background='linear-gradient(135deg,#1a0a2e,#4c1d95)'; this.style.display='none';">
-                            </div>
+                <!-- Step 4 -->
+                <div class="timeline-step">
+                    <div class="timeline-dot"></div>
+                    <a href="wealth-mindset.html" class="glass-panel timeline-card" style="padding: 1.5rem; text-decoration: none; display: grid;">
+                        <img src="assets/wealth-cover.jpg" alt="Wealth Principles Ebook">
+                        <div>
+                            <h3 style="font-size: 1.25rem; color: var(--color-gold);">समृद्धि सूत्र: Wealth Principles</h3>
+                            <p style="font-size: 0.95rem; margin-top: 0.35rem; color: var(--color-text-slate);">Resolves limiting money blocks, establishes income allocation routines, and setups asset-building mental frameworks.</p>
                         </div>
-                        <div style="padding: 1.25rem; display: flex; flex-direction: column; flex: 1;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                                <span style="font-size: 0.7rem; text-transform: uppercase; color: #a78bfa; font-weight: 700; letter-spacing: 0.05em;">Peace</span>
-                                <span style="background: rgba(16,185,129,0.08); color: #10B981; border: 1px solid rgba(16,185,129,0.15); font-size: 0.65rem; padding: 2px 7px; border-radius: 100px; font-weight: 700;">Instant Delivery</span>
-                            </div>
-                            <h3 style="font-size: 1.1rem; color: #fff; margin-bottom: 0.4rem; line-height: 1.3;">चिंता मुक्ति (Anxiety Relief)</h3>
-                            <p style="font-size: 0.82rem; color: var(--color-text-slate); line-height: 1.45; flex: 1; margin-bottom: 1rem;">Anxiety, future doubts aur daily stress se permanently bahar niklein. Practical calming techniques.</p>
-                            <div style="display: flex; align-items: center; gap: 8px; border-top: 1px solid rgba(255,255,255,0.04); padding-top: 0.75rem;">
-                                <span style="font-size: 1.15rem; font-weight: 700; color: var(--color-gold);">₹199</span>
-                                <del style="font-size: 0.8rem; color: var(--color-text-slate);">₹999</del>
-                                <span style="margin-left: auto; font-size: 0.75rem; color: var(--color-gold); font-weight: 600;">View Details →</span>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Book 3: अनुशासन क्रांति -->
-                <a href="habit-freedom.html" style="text-decoration: none;">
-                    <div class="glass-card" style="display: flex; flex-direction: column; height: 100%; transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s ease; cursor: pointer;">
-                        <div style="height: 200px; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, rgba(245,158,11,0.08) 0%, transparent 70%); border-radius: var(--radius-md) var(--radius-md) 0 0; perspective: 1000px;">
-                            <div style="width: 110px; height: 155px; transform: rotateY(-12deg) rotateX(5deg); box-shadow: -8px 12px 20px rgba(0,0,0,0.5); border-radius: 3px; overflow: hidden;">
-                                <img src="assets/discipline-cover.jpg" alt="अनुशासन क्रांति" style="width:100%; height:100%; object-fit:cover;" onerror="this.parentElement.style.background='linear-gradient(135deg,#1c1000,#78350f)'; this.style.display='none';">
-                            </div>
-                        </div>
-                        <div style="padding: 1.25rem; display: flex; flex-direction: column; flex: 1;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                                <span style="font-size: 0.7rem; text-transform: uppercase; color: #f59e0b; font-weight: 700; letter-spacing: 0.05em;">Discipline</span>
-                                <span style="background: rgba(16,185,129,0.08); color: #10B981; border: 1px solid rgba(16,185,129,0.15); font-size: 0.65rem; padding: 2px 7px; border-radius: 100px; font-weight: 700;">Instant Delivery</span>
-                            </div>
-                            <h3 style="font-size: 1.1rem; color: #fff; margin-bottom: 0.4rem; line-height: 1.3;">अनुशासन क्रांति (Ultimate Discipline)</h3>
-                            <p style="font-size: 0.82rem; color: var(--color-text-slate); line-height: 1.45; flex: 1; margin-bottom: 1rem;">Procrastination tod do aur unbreakable daily discipline build karo. Step-by-step habit system.</p>
-                            <div style="display: flex; align-items: center; gap: 8px; border-top: 1px solid rgba(255,255,255,0.04); padding-top: 0.75rem;">
-                                <span style="font-size: 1.15rem; font-weight: 700; color: var(--color-gold);">₹199</span>
-                                <del style="font-size: 0.8rem; color: var(--color-text-slate);">₹999</del>
-                                <span style="margin-left: auto; font-size: 0.75rem; color: var(--color-gold); font-weight: 600;">View Details →</span>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Book 4: समृद्धि सूत्र -->
-                <a href="wealth-mindset.html" style="text-decoration: none;">
-                    <div class="glass-card" style="display: flex; flex-direction: column; height: 100%; transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s ease; cursor: pointer;">
-                        <div style="height: 200px; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, rgba(16,185,129,0.08) 0%, transparent 70%); border-radius: var(--radius-md) var(--radius-md) 0 0; perspective: 1000px;">
-                            <div style="width: 110px; height: 155px; transform: rotateY(-12deg) rotateX(5deg); box-shadow: -8px 12px 20px rgba(0,0,0,0.5); border-radius: 3px; overflow: hidden;">
-                                <img src="assets/wealth-cover.jpg" alt="समृद्धि सूत्र" style="width:100%; height:100%; object-fit:cover;" onerror="this.parentElement.style.background='linear-gradient(135deg,#001a0d,#064e3b)'; this.style.display='none';">
-                            </div>
-                        </div>
-                        <div style="padding: 1.25rem; display: flex; flex-direction: column; flex: 1;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                                <span style="font-size: 0.7rem; text-transform: uppercase; color: #10B981; font-weight: 700; letter-spacing: 0.05em;">Wealth</span>
-                                <span style="background: rgba(16,185,129,0.08); color: #10B981; border: 1px solid rgba(16,185,129,0.15); font-size: 0.65rem; padding: 2px 7px; border-radius: 100px; font-weight: 700;">Instant Delivery</span>
-                            </div>
-                            <h3 style="font-size: 1.1rem; color: #fff; margin-bottom: 0.4rem; line-height: 1.3;">समृद्धि सूत्र (Wealth Principles)</h3>
-                            <p style="font-size: 0.82rem; color: var(--color-text-slate); line-height: 1.45; flex: 1; margin-bottom: 1rem;">Money blocks aur poverty mindset tod do. Abundance habits aur wealth principles Hinglish mein.</p>
-                            <div style="display: flex; align-items: center; gap: 8px; border-top: 1px solid rgba(255,255,255,0.04); padding-top: 0.75rem;">
-                                <span style="font-size: 1.15rem; font-weight: 700; color: var(--color-gold);">₹199</span>
-                                <del style="font-size: 0.8rem; color: var(--color-text-slate);">₹999</del>
-                                <span style="margin-left: auto; font-size: 0.75rem; color: var(--color-gold); font-weight: 600;">View Details →</span>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Book 5: Focus Reset -->
-                <a href="focus-reset.html" style="text-decoration: none;">
-                    <div class="glass-card" style="display: flex; flex-direction: column; height: 100%; transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s ease; cursor: pointer; border-color: rgba(0,200,255,0.15);">
-                        <div style="height: 200px; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, rgba(0,200,255,0.08) 0%, transparent 70%); border-radius: var(--radius-md) var(--radius-md) 0 0; perspective: 1000px;">
-                            <div style="width: 110px; height: 155px; transform: rotateY(-12deg) rotateX(5deg); box-shadow: -8px 12px 20px rgba(0,0,0,0.5); border-radius: 3px; overflow: hidden;">
-                                <img src="assets/focus-reset-cover.jpg" alt="Focus Reset" style="width:100%; height:100%; object-fit:cover;">
-                            </div>
-                        </div>
-                        <div style="padding: 1.25rem; display: flex; flex-direction: column; flex: 1;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                                <span style="font-size: 0.7rem; text-transform: uppercase; color: #00C8FF; font-weight: 700; letter-spacing: 0.05em;">🆕 Focus</span>
-                                <span style="background: rgba(16,185,129,0.08); color: #10B981; border: 1px solid rgba(16,185,129,0.15); font-size: 0.65rem; padding: 2px 7px; border-radius: 100px; font-weight: 700;">Instant Delivery</span>
-                            </div>
-                            <h3 style="font-size: 1.1rem; color: #fff; margin-bottom: 0.4rem; line-height: 1.3;">Focus Reset (Phone की लत तोड़ो)</h3>
-                            <p style="font-size: 0.82rem; color: var(--color-text-slate); line-height: 1.45; flex: 1; margin-bottom: 1rem;">Screen addiction aur digital distraction se bahar niklo. Deep focus aur mental clarity regain karo.</p>
-                            <div style="display: flex; align-items: center; gap: 8px; border-top: 1px solid rgba(0,200,255,0.06); padding-top: 0.75rem;">
-                                <span style="font-size: 1.15rem; font-weight: 700; color: #00C8FF;">₹199</span>
-                                <del style="font-size: 0.8rem; color: var(--color-text-slate);">₹1499</del>
-                                <span style="margin-left: auto; font-size: 0.75rem; color: #00C8FF; font-weight: 600;">View Details →</span>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Book 6: Mega Bundle -->
-                <a href="bundle.html" style="text-decoration: none;">
-                    <div class="glass-card" style="display: flex; flex-direction: column; height: 100%; transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s ease; cursor: pointer; border-color: rgba(251,191,36,0.25); background: rgba(251,191,36,0.03);">
-                        <div style="height: 200px; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, rgba(251,191,36,0.1) 0%, transparent 70%); border-radius: var(--radius-md) var(--radius-md) 0 0; perspective: 1000px; position: relative;">
-                            <div style="width: 110px; height: 155px; transform: rotateY(-12deg) rotateX(5deg); box-shadow: -8px 12px 20px rgba(0,0,0,0.5); border-radius: 3px; overflow: hidden;">
-                                <img src="assets/bundle-cover.jpg" alt="Mega Bundle" style="width:100%; height:100%; object-fit:cover;" onerror="this.parentElement.style.background='linear-gradient(135deg,#1a1000,#78350f)'; this.style.display='none';">
-                            </div>
-                            <div style="position: absolute; top: 12px; right: 12px; background: linear-gradient(135deg, #fbbf24, #d97706); color: #1a0800; font-size: 0.65rem; font-weight: 800; padding: 3px 8px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.05em;">BEST VALUE</div>
-                        </div>
-                        <div style="padding: 1.25rem; display: flex; flex-direction: column; flex: 1;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                                <span style="font-size: 0.7rem; text-transform: uppercase; color: var(--color-gold); font-weight: 700; letter-spacing: 0.05em;">⚡ Bundle</span>
-                                <span style="background: rgba(251,191,36,0.08); color: var(--color-gold); border: 1px solid rgba(251,191,36,0.2); font-size: 0.65rem; padding: 2px 7px; border-radius: 100px; font-weight: 700;">4 Books = 1 Price</span>
-                            </div>
-                            <h3 style="font-size: 1.1rem; color: #fff; margin-bottom: 0.4rem; line-height: 1.3;">TATVAM Mega Mindset Bundle (4-in-1)</h3>
-                            <p style="font-size: 0.82rem; color: var(--color-text-slate); line-height: 1.45; flex: 1; margin-bottom: 1rem;">Saari 4 books ek bundle mein. Total value ₹3,996 — abhi sirf ₹199 mein grab karo!</p>
-                            <div style="display: flex; align-items: center; gap: 8px; border-top: 1px solid rgba(251,191,36,0.08); padding-top: 0.75rem;">
-                                <span style="font-size: 1.15rem; font-weight: 700; color: var(--color-gold);">₹199</span>
-                                <del style="font-size: 0.8rem; color: var(--color-text-slate);">₹3,996</del>
-                                <span style="background: rgba(16,185,129,0.1); color: #10B981; font-size: 0.65rem; padding: 2px 6px; border-radius: 100px; font-weight: 700;">95% OFF</span>
-                                <span style="margin-left: auto; font-size: 0.75rem; color: var(--color-gold); font-weight: 600;">View Details →</span>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-
-            </div>
-
-            <!-- View All Button -->
-            <div style="text-align: center; margin-top: 2.5rem;">
-                <a href="library.php" class="btn btn-secondary" style="padding: 0.9rem 2.5rem; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 8px; text-decoration: none;">
-                    <i data-lucide="grid"></i> Browse Full Library
-                </a>
+                    </a>
+                </div>
             </div>
         </div>
     </section>
@@ -575,39 +448,147 @@
         </div>
     </section>
 
+    <!-- 12. FINAL CTA -->
+    <section class="section-pad" style="background: radial-gradient(circle at center, rgba(245, 158, 11, 0.04) 0%, rgba(3, 5, 12, 0.95) 100%); text-align: center; border-top: var(--border-light) 1px solid;">
+        <div class="container" style="max-width: 700px;">
+            <span class="hero-badge"><i data-lucide="clock"></i> Limited Launch Price</span>
+            <h2 style="font-size: 2.75rem; margin-bottom: 1rem;">Are You Ready to Transform?</h2>
+            <p style="margin-bottom: var(--space-md);">Get the complete 4-in-1 Mindset Bundle + All Bonuses for a single launch discount of ₹199.</p>
+            
+            <div style="margin-bottom: var(--space-md);">
+                <img src="assets/bundle-cover.jpg" alt="TATVAM Bundle" style="width: 160px; border-radius: 4px; box-shadow: -15px 25px 45px rgba(0,0,0,0.5); margin: 0 auto;">
+            </div>
+
+            <div style="font-size: 2.25rem; font-weight: 800; font-family: var(--font-heading); margin-bottom: 1.5rem;">
+                <del style="font-size: 1.25rem; color: var(--color-text-slate); margin-right: var(--space-xs);">₹3,996</del>
+                <span style="color: var(--color-gold);">₹199 Only</span>
+            </div>
+
+            <!-- Countdown widget inside final CTA -->
+            <div style="display: flex; justify-content: center; gap: var(--space-sm); margin-bottom: 2rem;">
+                <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-light); padding: 0.75rem 1.25rem; border-radius: var(--radius-sm);">
+                    <div id="cta-minutes" style="font-size: 1.75rem; font-weight: 700; font-family: var(--font-heading); color: var(--color-gold);">15</div>
+                    <span style="font-size: 0.75rem; color: var(--color-text-slate);">MINUTES</span>
+                </div>
+                <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-light); padding: 0.75rem 1.25rem; border-radius: var(--radius-sm);">
+                    <div id="cta-seconds" style="font-size: 1.75rem; font-weight: 700; font-family: var(--font-heading); color: var(--color-gold);">00</div>
+                    <span style="font-size: 0.75rem; color: var(--color-text-slate);">SECONDS</span>
+                </div>
+            </div>
+
+            <button class="btn btn-primary checkout-trigger" data-product-slug="mega-bundle" style="padding: 1.25rem 3.5rem;">Get All E-Books Instantly <i data-lucide="arrow-right"></i></button>
+        </div>
+    </section>
+
     <!-- FOOTER -->
-    <footer style="background: #03050c; color: var(--color-text-slate); padding: var(--space-md) 0; border-top: var(--glass-border) 1px solid; text-align: center; font-size: 0.85rem; position: relative; z-index: 2;">
+    <footer style="background: #03050c; color: var(--color-text-slate); padding: var(--space-lg) 0 var(--space-md); border-top: var(--border-light) 1px solid; position: relative; z-index: 2;">
         <div class="container">
-            <p>&copy; 2026 tatvam.shop. All rights reserved. Support Desk: support@tatvam.shop</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-md); border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: var(--space-md); margin-bottom: var(--space-md);">
+                <div>
+                    <h3 style="color: var(--color-text-white); font-size: 1.35rem; margin-bottom: 0.5rem;">TATVAM<span>.</span></h3>
+                    <p style="font-size: 0.9rem;">Modern spiritual luxury digital store delivering mental peace & discipline guides.</p>
+                </div>
+                <div>
+                    <h4 style="color: var(--color-gold); font-size: 0.95rem; text-transform: uppercase; margin-bottom: 0.75rem;">Categories</h4>
+                    <p style="font-size: 0.9rem; margin-bottom: 0.35rem;"><a href="positive-thinking.html">Positive Thinking</a></p>
+                    <p style="font-size: 0.9rem; margin-bottom: 0.35rem;"><a href="stress-worry.html">Stress Control</a></p>
+                    <p style="font-size: 0.9rem; margin-bottom: 0.35rem;"><a href="habit-freedom.html">Habits & Discipline</a></p>
+                    <p style="font-size: 0.9rem;"><a href="wealth-mindset.html">Wealth Mindset</a></p>
+                </div>
+                <div>
+                    <h4 style="color: var(--color-gold); font-size: 0.95rem; text-transform: uppercase; margin-bottom: 0.75rem;">Support Links</h4>
+                    <p style="font-size: 0.9rem; margin-bottom: 0.35rem;"><a href="contact-us.html">Contact Us</a></p>
+                    <p style="font-size: 0.9rem; margin-bottom: 0.35rem;"><a href="terms-conditions.html">Terms & Conditions</a></p>
+                    <p style="font-size: 0.9rem;"><a href="refund-policy.html">Refund Policy</a></p>
+                </div>
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; flex-wrap: wrap; font-size: 0.85rem;">
+                <p>&copy; 2026 tatvam.shop. All rights reserved.</p>
+                <p><a href="privacy.html">Privacy Policy</a></p>
+            </div>
         </div>
     </footer>
 
+    <!-- 2. STICKY DUAL-MODE BUY WIDGETS (NEW) -->
+    <!-- Desktop bottom-right corner checkout widget -->
+    <div class="floating-checkout-card" id="desktop-floating-card">
+        <div class="floating-book-row">
+            <img src="assets/bundle-cover.jpg" alt="TATVAM Bundle">
+            <div>
+                <h4 style="font-size: 0.9rem; font-weight: bold; line-height: 1.2;">Mega Mindset Bundle</h4>
+                <span style="font-size: 0.75rem; color: var(--color-gold); font-weight: 500;">Save 95% Launch Discount</span>
+            </div>
+        </div>
+        
+        <div class="floating-pricing-box">
+            <div>
+                <span style="font-size: 1.15rem; font-weight: 700; color: var(--color-gold);">₹199</span>
+                <del style="font-size: 0.8rem; color: var(--color-text-slate); margin-left: 4px;">₹3,996</del>
+            </div>
+            <div id="desktop-floating-timer" style="font-size: 0.85rem; font-family: var(--font-heading); color: var(--color-gold); font-weight: bold;">15:00</div>
+        </div>
+        
+        <button class="btn btn-primary btn-sm checkout-trigger" data-product-slug="mega-bundle" style="width: 100%; justify-content: center; box-shadow: none;">Buy Bundle Now</button>
+    </div>
+
+    <!-- Mobile sticky bottom bar -->
+    <div class="sticky-buy-bar">
+        <div class="container buy-bar-container">
+            <div class="buy-bar-info">
+                <h4>Mega Bundle (4-in-1)</h4>
+                <span class="price">₹199</span>
+            </div>
+            <button class="btn btn-primary btn-sm checkout-trigger" data-product-slug="mega-bundle">Buy Bundle <i data-lucide="arrow-right"></i></button>
+        </div>
+    </div>
+
+    <!-- ONE STEP GLASS CHECKOUT MODAL -->
+    <div class="modal-overlay">
+        <div class="modal-card">
+            <button class="modal-close" aria-label="Close Checkout Modal">&times;</button>
+            <h2 class="gradient-gold" style="background: linear-gradient(135deg, #FFE082 0%, var(--color-gold) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Fill Your Details</h2>
+            <p>E-book instantly deliver karne ke liye details enter karein.</p>
+            
+            <form id="checkout-form">
+                <input type="hidden" name="product_slug" id="target-product-slug" value="mega-bundle">
+                
+                <div class="form-group">
+                    <input type="text" name="name" id="name" class="form-input" placeholder=" " required>
+                    <label for="name" class="form-label">Your Name</label>
+                </div>
+                <div class="form-group">
+                    <input type="email" name="email" id="email" class="form-input" placeholder=" " required>
+                    <label for="email" class="form-label">Email Address</label>
+                </div>
+                <div class="form-group">
+                    <input type="tel" name="phone" id="phone" class="form-input" placeholder=" " required>
+                    <label for="phone" class="form-label">WhatsApp Phone Number</label>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: var(--space-xs);">
+                    Proceed to Payment <i data-lucide="credit-card"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- LIVE PURCHASE ACTIVITY TOAST -->
     <div class="toast-container">
-        <div class="toast" id="purchase-toast">
-            <div class="toast-img-wrapper">
-                <img src="assets/calm-cover.jpg?v=1.1" id="toast-product-img" alt="Product Cover">
-            </div>
-            <div class="toast-content">
-                <div class="toast-header-row">
-                    <span class="verified-badge-pill">
-                        <svg class="verified-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                        Verified Purchase
-                    </span>
-                    <span id="toast-time-val" class="toast-time">2m ago</span>
-                </div>
-                <div class="toast-text">
-                    <span id="toast-buyer-name">Amit</span> from <span id="toast-buyer-location">Delhi</span> bought <strong id="toast-product-name" class="highlight">Positive Thinking (नकारात्मक सोच से बाहर निकलें)</strong>
-                </div>
+        <div class="toast">
+            <div class="toast-green-dot"></div>
+            <div>
+                <span id="toast-buyer-name" style="font-weight: bold; color: var(--color-text-white);">Amit</span> from 
+                <span id="toast-buyer-location" style="font-weight: bold; color: var(--color-text-white);">Delhi</span> bought 
+                <span id="toast-product-name" style="color: var(--color-gold); font-weight: bold;">मन की शांति</span> 
+                <span>2m ago</span>
             </div>
         </div>
     </div>
 
     <!-- WHATSAPP FLOATING WIDGET -->
     <div class="whatsapp-widget">
-        <a href="https://wa.me/918417894808?text=Hello%20TATVAM%20Support,%20I%20have%20a%20question%20about%20my%20purchase." target="_blank" rel="noopener" class="whatsapp-btn" aria-label="WhatsApp Support">
+        <a href="https://wa.me/919999999999?text=Hello%20TATVAM%20Support,%20I%20have%20a%20question%20about%20my%20purchase." target="_blank" rel="noopener" class="whatsapp-btn" aria-label="WhatsApp Support">
             <i data-lucide="message-circle"></i>
         </a>
     </div>
@@ -620,6 +601,6 @@
             }
         });
     </script>
-    <script src="script.js?v=10.2" defer></script>
+    <script src="script.js" defer></script>
 </body>
 </html>

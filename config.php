@@ -4,14 +4,6 @@
  * Contains API Credentials, Site Constants, and Database configurations
  */
 
-// Set Default Timezone to Indian Standard Time (IST)
-date_default_timezone_set('Asia/Kolkata');
-
-
-if (file_exists(__DIR__ . '/config.secret.php')) {
-    require_once __DIR__ . '/config.secret.php';
-}
-
 // Debugging (Set to false in production)
 define('DEBUG_MODE', true);
 if (DEBUG_MODE) {
@@ -24,12 +16,7 @@ if (DEBUG_MODE) {
 }
 
 // Site Configurations
-if (!defined('SITE_URL')) {
-    $protocol = (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] === 'on' || $_SERVER['HTTPS'] === 1)) || 
-                (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') ? 'https' : 'http';
-    $host = $_SERVER['HTTP_HOST'] ?? 'tatvam.in';
-    define('SITE_URL', $protocol . '://' . $host);
-}
+define('SITE_URL', 'https://tatvam.shop'); // Always use tatvam.shop
 define('SITE_NAME', 'TATVAM');
 define('SUPPORT_EMAIL', 'support@tatvam.shop');
 
@@ -46,20 +33,19 @@ define('MYSQL_USER', 'root');
 define('MYSQL_PASS', '');
 define('MYSQL_DB', 'tatvam');
 
-// Cashfree Payment Gateway Credentials
-if (!defined('CASHFREE_APP_ID')) define('CASHFREE_APP_ID', '13547397d3e30d5de7d3d1a22179374531');
-if (!defined('CASHFREE_SECRET_KEY')) define('CASHFREE_SECRET_KEY', 'cfsk_ma_prod_403c547114acb5ce4db767d374712a00_36752f6a');
-if (!defined('CASHFREE_ENV')) define('CASHFREE_ENV', 'PRODUCTION'); // 'TEST' for sandbox, 'PRODUCTION' for live
+// Razorpay API Credentials (Get these from your Razorpay Dashboard)
+define('RAZORPAY_KEY_ID', 'rzp_test_XXXXXXXXXXXXXX');
+define('RAZORPAY_KEY_SECRET', 'YYYYYYYYYYYYYYYYYYYYYYYY');
 
 // SMTP Credentials (For sending ebook delivery emails)
-if (!defined('SMTP_HOST')) define('SMTP_HOST', 'smtp.gmail.com');
-if (!defined('SMTP_PORT')) define('SMTP_PORT', 587);
-if (!defined('SMTP_SECURE')) define('SMTP_SECURE', 'tls');
-if (!defined('SMTP_USER')) define('SMTP_USER', 'your-email@gmail.com');
-if (!defined('SMTP_PASS')) define('SMTP_PASS', 'your-app-password');
-if (!defined('SMTP_FROM_NAME')) define('SMTP_FROM_NAME', 'TATVAM Support Desk');
+define('SMTP_HOST', 'smtp.gmail.com');
+define('SMTP_PORT', 587); // 465 for SSL, 587 for TLS
+define('SMTP_SECURE', 'tls'); // 'tls' or 'ssl'
+define('SMTP_USER', 'your-email@gmail.com');
+define('SMTP_PASS', 'your-app-password');
+define('SMTP_FROM_NAME', 'TATVAM Support Desk');
 
 // Meta Conversion API (CAPI) & Pixel Configurations
-if (!defined('META_PIXEL_ID')) define('META_PIXEL_ID', '1300320535510896');
-if (!defined('META_CAPI_ACCESS_TOKEN')) define('META_CAPI_ACCESS_TOKEN', 'EAAkpjFZAtNEEBSJj3fz2I0ytF4BROgqpU2iXo0A1DeyBXGNBRHZCUeij2X68X4ZAUfyTnqV1vXixY4AztrOwkDRFToPaMpc1p0vNg1fIDVll8rh5j61h1hGmipAJJzOFFHxDAZCW08flaAZB3NtSb7fCoMy76u7s5sT1FEDnMtVvxTqPMtVMvqjvj1jV1hgZDZD');
-if (!defined('META_CAPI_TEST_CODE')) define('META_CAPI_TEST_CODE', 'TEST12345');
+define('META_PIXEL_ID', '123456789012345');
+define('META_CAPI_ACCESS_TOKEN', 'EAAB...YOUR_ACCESS_TOKEN');
+define('META_CAPI_TEST_CODE', 'TEST12345'); // Optional: Add testing code for Meta payload verification

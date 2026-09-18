@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us | TATVAM Store Support</title>
     
     <!-- Google Fonts -->
@@ -14,36 +14,23 @@
     <script src="https://unpkg.com/lucide@latest" defer></script>
 
     <!-- Master CSS -->
-    <link rel="stylesheet" href="styles.css?v=2.3">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body data-page-slug="contact">
 
     <!-- HEADER -->
-    <header class="header">
+    <header class="header scrolled">
         <div class="nav-glass">
             <a href="index.html" class="logo">TATVAM<span>.</span></a>
-            <!-- Hamburger Button -->
-            <button class="mobile-menu-btn" aria-label="Toggle Menu">&#9776;</button>
             <nav class="nav-links">
                 <a href="index.html" class="nav-link">Home</a>
-                <div class="nav-dropdown">
-                    <a href="library.php" class="nav-link dropdown-trigger">E-Books <i data-lucide="chevron-down" class="dropdown-icon"></i></a>
-                    <div class="dropdown-menu">
-                        <a href="library.php" class="dropdown-item">All E-Books</a>
-                        <a href="positive-thinking.html" class="dropdown-item">मन की शांति (Calm)</a>
-                    </div>
-                </div>
+                <a href="library.php" class="nav-link">E-Books</a>
+                <a href="bundle.html" class="nav-link">Bundles</a>
                 <a href="index.html#faq" class="nav-link">About</a>
-                <div class="nav-dropdown">
-                    <span class="nav-link dropdown-trigger">Policies & Help <i data-lucide="chevron-down" class="dropdown-icon"></i></span>
-                    <div class="dropdown-menu">
-                        <a href="contact-us.html" class="dropdown-item">Contact Us</a>
-                        <a href="privacy.html" class="dropdown-item">Privacy Policy</a>
-                        <a href="refund-policy.html" class="dropdown-item">Refund Policy</a>
-                        <a href="terms-conditions.html" class="dropdown-item">Terms & Conditions</a>
-                    </div>
-                </div>
-                <a href="positive-thinking.html" class="btn btn-primary btn-sm"><i data-lucide="sparkles"></i> Get E-Book</a>
+                <a href="contact-us.html" class="nav-link">Contact</a>
+                <a href="#" id="open-wishlist-btn" class="nav-link" style="display: flex; align-items: center; gap: 6px;">
+                    <i data-lucide="heart" style="width: 18px; height: 18px;"></i> Wishlist
+                </a>
             </nav>
         </div>
     </header>
@@ -52,7 +39,7 @@
     <main class="legal-page" style="padding-top: 150px; padding-bottom: 100px; min-height: 80vh; display: flex; align-items: center; justify-content: center;">
         <div class="container" style="max-width: 600px;">
             <div class="glass-card" style="padding: var(--space-md); border-color: rgba(251, 191, 36, 0.4); box-shadow: var(--shadow-glow-gold); z-index: 2; position: relative;">
-                <h1 class="gradient-gold" style="text-align: center; margin-bottom: var(--space-xs);">Contact TATVAM Support</h1>
+                <h1 class="gradient-gold" style="font-size: 2rem; margin-bottom: var(--space-xs); text-align: center;">Contact TATVAM Support</h1>
                 <p style="text-align: center; margin-bottom: var(--space-md);">Aapke pass digital download link or purchases se related koi sawal hai? Niche fill karein.</p>
                 
                 <form action="mailto:support@tatvam.shop" method="POST" enctype="text/plain">
@@ -102,6 +89,6 @@
             }
         });
     </script>
-    <script src="script.js?v=1.3" defer></script>
+    <script src="script.js" defer></script>
 </body>
 </html>

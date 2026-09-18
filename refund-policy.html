@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Refund Policy | TATVAM</title>
     
     <!-- Google Fonts -->
@@ -14,36 +14,23 @@
     <script src="https://unpkg.com/lucide@latest" defer></script>
 
     <!-- Master CSS -->
-    <link rel="stylesheet" href="styles.css?v=2.3">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body data-page-slug="refund">
 
     <!-- HEADER -->
-    <header class="header">
+    <header class="header scrolled">
         <div class="nav-glass">
             <a href="index.html" class="logo">TATVAM<span>.</span></a>
-            <!-- Hamburger Button -->
-            <button class="mobile-menu-btn" aria-label="Toggle Menu">&#9776;</button>
             <nav class="nav-links">
                 <a href="index.html" class="nav-link">Home</a>
-                <div class="nav-dropdown">
-                    <a href="library.php" class="nav-link dropdown-trigger">E-Books <i data-lucide="chevron-down" class="dropdown-icon"></i></a>
-                    <div class="dropdown-menu">
-                        <a href="library.php" class="dropdown-item">All E-Books</a>
-                        <a href="positive-thinking.html" class="dropdown-item">मन की शांति (Calm)</a>
-                    </div>
-                </div>
+                <a href="library.php" class="nav-link">E-Books</a>
+                <a href="bundle.html" class="nav-link">Bundles</a>
                 <a href="index.html#faq" class="nav-link">About</a>
-                <div class="nav-dropdown">
-                    <span class="nav-link dropdown-trigger">Policies & Help <i data-lucide="chevron-down" class="dropdown-icon"></i></span>
-                    <div class="dropdown-menu">
-                        <a href="contact-us.html" class="dropdown-item">Contact Us</a>
-                        <a href="privacy.html" class="dropdown-item">Privacy Policy</a>
-                        <a href="refund-policy.html" class="dropdown-item">Refund Policy</a>
-                        <a href="terms-conditions.html" class="dropdown-item">Terms & Conditions</a>
-                    </div>
-                </div>
-                <a href="positive-thinking.html" class="btn btn-primary btn-sm"><i data-lucide="sparkles"></i> Get E-Book</a>
+                <a href="contact-us.html" class="nav-link">Contact</a>
+                <a href="#" id="open-wishlist-btn" class="nav-link" style="display: flex; align-items: center; gap: 6px;">
+                    <i data-lucide="heart" style="width: 18px; height: 18px;"></i> Wishlist
+                </a>
             </nav>
         </div>
     </header>
@@ -52,17 +39,17 @@
     <main class="legal-page" style="padding-top: 150px; padding-bottom: 100px; min-height: 80vh;">
         <div class="container">
             <div class="glass-card" style="padding: var(--space-md); border-color: rgba(255,255,255,0.08);">
-                <h1 class="gradient-gold">Refund Policy</h1>
+                <h1 class="gradient-gold" style="font-size: 2.5rem; margin-bottom: 0.5rem;">Refund Policy</h1>
                 <p style="margin-bottom: var(--space-md);">Last updated: July 29, 2026</p>
                 
                 <div style="display: flex; flex-direction: column; gap: var(--space-md); text-align: left;">
                     <section>
-                        <h2 style="color: var(--color-gold); margin-bottom: 0.5rem;">1. Digital Products Nature</h2>
+                        <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--color-gold);">1. Digital Products Nature</h2>
                         <p>Due to the immediate access nature of digital items (specifically ebooks, PDFs, checklists, and templates), <strong>all sales made on tatvam.shop are final</strong>. Once your transaction is finalized, the download link is instantly dispatched, rendering the item non-returnable.</p>
                     </section>
                     
                     <section>
-                        <h2 style="color: var(--color-gold); margin-bottom: 0.5rem;">2. Exceptional Circumstances</h2>
+                        <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--color-gold);">2. Exceptional Circumstances</h2>
                         <p>We want our readers to have a seamless experience. We will issue replacements or investigate refund claims in the following situations:</p>
                         <ul style="margin-left: 20px; margin-top: 10px; list-style-type: disc;">
                             <li>The product file is corrupted or cannot be opened/accessed.</li>
@@ -71,12 +58,12 @@
                     </section>
                     
                     <section>
-                        <h2 style="color: var(--color-gold); margin-bottom: 0.5rem;">3. File Access Support</h2>
+                        <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--color-gold);">3. File Access Support</h2>
                         <p>If you fail to receive your download email or encounter problems rendering the PDF on your specific mobile device, please forward your order details directly to our support desk. We will manually deliver alternative links or target formats within 24 hours.</p>
                     </section>
                     
                     <section>
-                        <h2 style="color: var(--color-gold); margin-bottom: 0.5rem;">4. Support Contacts</h2>
+                        <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--color-gold);">4. Support Contacts</h2>
                         <p>For support enquiries regarding purchase issues, contact: <a href="mailto:support@tatvam.shop" style="color: var(--color-gold); font-weight: 500;">support@tatvam.shop</a>.</p>
                     </section>
                 </div>
@@ -109,6 +96,6 @@
             }
         });
     </script>
-    <script src="script.js?v=1.3" defer></script>
+    <script src="script.js" defer></script>
 </body>
 </html>

@@ -8,12 +8,6 @@ require_once __DIR__ . '/config.php';
 
 try {
     if (DB_DRIVE === 'sqlite') {
-        // Ensure database file directory exists
-        $db_dir = dirname(SQLITE_DB_PATH);
-        if (!file_exists($db_dir)) {
-            mkdir($db_dir, 0755, true);
-        }
-
         // Initialize SQLite Connection
         $db = new PDO('sqlite:' . SQLITE_DB_PATH);
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -47,23 +41,6 @@ try {
         $db->exec("UPDATE products SET description = 'Paison ko lekar poor self-limiting beliefs aur money blocks aapki growth block kar rahe hain? Abundance habits seekhein.', cover_image = 'assets/wealth-cover.jpg' WHERE slug = 'wealth-mindset' AND (description IS NULL OR description = '')");
         $db->exec("UPDATE products SET description = 'Sari single guides ek bundle me paayein. Total Value ₹3,996 par abhi grab karein!', cover_image = 'assets/bundle-cover.jpg' WHERE slug = 'mega-bundle' AND (description IS NULL OR description = '')");
 
-        $db->exec("CREATE TABLE IF NOT EXISTS daily_calculations (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            calc_date TEXT UNIQUE NOT NULL,
-            ad_spend REAL DEFAULT 0,
-            notes TEXT,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        )");
-
-        $db->exec("CREATE TABLE IF NOT EXISTS site_analytics (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            event_type TEXT NOT NULL,
-            page_slug TEXT DEFAULT 'positive-thinking',
-            ip_address TEXT,
-            user_agent TEXT,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        )");
-
         $db->exec("CREATE TABLE IF NOT EXISTS orders (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             customer_name TEXT NOT NULL,
@@ -90,14 +67,12 @@ try {
             $insert->execute(["अनुशासन क्रांति (Ultimate Discipline)", "habit-freedom", 199.00, 999.00, "files/ultimate_discipline_hindi.pdf", "discipline", "Procrastination aur lazy hours aapki speed slow kar rahe hain? Self-discipline build karna seekhein.", "assets/discipline-cover.jpg"]);
             $insert->execute(["समृद्धि सूत्र (Wealth Principles)", "wealth-mindset", 199.00, 999.00, "files/wealth_principles_hindi.pdf", "wealth", "Paison ko lekar poor self-limiting beliefs aur money blocks aapki growth block kar rahe hain? Abundance habits seekhein.", "assets/wealth-cover.jpg"]);
             $insert->execute(["TATVAM Mega Mindset Bundle (4-in-1)", "mega-bundle", 199.00, 3996.00, "files/tattvam_mega_bundle.zip", "bundle", "Sari single guides ek bundle me paayein. Total Value ₹3,996 par abhi grab karein!", "assets/bundle-cover.jpg"]);
-            $insert->execute(["Focus Reset (Phone की लत तोड़ो, Focus वापस लाओ)", "focus-reset", 199.00, 1499.00, "files/focus_reset_hindi.pdf", "focus", "Phone aur screen addiction se bahar niklein. Digital detox aur deep focus ke liye proven Hinglish guide.", "assets/focus-reset-cover.jpg"]);
         }
 
         // Overwrite title and description for positive-thinking product in existing database
         $db->exec("UPDATE products SET title = 'Positive Thinking (नकारात्मक सोच से बाहर निकलें)', description = 'नकारात्मक सोच से बाहर निकलें और सकारात्मक, शांत एवं आत्मविश्वासी जीवन की ओर बढ़ें।' WHERE slug = 'positive-thinking'");
-
-        // Insert focus-reset if it doesn't exist yet (for existing databases)
-        $db->exec("INSERT OR IGNORE INTO products (title, slug, price, original_price, file_path, category, description, cover_image) VALUES ('Focus Reset (Phone की लत तोड़ो, Focus वापस लाओ)', 'focus-reset', 199.00, 1499.00, 'files/focus_reset_hindi.pdf', 'focus', 'Phone aur screen addiction se bahar niklein. Digital detox aur deep focus ke liye proven Hinglish guide.', 'assets/focus-reset-cover.jpg')");
+        // Overwrite price of all products in existing database to 199.00
+        $db->exec("UPDATE products SET price = 199.00");
 
     } else {
         // Initialize MySQL Connection

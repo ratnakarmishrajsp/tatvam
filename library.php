@@ -6,7 +6,7 @@
 require_once __DIR__ . '/db.php';
 
 try {
-    $stmt = $db->query("SELECT * FROM products ORDER BY id ASC");
+    $stmt = $db->query("SELECT * FROM products ORDER BY id DESC");
     $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (Exception $e) {
     die("Database Query Failed: " . $e->getMessage());
@@ -25,8 +25,6 @@ function getProductUrl($slug) {
             return 'wealth-mindset.html';
         case 'mega-bundle':
             return 'bundle.html';
-        case 'focus-reset':
-            return 'focus-reset.html';
         default:
             return 'product.php?slug=' . urlencode($slug);
     }
@@ -36,17 +34,9 @@ function getProductUrl($slug) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Book Library | TATVAM Digital Bookstore</title>
     <meta name="description" content="Browse our luxury digital library. Find guides on positive thinking, discipline, anxiety relief, and wealth frameworks.">
-    
-    <!-- Meta Pixel Code -->
-    <?php include_once __DIR__ . '/includes/meta-pixel-header.php'; ?>
-    <script>
-        if (typeof fbq === 'function') {
-            fbq('track', 'ViewContent', { content_name: 'E-Book Library', content_category: 'Catalog' });
-        }
-    </script>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -57,7 +47,7 @@ function getProductUrl($slug) {
     <script src="https://unpkg.com/lucide@latest" defer></script>
 
     <!-- Master CSS -->
-    <link rel="stylesheet" href="styles.css?v=2.3">
+    <link rel="stylesheet" href="styles.css">
     
     <style>
         /* Specific Bookstore styling extensions */
@@ -185,35 +175,16 @@ function getProductUrl($slug) {
     <div class="noise-overlay"></div>
 
     <!-- HEADER -->
-    <header class="header">
+    <header class="header scrolled">
         <div class="nav-glass">
             <a href="index.html" class="logo">TATVAM<span>.</span></a>
-            <!-- Hamburger Button -->
-            <button class="mobile-menu-btn" aria-label="Toggle Menu">&#9776;</button>
             <nav class="nav-links">
                 <a href="index.html" class="nav-link">Home</a>
-                <div class="nav-dropdown">
-                    <a href="library.php" class="nav-link dropdown-trigger">E-Books <i data-lucide="chevron-down" class="dropdown-icon"></i></a>
-                    <div class="dropdown-menu">
-                        <a href="library.php" class="dropdown-item">📚 All E-Books</a>
-                        <a href="positive-thinking.html" class="dropdown-item">मन की शांति (Calm)</a>
-                        <a href="stress-worry.html" class="dropdown-item">चिंता मुक्ति (Anxiety Relief)</a>
-                        <a href="habit-freedom.html" class="dropdown-item">अनुशासन क्रांति (Discipline)</a>
-                        <a href="wealth-mindset.html" class="dropdown-item">समृद्धि सूत्र (Wealth)</a>
-                        <a href="bundle.html" class="dropdown-item">⚡ Mega Bundle (4-in-1)</a>
-                    </div>
-                </div>
+                <a href="library.php" class="nav-link" style="color: var(--color-gold);">E-Books</a>
+                <a href="bundle.html" class="nav-link">Bundles</a>
                 <a href="index.html#faq" class="nav-link">About</a>
-                <div class="nav-dropdown">
-                    <span class="nav-link dropdown-trigger">Policies & Help <i data-lucide="chevron-down" class="dropdown-icon"></i></span>
-                    <div class="dropdown-menu">
-                        <a href="contact-us.html" class="dropdown-item">Contact Us</a>
-                        <a href="privacy.html" class="dropdown-item">Privacy Policy</a>
-                        <a href="refund-policy.html" class="dropdown-item">Refund Policy</a>
-                        <a href="terms-conditions.html" class="dropdown-item">Terms & Conditions</a>
-                    </div>
-                </div>
-                <a href="positive-thinking.html" class="btn btn-primary btn-sm"><i data-lucide="sparkles"></i> Get E-Book</a>
+                <a href="contact-us.html" class="nav-link">Contact</a>
+                <a href="bundle.html" class="btn btn-primary btn-sm"><i data-lucide="sparkles"></i> Claim Offer</a>
             </nav>
         </div>
     </header>
@@ -225,7 +196,7 @@ function getProductUrl($slug) {
                 <i data-lucide="book-open"></i>
                 <span>Mindset & Discipline Library</span>
             </div>
-            <h1 class="library-title">Explore Premium E-Books</h1>
+            <h1 style="font-size: 3rem; margin-bottom: 0.5rem;">Explore Premium E-Books</h1>
             <p style="color: var(--color-text-slate); max-width: 600px; margin: 0 auto 2rem;">Read simple guides written in Hinglish to rewire your thinking models, eliminate stress, and rebuild daily motivation.</p>
             
             <!-- Search Bar -->
@@ -234,7 +205,15 @@ function getProductUrl($slug) {
                 <input type="text" id="library-search" class="search-input" placeholder="Search ebooks by title, category, keyword...">
             </div>
 
-            <!-- Category Filters Removed (Single Product) -->
+            <!-- Category Filters -->
+            <div class="filter-container">
+                <button class="filter-btn active" onclick="filterCategory('all', this)">All Library</button>
+                <button class="filter-btn" onclick="filterCategory('mindset', this)">Mindset</button>
+                <button class="filter-btn" onclick="filterCategory('peace', this)">Emotional Peace</button>
+                <button class="filter-btn" onclick="filterCategory('discipline', this)">Discipline</button>
+                <button class="filter-btn" onclick="filterCategory('wealth', this)">Wealth</button>
+                <button class="filter-btn" onclick="filterCategory('bundle', this)">Bundles</button>
+            </div>
         </div>
     </section>
 
