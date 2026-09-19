@@ -3042,9 +3042,9 @@
                     // Keep visible for 4.5 seconds
                     setTimeout(() => {
                         hideToast();
-                        // Schedule next popup after 10 seconds
+                        // Schedule next popup after 25 seconds
                         if (!isDismissed) {
-                            toastTimer = setTimeout(showToast, 10000);
+                            toastTimer = setTimeout(showToast, 25000);
                         }
                     }, 4500);
                 }
@@ -3053,8 +3053,8 @@
                     toast.classList.remove('active');
                 }
 
-                // Initial start after 2.5 seconds of page load
-                toastTimer = setTimeout(showToast, 2500);
+                // Initial start after 7 seconds of page load
+                toastTimer = setTimeout(showToast, 7000);
             }
 
             if (document.readyState === 'loading') {
