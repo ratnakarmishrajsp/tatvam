@@ -33,7 +33,12 @@ define('MYSQL_USER', 'root');
 define('MYSQL_PASS', '');
 define('MYSQL_DB', 'tatvam');
 
-// Razorpay API Credentials (Get these from your Razorpay Dashboard)
+// Cashfree Payment Gateway Credentials
+if (!defined('CASHFREE_APP_ID')) define('CASHFREE_APP_ID', '13547397d3e30d5de7d3d1a22179374531');
+if (!defined('CASHFREE_SECRET_KEY')) define('CASHFREE_SECRET_KEY', 'cfsk_ma_prod_403c547114acb5ce4db767d374712a00_36752f6a');
+if (!defined('CASHFREE_ENV')) define('CASHFREE_ENV', 'PRODUCTION'); // 'TEST' for sandbox, 'PRODUCTION' for live
+
+// Razorpay API Credentials (Optional fallback)
 define('RAZORPAY_KEY_ID', 'rzp_test_XXXXXXXXXXXXXX');
 define('RAZORPAY_KEY_SECRET', 'YYYYYYYYYYYYYYYYYYYYYYYY');
 
@@ -46,6 +51,7 @@ define('SMTP_PASS', 'your-app-password');
 define('SMTP_FROM_NAME', 'TATVAM Support Desk');
 
 // Meta Conversion API (CAPI) & Pixel Configurations
-define('META_PIXEL_ID', '123456789012345');
-define('META_CAPI_ACCESS_TOKEN', 'EAAB...YOUR_ACCESS_TOKEN');
-define('META_CAPI_TEST_CODE', 'TEST12345'); // Optional: Add testing code for Meta payload verification
+if (!defined('META_PIXEL_ID')) define('META_PIXEL_ID', '1300320535510896');
+if (!defined('META_CAPI_ACCESS_TOKEN')) define('META_CAPI_ACCESS_TOKEN', 'EAAkpjFZAtNEEBSJj3fz2I0ytF4BROgqpU2iXo0A1DeyBXGNBRHZCUeij2X68X4ZAUfyTnqV1vXixY4AztrOwkDRFToPaMpc1p0vNg1fIDVll8rh5j61h1hGmipAJJzOFFHxDAZCW08flaAZB3NtSb7fCoMy76u7s5sT1FEDnMtVvxTqPMtVMvqjvj1jV1hgZDZD');
+if (!defined('META_CAPI_TEST_CODE')) define('META_CAPI_TEST_CODE', 'TEST12345');
+

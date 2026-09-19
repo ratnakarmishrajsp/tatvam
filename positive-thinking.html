@@ -13,7 +13,7 @@
 
     <!-- Scripts -->
     <script src="https://unpkg.com/lucide@latest" defer></script>
-    <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
+    <script src="https://sdk.cashfree.com/js/v3/cashfree.js" defer></script>
 
     <style>
         /* ── RESET & DESIGN TOKENS ── */
@@ -2586,7 +2586,7 @@
 
             <div class="modal-security-note">
                 <i data-lucide="shield-check"></i>
-                <span>256-Bit SSL Secured &bull; Razorpay / UPI / Cards</span>
+                <span>256-Bit SSL Secured &bull; Cashfree / UPI / Cards</span>
             </div>
         </div>
     </div>
@@ -2716,14 +2716,14 @@
                 });
             }
 
-            // 6. Checkout Submission & Razorpay Integration
+            // 6. Checkout Submission & Cashfree Payment Gateway Integration
             if (checkoutForm) {
                 checkoutForm.addEventListener('submit', (e) => {
                     e.preventDefault();
 
                     const origText = submitBtn.innerHTML;
                     submitBtn.disabled = true;
-                    submitBtn.innerHTML = `<i data-lucide="loader" class="animate-spin"></i> Processing Checkout...`;
+                    submitBtn.innerHTML = `<i data-lucide="loader" class="animate-spin"></i> Redirecting to Cashfree...`;
                     if (typeof lucide !== 'undefined') lucide.createIcons();
 
                     const formData = new FormData(checkoutForm);
@@ -2734,90 +2734,50 @@
                     })
                     .then(res => res.json())
                     .then(data => {
-                        if (data.success) {
-                            if (data.sandbox) {
-                                submitBtn.innerHTML = `<i data-lucide="check"></i> Redirecting to Access...`;
-                                if (typeof lucide !== 'undefined') lucide.createIcons();
+                        if (data.success && data.payment_session_id) {
+                            // Determine Cashfree mode & initialize SDK instance
+                            const cfMode = (data.environment === 'PRODUCTION') ? 'production' : 'sandbox';
+                            let cashfreeObj = null;
 
-                                setTimeout(() => {
-                                    const successForm = document.createElement('form');
-                                    successForm.method = 'POST';
-                                    successForm.action = 'thank-you.php';
+                            if (typeof Cashfree !== 'undefined') {
+                                cashfreeObj = Cashfree({ mode: cfMode });
+                            } else if (typeof window.Cashfree !== 'undefined') {
+                                cashfreeObj = window.Cashfree({ mode: cfMode });
+                            }
 
-                                    const inputs = {
-                                        'razorpay_order_id': data.razorpay_order_id,
-                                        'razorpay_payment_id': 'pay_sim_' + Math.random().toString(36).substr(2, 9),
-                                        'sandbox': 'true'
-                                    };
-
-                                    for (const [key, val] of Object.entries(inputs)) {
-                                        const input = document.createElement('input');
-                                        input.type = 'hidden';
-                                        input.name = key;
-                                        input.value = val;
-                                        successForm.appendChild(input);
-                                    }
-
-                                    document.body.appendChild(successForm);
-                                    successForm.submit();
-                                }, 1000);
-                            } else {
-                                // Live Razorpay Gate
-                                const options = {
-                                    "key": data.key,
-                                    "amount": data.amount,
-                                    "currency": "INR",
-                                    "name": "TATVAM Store",
-                                    "description": "Positive Thinking Guide + Bonus Toolkit",
-                                    "image": data.cover_image || "assets/calm-cover.jpg",
-                                    "order_id": data.razorpay_order_id,
-                                    "handler": function (response) {
-                                        const form = document.createElement('form');
-                                        form.method = 'POST';
-                                        form.action = 'thank-you.php';
-
-                                        const params = {
-                                            'razorpay_order_id': response.razorpay_order_id,
-                                            'razorpay_payment_id': response.razorpay_payment_id,
-                                            'razorpay_signature': response.razorpay_signature
-                                        };
-
-                                        for (const [key, value] of Object.entries(params)) {
-                                            const hiddenField = document.createElement('input');
-                                            hiddenField.type = 'hidden';
-                                            hiddenField.name = key;
-                                            hiddenField.value = value;
-                                            form.appendChild(hiddenField);
-                                        }
-
-                                        document.body.appendChild(form);
-                                        form.submit();
-                                    },
-                                    "prefill": {
-                                        "name": data.customer_name,
-                                        "email": data.customer_email,
-                                        "contact": data.customer_phone
-                                    },
-                                    "theme": {
-                                        "color": "#C5A880"
-                                    }
-                                };
-                                const rzp = new Razorpay(options);
-                                rzp.open();
-                                closeCheckout();
+                            if (!cashfreeObj) {
+                                alert('Cashfree Payment Gateway failed to load. Please refresh the page and try again.');
                                 submitBtn.innerHTML = origText;
                                 submitBtn.disabled = false;
                                 if (typeof lucide !== 'undefined') lucide.createIcons();
+                                return;
                             }
+
+                            // Trigger Meta Pixel InitiateCheckout Event if available
+                            if (typeof fbq === 'function') {
+                                fbq('track', 'InitiateCheckout', {
+                                    content_name: data.product_name || 'Positive Thinking Guide',
+                                    currency: 'INR',
+                                    value: 199.00
+                                });
+                            }
+
+                            closeCheckout();
+
+                            // Launch Cashfree Drop checkout / Payment redirect
+                            cashfreeObj.checkout({
+                                paymentSessionId: data.payment_session_id,
+                                redirectTarget: '_self'
+                            });
                         } else {
-                            alert("Error: " + data.message);
+                            alert("Error: " + (data.message || "Payment session could not be created. Please try again."));
                             submitBtn.innerHTML = origText;
                             submitBtn.disabled = false;
                             if (typeof lucide !== 'undefined') lucide.createIcons();
                         }
                     })
                     .catch(err => {
-                        console.error(err);
+                        console.error('Checkout error:', err);
                         alert("Checkout error. Please check your connection and try again.");
                         submitBtn.innerHTML = origText;
                         submitBtn.disabled = false;

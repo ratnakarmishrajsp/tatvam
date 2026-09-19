@@ -1,7 +1,7 @@
 <?php
 /**
- * TATVAM - Secure Razorpay Order Generation API
- * Registers pending transaction and returns checkout parameters
+ * TATVAM - Secure Cashfree Order Generation API
+ * Registers pending transaction and returns Cashfree payment_session_id
  */
 
 header('Content-Type: application/json');
@@ -13,11 +13,11 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-// Sanitize post variables (supporting both standard SAPI and $_POST fallbacks)
-$customer_name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS) ?: (isset($_POST['name']) ? htmlspecialchars(trim($_POST['name'])) : null);
-$customer_email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL) ?: (isset($_POST['email']) ? filter_var(trim($_POST['email']), FILTER_VALIDATE_EMAIL) : null);
-$customer_phone = filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_SPECIAL_CHARS) ?: (isset($_POST['phone']) ? htmlspecialchars(trim($_POST['phone'])) : null);
-$product_slug = filter_input(INPUT_POST, 'product_slug', FILTER_SANITIZE_SPECIAL_CHARS) ?: (isset($_POST['product_slug']) ? htmlspecialchars(trim($_POST['product_slug'])) : null);
+// Sanitize post variables
+$customer_name  = trim($_POST['name'] ?? filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS) ?? '');
+$customer_email = filter_var($_POST['email'] ?? filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL), FILTER_VALIDATE_EMAIL);
+$customer_phone = trim($_POST['phone'] ?? filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_SPECIAL_CHARS) ?? '');
+$product_slug   = trim($_POST['product_slug'] ?? filter_input(INPUT_POST, 'product_slug', FILTER_SANITIZE_SPECIAL_CHARS) ?? '');
 
 if (!$customer_name || !$customer_email || !$customer_phone || !$product_slug) {
     echo json_encode(['success' => false, 'message' => 'Please fill in all details correctly.']);
@@ -36,72 +36,94 @@ try {
     }
 
     $amount = (float)$product['price'];
-    $amount_in_paisa = (int)($amount * 100); // Razorpay calculates in Paisa
 
-    // 2. Localhost Sandbox Detection
-    // If credentials are left at default test placeholders, fallback to sandbox simulation
-    $is_sandbox = (RAZORPAY_KEY_ID === 'rzp_test_XXXXXXXXXXXXXX');
+    // 2. Generate unique order ID for Cashfree
+    $cf_order_id = 'tatvam_' . time() . '_' . bin2hex(random_bytes(4));
 
-    $razorpay_order_id = 'order_sim_' . bin2hex(random_bytes(8)); // Simulated Order ID
+    // 3. Determine Cashfree API URL based on environment
+    $is_sandbox = (defined('CASHFREE_ENV') && CASHFREE_ENV === 'TEST');
+    $api_base   = $is_sandbox
+        ? 'https://sandbox.cashfree.com/pg'
+        : 'https://api.cashfree.com/pg';
 
-    if (!$is_sandbox) {
-        // Run secure cURL query to Razorpay API for live order creation
-        $url = 'https://api.razorpay.com/v1/orders';
-        $payload = json_encode([
-            'amount' => $amount_in_paisa,
-            'currency' => 'INR',
-            'receipt' => 'receipt_order_' . time(),
-            'payment_capture' => 1
-        ]);
+    $payment_session_id = null;
 
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-        curl_setopt($ch, CURLOPT_USERPWD, RAZORPAY_KEY_ID . ':' . RAZORPAY_KEY_SECRET);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-        
-        $response = curl_exec($ch);
-        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
+    // 4. Call Cashfree Orders API
+    $payload = json_encode([
+        'order_id'       => $cf_order_id,
+        'order_amount'   => $amount,
+        'order_currency' => 'INR',
+        'customer_details' => [
+            'customer_id'    => 'cust_' . preg_replace('/[^a-zA-Z0-9]/', '', $customer_email),
+            'customer_name'  => $customer_name,
+            'customer_email' => $customer_email,
+            'customer_phone' => preg_replace('/[^0-9]/', '', $customer_phone),
+        ],
+        'order_meta' => [
+            'return_url'   => SITE_URL . '/thank-you.php?order_id={order_id}',
+            'notify_url'   => SITE_URL . '/cashfree-webhook.php',
+        ],
+        'order_note' => 'TATVAM Ebook: ' . $product['title'],
+    ]);
 
-        if ($http_code === 200) {
-            $data = json_decode($response, true);
-            $razorpay_order_id = $data['id'];
-        } else {
-            // Log details and return failure
-            error_log("Razorpay Order API Failed. HTTP Code: $http_code. Response: $response");
-            echo json_encode(['success' => false, 'message' => 'Payment processor generation failed. Continuing via fallback.']);
-            $is_sandbox = true; // Fallback to sandbox simulation
+    $ch = curl_init($api_base . '/orders');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+        'x-client-id: ' . CASHFREE_APP_ID,
+        'x-client-secret: ' . CASHFREE_SECRET_KEY,
+        'x-api-version: 2023-08-01',
+    ]);
+
+    $response  = curl_exec($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($http_code === 200) {
+        $cf_data = json_decode($response, true);
+        $payment_session_id = $cf_data['payment_session_id'] ?? null;
+        if (!$payment_session_id) {
+            error_log("Cashfree: payment_session_id missing. Response: $response");
+            echo json_encode(['success' => false, 'message' => 'Payment session creation failed. Please retry.']);
+            exit;
         }
+    } else {
+        error_log("Cashfree Order API Failed. HTTP: $http_code. Response: $response");
+        echo json_encode(['success' => false, 'message' => 'Payment gateway error. Please retry.']);
+        exit;
     }
 
-    // 3. Register pending order inside database
-    $order_stmt = $db->prepare("INSERT INTO orders (customer_name, customer_email, customer_phone, product_id, amount, payment_status, razorpay_order_id) VALUES (?, ?, ?, ?, ?, 'pending', ?)");
+    // 5. Register pending order in database with exact local timestamp (IST)
+    $current_now = date('Y-m-d H:i:s');
+    $order_stmt = $db->prepare("INSERT INTO orders (customer_name, customer_email, customer_phone, product_id, amount, payment_status, razorpay_order_id, created_at) VALUES (?, ?, ?, ?, ?, 'pending', ?, ?)");
     $order_stmt->execute([
         $customer_name,
         $customer_email,
         $customer_phone,
         $product['id'],
         $amount,
-        $razorpay_order_id
+        $cf_order_id,
+        $current_now,
     ]);
-    
-    // Get last inserted order ID
+
     $db_order_id = $db->lastInsertId();
 
     echo json_encode([
-        'success' => true,
-        'sandbox' => $is_sandbox,
-        'db_order_id' => $db_order_id,
-        'razorpay_order_id' => $razorpay_order_id,
-        'key' => RAZORPAY_KEY_ID,
-        'amount' => $amount_in_paisa,
-        'product_name' => $product['title'],
-        'customer_name' => $customer_name,
-        'customer_email' => $customer_email,
-        'customer_phone' => $customer_phone,
-        'cover_image' => $product['cover_image']
+        'success'            => true,
+        'sandbox'            => $is_sandbox,
+        'db_order_id'        => $db_order_id,
+        'cf_order_id'        => $cf_order_id,
+        'payment_session_id' => $payment_session_id,
+        'environment'        => defined('CASHFREE_ENV') ? CASHFREE_ENV : 'PRODUCTION',
+        'product_name'       => $product['title'],
+        'customer_name'      => $customer_name,
+        'customer_email'     => $customer_email,
+        'customer_phone'     => $customer_phone,
+        'cover_image'        => $product['cover_image'],
     ]);
 
 } catch (Exception $e) {

@@ -15,8 +15,97 @@ $customer_email = "";
 $product_title = "";
 $download_link = "";
 
-// 1. Signature / Sandbox Verification
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+// 1. Cashfree Payment Verification (Cashfree redirects back with ?order_id=tatvam_xxx in the URL)
+if (!empty($_GET['order_id']) || !empty($_POST['cf_order_id'])) {
+    $cf_order_id = filter_input(INPUT_GET, 'order_id', FILTER_SANITIZE_SPECIAL_CHARS)
+                ?? filter_input(INPUT_POST, 'cf_order_id', FILTER_SANITIZE_SPECIAL_CHARS);
+
+    if ($cf_order_id) {
+        // Fetch order from DB
+        $stmt = $db->prepare("SELECT orders.*, products.title, products.slug FROM orders JOIN products ON orders.product_id = products.id WHERE orders.razorpay_order_id = ?");
+        $stmt->execute([$cf_order_id]);
+        $order = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($order) {
+            // If already paid, just display the confirmation
+            if ($order['payment_status'] === 'paid') {
+                $payment_verified = true;
+                $customer_name  = $order['customer_name'];
+                $customer_email = $order['customer_email'];
+                $product_title  = $order['title'];
+                $download_link  = SITE_URL . "/download.php?token=" . $order['download_token'];
+            } else {
+                // Verify payment status via Cashfree API
+                $api_base = (defined('CASHFREE_ENV') && CASHFREE_ENV === 'TEST')
+                    ? 'https://sandbox.cashfree.com/pg'
+                    : 'https://api.cashfree.com/pg';
+
+                $ch = curl_init($api_base . '/orders/' . $cf_order_id . '/payments');
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                    'x-client-id: ' . CASHFREE_APP_ID,
+                    'x-client-secret: ' . CASHFREE_SECRET_KEY,
+                    'x-api-version: 2023-08-01',
+                ]);
+                $response  = curl_exec($ch);
+                $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                curl_close($ch);
+
+                $cf_payment_id = null;
+                if ($http_code === 200) {
+                    $payments = json_decode($response, true);
+                    // Check if any payment has SUCCESS status
+                    foreach ((array)$payments as $payment) {
+                        if (($payment['payment_status'] ?? '') === 'SUCCESS') {
+                            $payment_verified = true;
+                            $cf_payment_id = $payment['cf_payment_id'] ?? null;
+                            break;
+                        }
+                    }
+                } else {
+                    error_log("Cashfree payment verify failed. HTTP: $http_code. Response: $response");
+                }
+
+                if ($payment_verified) {
+                    // Generate a secure download token (expires in 7 days)
+                    $download_token = bin2hex(random_bytes(16));
+                    $token_expiry   = date('Y-m-d H:i:s', strtotime('+7 days'));
+
+                    // Update order record with payment details
+                    $update_stmt = $db->prepare("UPDATE orders SET payment_status = 'paid', razorpay_payment_id = ?, download_token = ?, token_expiry = ? WHERE id = ?");
+                    $update_stmt->execute([
+                        $cf_payment_id ?? ('cf_pay_' . bin2hex(random_bytes(6))),
+                        $download_token,
+                        $token_expiry,
+                        $order['id'],
+                    ]);
+
+                    // Prepare order attributes for rendering
+                    $customer_name  = $order['customer_name'];
+                    $customer_email = $order['customer_email'];
+                    $product_title  = $order['title'];
+                    $download_link  = SITE_URL . "/download.php?token=" . $download_token;
+
+                    // Send email notification to user
+                    sendEbookEmail($customer_email, $customer_name, $product_title, $download_link);
+
+                    // Trigger Meta CAPI "Purchase" event
+                    sendMetaCapiEvent('Purchase', [
+                        'email'    => $customer_email,
+                        'phone'    => $order['customer_phone'],
+                        'name'     => $customer_name,
+                        'value'    => $order['amount'],
+                        'currency' => 'INR',
+                    ]);
+                }
+            }
+        }
+    }
+}
+// 2. Razorpay Fallback Verification
+elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $razorpay_order_id = filter_input(INPUT_POST, 'razorpay_order_id', FILTER_SANITIZE_SPECIAL_CHARS);
     $razorpay_payment_id = filter_input(INPUT_POST, 'razorpay_payment_id', FILTER_SANITIZE_SPECIAL_CHARS);
     $razorpay_signature = filter_input(INPUT_POST, 'razorpay_signature', FILTER_SANITIZE_SPECIAL_CHARS);
