@@ -2776,76 +2776,6 @@
                 });
             }
         });
-
-        // ── LIVE PURCHASE SOCIAL PROOF TOAST (Every 10 seconds) ──
-        (function() {
-            const buyers = [
-                { name: "Priya Sharma", city: "Delhi", time: "Just now" },
-                { name: "Aman Verma", city: "Lucknow", time: "1 min ago" },
-                { name: "Sneha Patel", city: "Ahmedabad", time: "Just now" },
-                { name: "Rahul Mehta", city: "Mumbai", time: "2 mins ago" },
-                { name: "Pooja Gupta", city: "Jaipur", time: "Just now" },
-                { name: "Vikram Joshi", city: "Pune", time: "3 mins ago" },
-                { name: "Neha Singh", city: "Bengaluru", time: "Just now" },
-                { name: "Rohan Das", city: "Kolkata", time: "2 mins ago" },
-                { name: "Divya Kapoor", city: "Chandigarh", time: "Just now" },
-                { name: "Aniket Nair", city: "Indore", time: "4 mins ago" },
-                { name: "Kavita Rao", city: "Hyderabad", time: "Just now" },
-                { name: "Deepak S.", city: "Bhopal", time: "1 min ago" }
-            ];
-
-            let buyerIndex = 0;
-            let toastTimer = null;
-            let isDismissed = false;
-
-            const toast = document.getElementById('purchase-toast');
-            const toastBuyer = document.getElementById('toast-buyer');
-            const toastTime = document.getElementById('toast-time');
-            const toastClose = document.getElementById('toast-close-btn');
-
-            if (!toast || !toastBuyer || !toastTime) return;
-
-            if (toastClose) {
-                toastClose.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    hideToast();
-                    isDismissed = true;
-                    if (toastTimer) clearTimeout(toastTimer);
-                });
-            }
-
-            // Click toast to open checkout
-            toast.addEventListener('click', function() {
-                if (typeof openCheckout === 'function') openCheckout();
-            });
-
-            function showToast() {
-                if (isDismissed) return;
-                const buyer = buyers[buyerIndex];
-                buyerIndex = (buyerIndex + 1) % buyers.length;
-
-                toastBuyer.textContent = `${buyer.name} (${buyer.city})`;
-                toastTime.textContent = buyer.time;
-
-                toast.classList.add('active');
-
-                // Keep visible for 4.5 seconds
-                setTimeout(() => {
-                    hideToast();
-                    // Schedule next popup after 10 seconds
-                    if (!isDismissed) {
-                        toastTimer = setTimeout(showToast, 10000);
-                    }
-                }, 4500);
-            }
-
-            function hideToast() {
-                toast.classList.remove('active');
-            }
-
-            // Initial start after 4 seconds of landing
-            toastTimer = setTimeout(showToast, 4000);
-        })();
     </script>
 
     <!-- RECENT PURCHASE SOCIAL PROOF TOAST -->
@@ -2870,31 +2800,31 @@
     <style>
         /* ── RECENT PURCHASE SOCIAL PROOF TOAST ── */
         .purchase-toast {
-            position: fixed;
-            bottom: 24px;
-            left: 24px;
-            z-index: 995;
-            background: rgba(10, 15, 30, 0.94);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            border: 1px solid rgba(197, 168, 128, 0.4);
-            border-radius: 14px;
-            padding: 10px 14px;
-            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), 0 0 20px rgba(197, 168, 128, 0.15);
-            max-width: 325px;
-            width: calc(100% - 32px);
-            transform: translateY(120%) scale(0.96);
+            position: fixed !important;
+            bottom: 24px !important;
+            left: 24px !important;
+            z-index: 99999 !important;
+            background: rgba(10, 15, 30, 0.95) !important;
+            backdrop-filter: blur(20px) !important;
+            -webkit-backdrop-filter: blur(20px) !important;
+            border: 1px solid rgba(197, 168, 128, 0.45) !important;
+            border-radius: 14px !important;
+            padding: 10px 14px !important;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65), 0 0 25px rgba(197, 168, 128, 0.2) !important;
+            max-width: 325px !important;
+            width: calc(100% - 32px) !important;
+            transform: translateY(140%) scale(0.95);
             opacity: 0;
             pointer-events: none;
-            transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s ease;
-            box-sizing: border-box;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+            box-sizing: border-box !important;
             cursor: pointer;
         }
 
         .purchase-toast.active {
-            transform: translateY(0) scale(1);
-            opacity: 1;
-            pointer-events: auto;
+            transform: translateY(0) scale(1) !important;
+            opacity: 1 !important;
+            pointer-events: auto !important;
         }
 
         .toast-content {
@@ -2909,7 +2839,7 @@
             border-radius: 6px;
             object-fit: cover;
             flex-shrink: 0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
             border: 1px solid rgba(197, 168, 128, 0.3);
         }
 
@@ -2990,16 +2920,99 @@
             color: #FFFFFF;
         }
 
-        /* Mobile adaptation: positioned safely above sticky bottom CTA bar */
+        /* Mobile adaptation: safely float above sticky bottom CTA bar */
         @media (max-width: 768px) {
             .purchase-toast {
-                left: 14px;
-                right: 14px;
-                bottom: 84px;
-                margin: 0 auto;
-                max-width: 320px;
+                left: 14px !important;
+                right: 14px !important;
+                bottom: 84px !important;
+                margin: 0 auto !important;
+                max-width: 325px !important;
             }
         }
     </style>
+
+    <script>
+        // ── LIVE PURCHASE SOCIAL PROOF TOAST (Every 10 seconds) ──
+        (function initPurchaseToast() {
+            function startToastLogic() {
+                const buyers = [
+                    { name: "Priya Sharma", city: "Delhi", time: "Just now" },
+                    { name: "Aman Verma", city: "Lucknow", time: "1 min ago" },
+                    { name: "Sneha Patel", city: "Ahmedabad", time: "Just now" },
+                    { name: "Rahul Mehta", city: "Mumbai", time: "2 mins ago" },
+                    { name: "Pooja Gupta", city: "Jaipur", time: "Just now" },
+                    { name: "Vikram Joshi", city: "Pune", time: "3 mins ago" },
+                    { name: "Neha Singh", city: "Bengaluru", time: "Just now" },
+                    { name: "Rohan Das", city: "Kolkata", time: "2 mins ago" },
+                    { name: "Divya Kapoor", city: "Chandigarh", time: "Just now" },
+                    { name: "Aniket Nair", city: "Indore", time: "4 mins ago" },
+                    { name: "Kavita Rao", city: "Hyderabad", time: "Just now" },
+                    { name: "Deepak S.", city: "Bhopal", time: "1 min ago" }
+                ];
+
+                let buyerIndex = 0;
+                let toastTimer = null;
+                let isDismissed = false;
+
+                const toast = document.getElementById('purchase-toast');
+                const toastBuyer = document.getElementById('toast-buyer');
+                const toastTime = document.getElementById('toast-time');
+                const toastClose = document.getElementById('toast-close-btn');
+
+                if (!toast || !toastBuyer || !toastTime) {
+                    console.warn("Purchase toast elements not found");
+                    return;
+                }
+
+                if (toastClose) {
+                    toastClose.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        hideToast();
+                        isDismissed = true;
+                        if (toastTimer) clearTimeout(toastTimer);
+                    });
+                }
+
+                // Click toast to open checkout
+                toast.addEventListener('click', function() {
+                    if (typeof openCheckout === 'function') openCheckout();
+                });
+
+                function showToast() {
+                    if (isDismissed) return;
+                    const buyer = buyers[buyerIndex];
+                    buyerIndex = (buyerIndex + 1) % buyers.length;
+
+                    toastBuyer.textContent = `${buyer.name} (${buyer.city})`;
+                    toastTime.textContent = buyer.time;
+
+                    toast.classList.add('active');
+
+                    // Keep visible for 4.5 seconds
+                    setTimeout(() => {
+                        hideToast();
+                        // Schedule next popup after 10 seconds
+                        if (!isDismissed) {
+                            toastTimer = setTimeout(showToast, 10000);
+                        }
+                    }, 4500);
+                }
+
+                function hideToast() {
+                    toast.classList.remove('active');
+                }
+
+                // Initial start after 2.5 seconds of page load
+                toastTimer = setTimeout(showToast, 2500);
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', startToastLogic);
+            } else {
+                startToastLogic();
+            }
+        })();
+    </script>
 </body>
 </html>
