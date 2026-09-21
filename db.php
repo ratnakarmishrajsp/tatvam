@@ -68,12 +68,6 @@ try {
             $insert->execute(["समृद्धि सूत्र (Wealth Principles)", "wealth-mindset", 199.00, 999.00, "files/wealth_principles_hindi.pdf", "wealth", "Paison ko lekar poor self-limiting beliefs aur money blocks aapki growth block kar rahe hain? Abundance habits seekhein.", "assets/wealth-cover.jpg"]);
             $insert->execute(["TATVAM Mega Mindset Bundle (4-in-1)", "mega-bundle", 199.00, 3996.00, "files/tattvam_mega_bundle.zip", "bundle", "Sari single guides ek bundle me paayein. Total Value ₹3,996 par abhi grab karein!", "assets/bundle-cover.jpg"]);
         }
-
-        // Overwrite title and description for positive-thinking product in existing database
-        $db->exec("UPDATE products SET title = 'Positive Thinking (नकारात्मक सोच से बाहर निकलें)', description = 'नकारात्मक सोच से बाहर निकलें और सकारात्मक, शांत एवं आत्मविश्वासी जीवन की ओर बढ़ें।' WHERE slug = 'positive-thinking'");
-        // Overwrite price of all products in existing database to 199.00
-        $db->exec("UPDATE products SET price = 199.00");
-
     } else {
         // Initialize MySQL Connection
         $dsn = "mysql:host=" . MYSQL_HOST . ";port=" . MYSQL_PORT . ";dbname=" . MYSQL_DB . ";charset=utf8mb4";

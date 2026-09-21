@@ -140,12 +140,12 @@ function syncLandingPagePrice($slug, $new_price, $new_orig_price) {
 // Handle editing an existing product
 if ($authenticated && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'edit_product') {
     $prod_id = (int)($_POST['id'] ?? 0);
-    $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_SPECIAL_CHARS);
-    $slug = filter_input(INPUT_POST, 'slug', FILTER_SANITIZE_SPECIAL_CHARS);
-    $category = filter_input(INPUT_POST, 'category', FILTER_SANITIZE_SPECIAL_CHARS);
-    $description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_SPECIAL_CHARS);
-    $price = (float)$_POST['price'];
-    $original_price = (float)$_POST['original_price'];
+    $title = trim($_POST['title'] ?? '');
+    $slug = trim($_POST['slug'] ?? '');
+    $category = trim($_POST['category'] ?? '');
+    $description = trim($_POST['description'] ?? '');
+    $price = (float)($_POST['price'] ?? 0);
+    $original_price = (float)($_POST['original_price'] ?? 0);
 
     if ($prod_id > 0 && !empty($title) && !empty($slug) && $price > 0) {
         try {
@@ -312,7 +312,7 @@ if ($authenticated) {
                     </div>
                 <?php endif; ?>
 
-                <form method="POST">
+                <form method="POST" action="index.php">
                     <input type="hidden" name="action" value="login">
                     <div class="form-group">
                         <input type="text" name="username" id="username" class="form-input" required placeholder=" ">
@@ -433,7 +433,7 @@ if ($authenticated) {
                     <!-- Add Product Card -->
                     <div class="glass-card" style="padding: var(--space-md);">
                         <h3 style="font-size: 1.5rem; margin-bottom: var(--space-sm); color: var(--color-gold);">Upload New E-Book</h3>
-                        <form method="POST" enctype="multipart/form-data">
+                        <form method="POST" action="index.php" enctype="multipart/form-data">
                             <input type="hidden" name="action" value="add_product">
                             
                             <div class="form-group">
@@ -529,7 +529,7 @@ if ($authenticated) {
                     <p style="font-size: 0.82rem; color: var(--color-text-slate);">Change price, title, or replace files. Updates take effect immediately.</p>
                 </div>
 
-                <form method="POST" enctype="multipart/form-data" id="edit-product-form">
+                <form method="POST" action="index.php" enctype="multipart/form-data" id="edit-product-form">
                     <input type="hidden" name="action" value="edit_product">
                     <input type="hidden" name="id" id="edit-id" value="">
 
