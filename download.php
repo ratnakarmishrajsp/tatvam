@@ -15,7 +15,7 @@ if (!$token) {
 
 try {
     // 1. Fetch order related to download token
-    $stmt = $db->prepare("SELECT orders.*, products.title, products.file_path FROM orders JOIN products ON orders.product_id = products.id WHERE orders.download_token = ?");
+    $stmt = $db->prepare("SELECT orders.*, products.title, products.file_path, products.slug as product_slug FROM orders JOIN products ON orders.product_id = products.id WHERE orders.download_token = ?");
     $stmt->execute([$token]);
     $order = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -85,7 +85,7 @@ try {
                         <?php foreach ($files as $idx => $f): ?>
                             <?php 
                                 $fext = strtoupper(pathinfo($f['file'], PATHINFO_EXTENSION));
-                                if (empty($fext)) $fext = 'FILE';
+                                if (empty($fext)) $fext = 'PDF';
                             ?>
                             <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); padding: 10px 14px; border-radius: var(--radius-sm); gap: 10px;">
                                 <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
@@ -141,81 +141,137 @@ try {
     $update_stmt = $db->prepare("UPDATE orders SET download_count = download_count + 1 WHERE id = ?");
     $update_stmt->execute([$order['id']]);
 
-    // 6. Expose Ebook File Bytes securely
-    $relative_file_path = $target_file;
-    $full_file_path = __DIR__ . '/' . $relative_file_path;
+    // 6. Robust File Resolution
+    $resolved_file_path = null;
+    $baseDir = __DIR__;
 
-    if (!file_exists($full_file_path)) {
-        // Localhost Sandboxed Sandbox Helper: Display a beautiful HTML page instead of raw PDF stream
-        $file_name = basename($relative_file_path);
+    // Check direct path
+    if (!empty($target_file) && file_exists($baseDir . '/' . $target_file)) {
+        $resolved_file_path = $baseDir . '/' . $target_file;
+    }
+
+    // Check in files/ directory without uploads/
+    if (!$resolved_file_path && !empty($target_file)) {
+        $baseName = basename($target_file);
+        if (file_exists($baseDir . '/files/' . $baseName)) {
+            $resolved_file_path = $baseDir . '/files/' . $baseName;
+        }
+    }
+
+    // Smart Resolution for Sanskar 30
+    $isSanskar = stripos($order['title'], 'sanskar') !== false 
+              || stripos($order['product_slug'] ?? '', 'sanskar') !== false
+              || stripos($target_file, 'sanskar') !== false 
+              || stripos($target_title, 'sanskar') !== false;
+
+    if (!$resolved_file_path && $isSanskar) {
+        if ($target_index === 1 || stripos($target_title, 'toolkit') !== false || stripos($target_title, 'parent') !== false || stripos($target_title, 'activity') !== false) {
+            $candidate = $baseDir . '/files/sanskar_30_parent_toolkit.pdf';
+            if (file_exists($candidate)) $resolved_file_path = $candidate;
+        } else {
+            $candidate = $baseDir . '/files/sanskar_30_main_ebook.pdf';
+            if (file_exists($candidate)) $resolved_file_path = $candidate;
+        }
+    }
+
+    // Match upload pattern if from admin upload (file_1_ is main, file_2_ is toolkit)
+    if (!$resolved_file_path && preg_match('/file_1_/i', $target_file)) {
+        if (file_exists($baseDir . '/files/sanskar_30_main_ebook.pdf')) {
+            $resolved_file_path = $baseDir . '/files/sanskar_30_main_ebook.pdf';
+        }
+    }
+    if (!$resolved_file_path && preg_match('/file_2_/i', $target_file)) {
+        if (file_exists($baseDir . '/files/sanskar_30_parent_toolkit.pdf')) {
+            $resolved_file_path = $baseDir . '/files/sanskar_30_parent_toolkit.pdf';
+        }
+    }
+
+    // Standard product fallbacks
+    if (!$resolved_file_path) {
+        $catalogueMap = [
+            'positive-thinking' => 'files/power_of_calm_hindi.pdf',
+            'stress-worry'      => 'files/anxiety_relief_hindi.pdf',
+            'habit-freedom'     => 'files/ultimate_discipline_hindi.pdf',
+            'wealth-mindset'    => 'files/wealth_principles_hindi.pdf',
+            'mega-bundle'       => 'files/tattvam_mega_bundle.zip',
+        ];
+        $slug = strtolower($order['product_slug'] ?? '');
+        if (isset($catalogueMap[$slug]) && file_exists($baseDir . '/' . $catalogueMap[$slug])) {
+            $resolved_file_path = $baseDir . '/' . $catalogueMap[$slug];
+        }
+    }
+
+    // If file still not found on disk, show a friendly support assistance card
+    if (!$resolved_file_path || !file_exists($resolved_file_path)) {
         ?>
         <!DOCTYPE html>
-        <html lang="en">
+        <html lang="hi">
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Download Sandbox Success | TATVAM</title>
+            <title>Download Help | TATVAM Support</title>
             <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
             <script src="https://unpkg.com/lucide@latest" defer></script>
             <link rel="stylesheet" href="styles.css">
         </head>
-        <body style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at center, var(--color-bg-2) 0%, var(--color-bg-1) 100%);">
-            <div class="bg-canvas"></div>
-            <div class="noise-overlay"></div>
-            
-            <div class="glass-card" style="width: 90%; max-width: 500px; text-align: center; padding: var(--space-lg); border-color: rgba(255, 255, 255, 0.15); z-index: 10; position: relative;">
-                <div style="font-size: 4rem; color: var(--color-success); margin-bottom: var(--space-sm); display: flex; justify-content: center;">
-                    <i data-lucide="check-circle" style="width: 64px; height: 64px; stroke-width: 2.5; color: var(--color-success);"></i>
+        <body style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at center, var(--color-bg-2) 0%, var(--color-bg-1) 100%); padding: 1.5rem 1rem;">
+            <div class="glass-card" style="width: 100%; max-width: 500px; text-align: center; padding: var(--space-lg); border-color: rgba(251, 191, 36, 0.4); position: relative; z-index: 10;">
+                <div style="font-size: 3.5rem; color: var(--color-gold); margin-bottom: var(--space-sm); display: flex; justify-content: center;">
+                    <i data-lucide="help-circle" style="width: 60px; height: 60px;"></i>
                 </div>
-                <h1 class="gradient-gold" style="font-size: 2.25rem; margin-bottom: var(--space-xs);">Sandbox Download Success!</h1>
-                
-                <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-light); padding: 1rem; border-radius: var(--radius-sm); margin: 1.5rem 0; text-align: left; font-size: 0.9rem;">
-                    <p style="margin-bottom: 0.5rem; color: var(--color-text-white);"><strong>Order Title:</strong> <?php echo htmlspecialchars($order['title']); ?></p>
-                    <p style="margin-bottom: 0.5rem; color: var(--color-text-white);"><strong>Item Title:</strong> <?php echo htmlspecialchars($target_title); ?></p>
-                    <p style="margin-bottom: 0.5rem; color: var(--color-text-white);"><strong>File Name:</strong> <?php echo htmlspecialchars($file_name); ?></p>
-                    <p style="color: var(--color-text-white);"><strong>Status:</strong> Sandbox Simulation Mode 🛠️</p>
+                <h1 class="gradient-gold" style="font-size: 1.85rem; margin-bottom: var(--space-xs);">फाइल डाउनलोड सहायता</h1>
+                <p style="font-size: 0.95rem; margin-bottom: var(--space-md); color: var(--color-text-slate);">
+                    आपकी ई-बुक फाइल तैयार हो रही है। यदि डाउनलोड तुरंत शुरू न हो, तो कृपया नीचे दिए गए लिंक से तुरंत WhatsApp या Email सहायता लें।
+                </p>
+                <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px;">
+                    <a href="mailto:support@tatvam.shop?subject=Download%20Help%20Order%20<?php echo urlencode($order['id']); ?>" class="btn btn-primary" style="width: 100%;">
+                        <i data-lucide="mail"></i> Email Support (support@tatvam.shop)
+                    </a>
+                    <a href="javascript:location.reload()" class="btn btn-secondary" style="width: 100%;">
+                        <i data-lucide="refresh-cw"></i> Retry Download (पुनः प्रयास करें)
+                    </a>
                 </div>
-
-                <p style="font-size: 0.95rem; margin-bottom: var(--space-md); color: var(--color-text-slate);">Yaha click karne par file download simulate ho gayi hai. Production mode me customer ko real file download milegi.</p>
-                
-                <?php if (count($files) > 1): ?>
-                    <a href="download.php?token=<?php echo urlencode($token); ?>" class="btn btn-primary" style="width: 100%; margin-bottom: 8px;"><i data-lucide="folder-down"></i> Back to Download Hub</a>
-                <?php endif; ?>
-                <a href="index.html" class="btn btn-secondary" style="width: 100%;"><i data-lucide="home"></i> Return to TATVAM Store</a>
             </div>
-
-            <script>
-                window.addEventListener('load', () => {
-                    if (typeof lucide !== 'undefined') {
-                        lucide.createIcons();
-                    }
-                });
-            </script>
+            <script>window.addEventListener('load', () => { if (typeof lucide !== 'undefined') lucide.createIcons(); });</script>
         </body>
         </html>
         <?php
         exit;
     }
 
-    // Serve real file
-    $file_name = basename($full_file_path);
-    $mime_type = function_exists('mime_content_type') ? @mime_content_type($full_file_path) : false;
+    // 7. Serve Real File Bytes directly to browser
+    $clean_filename = 'Ebook.pdf';
+    if ($isSanskar) {
+        $clean_filename = ($target_index === 1 || stripos($target_title, 'toolkit') !== false || stripos($target_title, 'parent') !== false)
+            ? 'SANSKAR 30 - Parent and Activity Toolkit.pdf'
+            : 'SANSKAR 30 - 30 Days of Good Habits and Strong Values.pdf';
+    } else {
+        $clean_filename = preg_replace('/[^A-Za-z0-9_\-\. ]/', '', $target_title);
+        $ext = pathinfo($resolved_file_path, PATHINFO_EXTENSION) ?: 'pdf';
+        if (!str_ends_with(strtolower($clean_filename), '.' . strtolower($ext))) {
+            $clean_filename .= '.' . $ext;
+        }
+    }
+
+    $mime_type = function_exists('mime_content_type') ? @mime_content_type($resolved_file_path) : 'application/pdf';
+    if (!$mime_type) $mime_type = 'application/pdf';
+    $filesize = filesize($resolved_file_path);
+
+    // Clear all existing buffers to prevent corrupted PDF streams
+    while (ob_get_level()) {
+        ob_end_clean();
+    }
 
     header('Content-Description: File Transfer');
-    header('Content-Type: ' . ($mime_type ? $mime_type : 'application/octet-stream'));
-    header('Content-Disposition: attachment; filename="' . $file_name . '"');
+    header('Content-Type: ' . $mime_type);
+    header('Content-Disposition: attachment; filename="' . $clean_filename . '"; filename*="UTF-8\'\'' . rawurlencode($clean_filename) . '"');
+    header('Content-Transfer-Encoding: binary');
     header('Expires: 0');
-    header('Cache-Control: must-revalidate');
+    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
     header('Pragma: public');
-    header('Content-Length: ' . filesize($full_file_path));
-    
-    // Clear buffer
-    if (ob_get_level()) {
-        ob_clean();
-    }
-    flush();
-    
-    readfile($full_file_path);
+    header('Content-Length: ' . $filesize);
+
+    readfile($resolved_file_path);
     exit;
 
 } catch (Exception $e) {
