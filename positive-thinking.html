@@ -2287,7 +2287,7 @@
         <div class="container">
             <div class="offer-main-box">
                 <span class="badge-tag">Complete Package</span>
-                <h2 class="section-title" style="margin-bottom: 8px;">₹199 में आपको क्या मिलेगा?</h2>
+                <h2 class="section-title" style="margin-bottom: 8px;"><span class="offer-title-price">₹199</span> में आपको क्या मिलेगा?</h2>
                 <p class="section-subtext" style="color: var(--color-text-body);">एक बार खरीदें और आजीवन अपने पास रखें — कोई सब्सक्रिप्शन नहीं, कोई छुपा शुल्क नहीं।</p>
 
                 <div class="offer-items-grid">
@@ -2603,6 +2603,53 @@
     <!-- ── SCRIPTS ── -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // 0. Live Price Sync from Database
+            window.tatvamLivePrice = 199;
+            (function syncLivePrice() {
+                fetch('get-product.php?slug=positive-thinking')
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data && data.success && data.price) {
+                            const p = Math.round(data.price);
+                            const orig = Math.round(data.original_price || (p * 5));
+                            const savings = Math.max(0, orig - p);
+                            window.tatvamLivePrice = p;
+
+                            // 1. Static price text spans
+                            document.querySelectorAll('.nav-price, .hero-current-price, .offer-final-price, .sticky-bar-price, .modal-summary-price, .offer-title-price, .toast-price').forEach(el => {
+                                el.textContent = '₹' + p;
+                            });
+
+                            document.querySelectorAll('.hero-original-price').forEach(el => {
+                                el.textContent = '₹' + orig;
+                            });
+
+                            document.querySelectorAll('.hero-savings-pill').forEach(el => {
+                                el.textContent = `₹${savings} बचाएं (One-Time)`;
+                            });
+
+                            // 2. CTA button texts containing ₹...
+                            document.querySelectorAll('.trigger-checkout').forEach(btn => {
+                                if (btn.innerHTML.includes('₹')) {
+                                    btn.innerHTML = btn.innerHTML.replace(/₹\s*\d+/g, '₹' + p);
+                                }
+                            });
+
+                            const submitBtn = document.getElementById('checkout-submit-btn');
+                            if (submitBtn && submitBtn.innerHTML.includes('₹')) {
+                                submitBtn.innerHTML = submitBtn.innerHTML.replace(/₹\s*\d+/g, '₹' + p);
+                            }
+
+                            // 3. Desktop pill price
+                            const pillPrice = document.querySelector('.desktop-floating-cta span');
+                            if (pillPrice && pillPrice.parentElement) {
+                                pillPrice.parentElement.innerHTML = `₹${p} <del style="font-size: 0.75rem; color: var(--color-text-subtle); font-weight: 400;">₹${orig}</del>`;
+                            }
+                        }
+                    })
+                    .catch(err => console.debug('Live price sync notice:', err));
+            })();
+
             // 1. Initialize Icons
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
@@ -2758,7 +2805,7 @@
                                 fbq('track', 'InitiateCheckout', {
                                     content_name: data.product_name || 'Positive Thinking Guide',
                                     currency: 'INR',
-                                    value: 199.00
+                                    value: window.tatvamLivePrice || 199.00
                                 });
                             }
 
@@ -2798,7 +2845,7 @@
                     <span class="toast-live-dot"></span>
                     <span class="toast-buyer" id="toast-buyer">Priya S. (Delhi)</span>
                 </div>
-                <div class="toast-product">Purchased Positive Thinking (₹199)</div>
+                <div class="toast-product">Purchased Positive Thinking (<span class="toast-price">₹199</span>)</div>
                 <div class="toast-meta">
                     <span class="toast-verified">✓ Verified Buyer</span>
                     <span class="toast-time" id="toast-time">Just now</span>
