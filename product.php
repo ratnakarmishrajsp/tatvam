@@ -12,6 +12,18 @@ if (empty($slug)) {
     exit;
 }
 
+$clean_slug = strtolower(str_replace(['-', '_', ' '], '', (string)$slug));
+if ($clean_slug === 'sanskar30') {
+    try {
+        $stmt = $db->prepare("SELECT * FROM products WHERE slug = ? OR slug = 'Sanskar30' OR slug = 'sanskar-30' OR slug = 'sanskar30' OR title LIKE '%Sanskar%' LIMIT 1");
+        $stmt->execute([$slug]);
+        $product = $stmt->fetch(PDO::FETCH_ASSOC);
+    } catch(Exception $e) {}
+
+    include __DIR__ . '/sanskar30.php';
+    exit;
+}
+
 try {
     $stmt = $db->prepare("SELECT * FROM products WHERE slug = ?");
     $stmt->execute([$slug]);

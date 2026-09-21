@@ -8,6 +8,8 @@
 
     # Pretty URL routing: route /positive-thinking to positive-thinking.html
     RewriteRule ^positive-thinking/?$ positive-thinking.html [L,QSA]
+    RewriteRule ^sanskar30/?$ sanskar30.php [L,QSA]
+    RewriteRule ^sanskar-30/?$ sanskar30.php [L,QSA]
     
     # Fallback extensionless HTML routing
     RewriteCond %{REQUEST_FILENAME} !-f

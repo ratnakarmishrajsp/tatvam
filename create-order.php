@@ -30,6 +30,12 @@ try {
     $stmt->execute([$product_slug]);
     $product = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    if (!$product && strtolower(str_replace(['-', '_', ' '], '', (string)$product_slug)) === 'sanskar30') {
+        $stmt = $db->prepare("SELECT * FROM products WHERE slug = 'Sanskar30' OR slug = 'sanskar-30' OR slug = 'sanskar30' OR title LIKE '%Sanskar%' LIMIT 1");
+        $stmt->execute();
+        $product = $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
     if (!$product) {
         echo json_encode(['success' => false, 'message' => 'Selected product not found.']);
         exit;
