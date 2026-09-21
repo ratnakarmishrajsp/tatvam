@@ -61,31 +61,60 @@ if ($authenticated && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['act
         }
     }
 
-    // Handle PDF file upload
-    $file_path = '';
-    if (isset($_FILES['ebook_file']) && $_FILES['ebook_file']['error'] === UPLOAD_ERR_OK) {
-        $file_name = basename($_FILES['ebook_file']['name']);
-        $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-        if ($file_ext === 'pdf' || $file_ext === 'zip') {
-            $dest_dir = __DIR__ . '/../files/uploads/';
-            if (!file_exists($dest_dir)) mkdir($dest_dir, 0755, true);
-            $new_name = uniqid('ebook_', true) . '.' . $file_ext;
-            if (move_uploaded_file($_FILES['ebook_file']['tmp_name'], $dest_dir . $new_name)) {
-                $file_path = 'files/uploads/' . $new_name;
+    // Handle Multiple E-Book / Toolkit Files upload
+    $allowed_file_exts = ['pdf', 'zip', 'epub', 'mobi', 'mp3', 'docx', 'doc', 'xlsx', 'csv', 'png', 'jpg'];
+    $uploaded_files = [];
+    $dest_dir = __DIR__ . '/../files/uploads/';
+    if (!file_exists($dest_dir)) mkdir($dest_dir, 0755, true);
+
+    // 1. Array inputs: ebook_files[] & file_titles[]
+    if (isset($_FILES['ebook_files']) && is_array($_FILES['ebook_files']['name'])) {
+        $count = count($_FILES['ebook_files']['name']);
+        for ($i = 0; $i < $count; $i++) {
+            if ($_FILES['ebook_files']['error'][$i] === UPLOAD_ERR_OK) {
+                $file_name = basename($_FILES['ebook_files']['name'][$i]);
+                $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+                if (in_array($file_ext, $allowed_file_exts)) {
+                    $new_name = uniqid('file_' . ($i + 1) . '_', true) . '.' . $file_ext;
+                    if (move_uploaded_file($_FILES['ebook_files']['tmp_name'][$i], $dest_dir . $new_name)) {
+                        $f_title = !empty($_POST['file_titles'][$i]) ? trim($_POST['file_titles'][$i]) : ($i === 0 ? 'Main eBook Guide' : 'Bonus Toolkit #' . ($i + 1));
+                        $uploaded_files[] = [
+                            'title' => $f_title,
+                            'file'  => 'files/uploads/' . $new_name
+                        ];
+                    }
+                }
             }
         }
     }
+
+    // 2. Single legacy file fallback: ebook_file
+    if (isset($_FILES['ebook_file']) && $_FILES['ebook_file']['error'] === UPLOAD_ERR_OK) {
+        $file_name = basename($_FILES['ebook_file']['name']);
+        $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+        if (in_array($file_ext, $allowed_file_exts)) {
+            $new_name = uniqid('ebook_', true) . '.' . $file_ext;
+            if (move_uploaded_file($_FILES['ebook_file']['tmp_name'], $dest_dir . $new_name)) {
+                $uploaded_files[] = [
+                    'title' => 'Main eBook Guide',
+                    'file'  => 'files/uploads/' . $new_name
+                ];
+            }
+        }
+    }
+
+    $file_path = !empty($uploaded_files) ? json_encode($uploaded_files, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) : '';
 
     if (!empty($title) && !empty($slug) && !empty($file_path)) {
         try {
             $stmt = $db->prepare("INSERT INTO products (title, slug, price, original_price, file_path, category, description, cover_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             $stmt->execute([$title, $slug, $price, $original_price, $file_path, $category, $description, $cover_image_path]);
-            $product_success = "Product added successfully!";
+            $product_success = "Product added successfully with " . count($uploaded_files) . " attached file(s)!";
         } catch (Exception $e) {
             $product_error = "Error adding product: " . $e->getMessage();
         }
     } else {
-        $product_error = "Title, slug, and Ebook file are required.";
+        $product_error = "Title, slug, and at least one E-Book file are required.";
     }
 }
 
@@ -172,18 +201,84 @@ if ($authenticated && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['act
                     }
                 }
 
-                // Handle PDF / ZIP file upload if provided
+                $allowed_file_exts = ['pdf', 'zip', 'epub', 'mobi', 'mp3', 'docx', 'doc', 'xlsx', 'csv', 'png', 'jpg'];
+                $dest_dir = __DIR__ . '/../files/uploads/';
+                if (!file_exists($dest_dir)) mkdir($dest_dir, 0755, true);
+
+                $updated_files = [];
+
+                // 1. Process existing files preserved or updated in edit modal
+                if (isset($_POST['existing_file_paths']) && is_array($_POST['existing_file_paths'])) {
+                    foreach ($_POST['existing_file_paths'] as $idx => $curr_path) {
+                        $curr_path = trim($curr_path);
+                        if (empty($curr_path)) continue;
+                        $ftitle = !empty($_POST['existing_file_titles'][$idx]) ? trim($_POST['existing_file_titles'][$idx]) : 'Guide File';
+
+                        // Check if a replacement file was uploaded for this item
+                        if (isset($_FILES['replace_files']['name'][$idx]) && $_FILES['replace_files']['error'][$idx] === UPLOAD_ERR_OK) {
+                            $r_name = basename($_FILES['replace_files']['name'][$idx]);
+                            $r_ext = strtolower(pathinfo($r_name, PATHINFO_EXTENSION));
+                            if (in_array($r_ext, $allowed_file_exts)) {
+                                $r_new_name = uniqid('file_rep_', true) . '.' . $r_ext;
+                                if (move_uploaded_file($_FILES['replace_files']['tmp_name'][$idx], $dest_dir . $r_new_name)) {
+                                    $curr_path = 'files/uploads/' . $r_new_name;
+                                }
+                            }
+                        }
+
+                        $updated_files[] = [
+                            'title' => $ftitle,
+                            'file'  => $curr_path
+                        ];
+                    }
+                }
+
+                // 2. Process newly attached files added in edit modal
+                if (isset($_FILES['new_ebook_files']) && is_array($_FILES['new_ebook_files']['name'])) {
+                    $new_count = count($_FILES['new_ebook_files']['name']);
+                    for ($j = 0; $j < $new_count; $j++) {
+                        if ($_FILES['new_ebook_files']['error'][$j] === UPLOAD_ERR_OK) {
+                            $new_fname = basename($_FILES['new_ebook_files']['name'][$j]);
+                            $new_ext = strtolower(pathinfo($new_fname, PATHINFO_EXTENSION));
+                            if (in_array($new_ext, $allowed_file_exts)) {
+                                $new_dest_name = uniqid('file_extra_', true) . '.' . $new_ext;
+                                if (move_uploaded_file($_FILES['new_ebook_files']['tmp_name'][$j], $dest_dir . $new_dest_name)) {
+                                    $new_title = !empty($_POST['new_file_titles'][$j]) ? trim($_POST['new_file_titles'][$j]) : 'Bonus Toolkit #' . ($j + 1);
+                                    $updated_files[] = [
+                                        'title' => $new_title,
+                                        'file'  => 'files/uploads/' . $new_dest_name
+                                    ];
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // 3. Fallback: single ebook_file input if submitted
                 if (isset($_FILES['ebook_file']) && $_FILES['ebook_file']['error'] === UPLOAD_ERR_OK) {
                     $file_name = basename($_FILES['ebook_file']['name']);
                     $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-                    if (in_array($file_ext, ['pdf', 'zip'])) {
-                        $dest_dir = __DIR__ . '/../files/uploads/';
-                        if (!file_exists($dest_dir)) mkdir($dest_dir, 0755, true);
+                    if (in_array($file_ext, $allowed_file_exts)) {
                         $new_name = uniqid('ebook_', true) . '.' . $file_ext;
                         if (move_uploaded_file($_FILES['ebook_file']['tmp_name'], $dest_dir . $new_name)) {
-                            $file_path = 'files/uploads/' . $new_name;
+                            if (!empty($updated_files)) {
+                                $updated_files[0]['file'] = 'files/uploads/' . $new_name;
+                            } else {
+                                $updated_files[] = [
+                                    'title' => 'Main Guide',
+                                    'file'  => 'files/uploads/' . $new_name
+                                ];
+                            }
                         }
                     }
+                }
+
+                // If updated_files has content, store as JSON.
+                if (!empty($updated_files)) {
+                    $file_path = json_encode($updated_files, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+                } elseif (!isset($_POST['files_managed'])) {
+                    // Retain untouched file_path if files manager wasn't rendered
+                    $file_path = $current_product['file_path'];
                 }
 
                 $update_stmt = $db->prepare("UPDATE products SET title = ?, slug = ?, price = ?, original_price = ?, file_path = ?, category = ?, description = ?, cover_image = ? WHERE id = ?");
@@ -192,7 +287,7 @@ if ($authenticated && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['act
                 // Synchronize price with landing page
                 syncLandingPagePrice($slug, $price, $original_price);
 
-                $product_success = "E-Book '{$title}' updated successfully! Price set to ₹{$price} and synced with landing page.";
+                $product_success = "E-Book '{$title}' updated successfully! Price set to ₹{$price} (" . count($updated_files) . " file(s) saved).";
             } else {
                 $product_error = "Product not found.";
             }
@@ -267,6 +362,10 @@ if ($authenticated) {
 
         $products_stmt = $db->query("SELECT * FROM products ORDER BY id DESC");
         $all_products = $products_stmt->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($all_products as &$p) {
+            $p['files'] = getProductFiles($p['file_path'], $p['title']);
+        }
+        unset($p);
 
     } catch (Exception $e) {
         $db_error = "Failed to query analytical metrics: " . $e->getMessage();
@@ -472,9 +571,30 @@ if ($authenticated) {
                                 <input type="file" name="cover_image" accept="image/*" required style="font-size: 0.9rem; color: var(--color-text-slate);">
                             </div>
 
+                            <!-- Multiple Files Upload Container -->
                             <div class="form-group" style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-light); padding: var(--space-sm); border-radius: var(--radius-sm);">
-                                <label style="display: block; font-size: 0.8rem; color: var(--color-text-slate); margin-bottom: var(--space-xxs);">PDF Guide File or Bundle ZIP</label>
-                                <input type="file" name="ebook_file" accept=".pdf,.zip" required style="font-size: 0.9rem; color: var(--color-text-slate);">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                    <label style="font-size: 0.85rem; font-weight: 600; color: #fff; margin: 0;">Files / Downloads (eBook + Toolkits)</label>
+                                    <button type="button" onclick="addNewUploadFileRow()" style="background: rgba(251, 191, 36, 0.15); border: 1px solid rgba(251, 191, 36, 0.4); color: var(--color-gold); border-radius: 4px; padding: 4px 8px; font-size: 0.75rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+                                        <i data-lucide="plus" style="width: 12px; height: 12px;"></i> + Add Another File
+                                    </button>
+                                </div>
+                                <p style="font-size: 0.75rem; color: var(--color-text-slate); margin-bottom: 10px;">Aap ek sath multiple files add kar sakte hain (e.g. Main eBook PDF + Bonus Toolkit/Workbook).</p>
+                                
+                                <div id="upload-files-container" style="display: flex; flex-direction: column; gap: 8px;">
+                                    <div class="upload-file-row" style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); padding: 8px 10px; border-radius: var(--radius-sm);">
+                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: center;">
+                                            <div>
+                                                <label style="display: block; font-size: 0.7rem; color: var(--color-text-slate); margin-bottom: 2px;">File 1 Title:</label>
+                                                <input type="text" name="file_titles[]" value="Main E-Book Guide" class="form-input" style="padding: 6px 10px; font-size: 0.8rem;" required>
+                                            </div>
+                                            <div>
+                                                <label style="display: block; font-size: 0.7rem; color: var(--color-text-slate); margin-bottom: 2px;">Select File (PDF, ZIP, etc.):</label>
+                                                <input type="file" name="ebook_files[]" accept=".pdf,.zip,.epub,.docx,.mp3" required style="font-size: 0.8rem; color: var(--color-text-slate); width: 100%;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <button type="submit" class="btn btn-primary" style="width: 100%;">
@@ -488,6 +608,10 @@ if ($authenticated) {
                         <h3 style="font-size: 1.5rem; margin-bottom: var(--space-sm); color: var(--color-primary);">Current Catalog</h3>
                         <div style="display: flex; flex-direction: column; gap: var(--space-sm);">
                             <?php foreach ($all_products as $prod): ?>
+                                <?php 
+                                    $p_files = $prod['files'] ?? getProductFiles($prod['file_path'], $prod['title']);
+                                    $file_count = count($p_files);
+                                ?>
                                 <div class="glass-card" style="display: flex; gap: var(--space-sm); align-items: center; padding: var(--space-xs);">
                                     <img src="../<?php echo htmlspecialchars($prod['cover_image']); ?>" onerror="this.src='../assets/book-cover.jpg';" style="width: 50px; height: 70px; object-fit: cover; border-radius: 4px; box-shadow: 0 4px 8px rgba(0,0,0,0.3);">
                                     <div style="flex: 1; min-width: 0;">
@@ -496,8 +620,13 @@ if ($authenticated) {
                                             <span style="font-size: 0.75rem; color: var(--color-text-slate); background: rgba(255,255,255,0.05); padding: 2px 6px; border-radius: 3px;"><?php echo htmlspecialchars($prod['slug']); ?></span>
                                             <span style="font-size: 0.75rem; color: var(--color-text-slate);"><?php echo htmlspecialchars($prod['category']); ?></span>
                                         </div>
-                                        <div style="font-size: 0.9rem; font-weight: bold; color: var(--color-gold); margin-top: 4px;">
-                                            ₹<?php echo $prod['price']; ?> <del style="font-weight: normal; font-size: 0.75rem; color: var(--color-text-slate); margin-left: 4px;">₹<?php echo $prod['original_price']; ?></del>
+                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px; flex-wrap: wrap; gap: 4px;">
+                                            <div style="font-size: 0.9rem; font-weight: bold; color: var(--color-gold);">
+                                                ₹<?php echo $prod['price']; ?> <del style="font-weight: normal; font-size: 0.75rem; color: var(--color-text-slate); margin-left: 4px;">₹<?php echo $prod['original_price']; ?></del>
+                                            </div>
+                                            <span style="font-size: 0.72rem; color: var(--color-gold); background: rgba(251,191,36,0.12); border: 1px solid rgba(251,191,36,0.25); border-radius: 3px; padding: 1px 6px; display: inline-flex; align-items: center; gap: 3px;" title="<?php echo htmlspecialchars(implode(', ', array_column($p_files, 'title'))); ?>">
+                                                <i data-lucide="paperclip" style="width: 10px; height: 10px;"></i> <?php echo $file_count . ' ' . ($file_count === 1 ? 'File' : 'Files'); ?>
+                                            </span>
                                         </div>
                                     </div>
                                     <div style="display: flex; gap: 6px; align-items: center;">
@@ -576,14 +705,29 @@ if ($authenticated) {
                         <input type="file" name="cover_image" accept="image/*" style="font-size: 0.85rem; color: var(--color-text-slate);">
                     </div>
 
-                    <!-- PDF / ZIP Guide File Preview & Replacement -->
+                    <input type="hidden" name="files_managed" value="1">
+
+                    <!-- PDF / ZIP Attached Files & Toolkits Management -->
                     <div class="form-group" style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-light); padding: var(--space-sm); border-radius: var(--radius-sm);">
-                        <div style="margin-bottom: 6px;">
-                            <span style="display: block; font-size: 0.85rem; font-weight: 600; color: #fff;">PDF Guide / ZIP Bundle File</span>
-                            <span style="font-size: 0.75rem; color: var(--color-gold);">Current file: <code id="edit-current-file" style="color: var(--color-text-slate);">None</code></span>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
+                            <div>
+                                <span style="display: block; font-size: 0.85rem; font-weight: 600; color: #fff;">Attached Files & Toolkits</span>
+                                <span style="font-size: 0.72rem; color: var(--color-text-slate);">Manage main guide and companion bonus files:</span>
+                            </div>
+                            <button type="button" onclick="addEditNewFileRow()" style="background: rgba(251, 191, 36, 0.15); border: 1px solid rgba(251, 191, 36, 0.4); color: var(--color-gold); border-radius: 4px; padding: 4px 8px; font-size: 0.75rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+                                <i data-lucide="plus" style="width: 12px; height: 12px;"></i> + Attach Another File
+                            </button>
                         </div>
-                        <label style="display: block; font-size: 0.75rem; color: var(--color-text-slate); margin-bottom: 4px;">Upload new PDF/ZIP file (leave empty to keep current file):</label>
-                        <input type="file" name="ebook_file" accept=".pdf,.zip" style="font-size: 0.85rem; color: var(--color-text-slate);">
+
+                        <!-- Current Attached Files List -->
+                        <div id="edit-files-list" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px;">
+                            <!-- Populated dynamically by openEditModal() -->
+                        </div>
+
+                        <!-- Newly Attached Files in Edit Modal -->
+                        <div id="edit-new-files-container" style="display: flex; flex-direction: column; gap: 8px;">
+                            <!-- Dynamically added when clicking + Attach Another File -->
+                        </div>
                     </div>
 
                     <div style="display: flex; gap: var(--space-sm); margin-top: var(--space-sm);">
@@ -630,6 +774,69 @@ if ($authenticated) {
             }
         }
 
+        function escapeHtml(text) {
+            if (!text) return '';
+            return String(text)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // Add dynamic row in "Upload New E-Book" form
+        function addNewUploadFileRow() {
+            const container = document.getElementById('upload-files-container');
+            const rowCount = container.querySelectorAll('.upload-file-row').length + 1;
+            const row = document.createElement('div');
+            row.className = 'upload-file-row';
+            row.style.cssText = 'background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); padding: 8px 10px; border-radius: var(--radius-sm); position: relative;';
+            row.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <span style="font-size: 0.72rem; color: var(--color-gold); font-weight: 600;">File #${rowCount} (Bonus / Toolkit)</span>
+                    <button type="button" onclick="this.closest('.upload-file-row').remove()" style="background: none; border: none; color: #EF4444; cursor: pointer; font-size: 0.75rem; padding: 0 4px;" title="Remove this file">&times; Remove</button>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: center;">
+                    <div>
+                        <label style="display: block; font-size: 0.7rem; color: var(--color-text-slate); margin-bottom: 2px;">File Title:</label>
+                        <input type="text" name="file_titles[]" placeholder="e.g. Companion Toolkit / Action Sheets" class="form-input" style="padding: 6px 10px; font-size: 0.8rem;" required>
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.7rem; color: var(--color-text-slate); margin-bottom: 2px;">Select File (PDF, ZIP, etc.):</label>
+                        <input type="file" name="ebook_files[]" accept=".pdf,.zip,.epub,.docx,.mp3" required style="font-size: 0.8rem; color: var(--color-text-slate); width: 100%;">
+                    </div>
+                </div>
+            `;
+            container.appendChild(row);
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+
+        // Add dynamic row in "Edit E-Book" modal
+        function addEditNewFileRow() {
+            const container = document.getElementById('edit-new-files-container');
+            const row = document.createElement('div');
+            row.className = 'edit-new-file-row';
+            row.style.cssText = 'background: rgba(251, 191, 36, 0.05); border: 1px dashed rgba(251, 191, 36, 0.35); border-radius: var(--radius-sm); padding: 8px 10px;';
+            row.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <span style="font-size: 0.72rem; color: var(--color-gold); font-weight: 600;">+ New Attached File / Bonus</span>
+                    <button type="button" onclick="this.closest('.edit-new-file-row').remove()" style="background: none; border: none; color: #EF4444; font-size: 0.75rem; cursor: pointer;">&times; Remove</button>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                    <div>
+                        <label style="display: block; font-size: 0.7rem; color: var(--color-text-slate); margin-bottom: 2px;">File Title:</label>
+                        <input type="text" name="new_file_titles[]" placeholder="e.g. Companion Toolkit / Workbook" class="form-input" style="padding: 6px 10px; font-size: 0.8rem;" required>
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.7rem; color: var(--color-text-slate); margin-bottom: 2px;">Select File (PDF, ZIP, etc.):</label>
+                        <input type="file" name="new_ebook_files[]" accept=".pdf,.zip,.epub,.docx,.mp3" required style="font-size: 0.75rem; color: var(--color-text-slate); width: 100%;">
+                    </div>
+                </div>
+            `;
+            container.appendChild(row);
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+
         function openEditModal(prod) {
             document.getElementById('edit-id').value = prod.id || '';
             document.getElementById('edit-title').value = prod.title || '';
@@ -643,9 +850,56 @@ if ($authenticated) {
             if (coverPreview) {
                 coverPreview.src = '../' + (prod.cover_image || 'assets/book-cover.jpg');
             }
-            const currentFile = document.getElementById('edit-current-file');
-            if (currentFile) {
-                currentFile.textContent = prod.file_path || 'None';
+
+            // Populate Attached Files
+            const filesList = document.getElementById('edit-files-list');
+            filesList.innerHTML = '';
+            const newFilesContainer = document.getElementById('edit-new-files-container');
+            newFilesContainer.innerHTML = '';
+
+            let files = prod.files || [];
+            if ((!files || files.length === 0) && prod.file_path) {
+                try {
+                    const parsed = JSON.parse(prod.file_path);
+                    if (Array.isArray(parsed)) files = parsed;
+                } catch (e) {
+                    files = [{ title: 'Main eBook', file: prod.file_path }];
+                }
+            }
+
+            if (!files || files.length === 0) {
+                filesList.innerHTML = '<p style="font-size: 0.75rem; color: var(--color-text-slate); padding: 4px 0;">No files currently attached.</p>';
+            } else {
+                files.forEach((f, idx) => {
+                    const fTitle = f.title || ('File #' + (idx + 1));
+                    const fPath = f.file || '';
+                    const fName = fPath.split('/').pop() || fPath;
+
+                    const div = document.createElement('div');
+                    div.className = 'edit-file-item';
+                    div.style.cssText = 'background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-sm); padding: 8px 10px;';
+                    div.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                            <span style="font-size: 0.72rem; color: var(--color-gold); font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+                                <i data-lucide="file-text" style="width: 12px; height: 12px;"></i> File #${idx + 1}
+                            </span>
+                            <button type="button" onclick="this.closest('.edit-file-item').remove()" style="background: none; border: none; color: #EF4444; font-size: 0.72rem; cursor: pointer;" title="Remove this file">&times; Delete File</button>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                            <div>
+                                <label style="display: block; font-size: 0.68rem; color: var(--color-text-slate); margin-bottom: 2px;">File Title / Label:</label>
+                                <input type="text" name="existing_file_titles[${idx}]" value="${escapeHtml(fTitle)}" class="form-input" style="padding: 6px 10px; font-size: 0.8rem;" required>
+                                <input type="hidden" name="existing_file_paths[${idx}]" value="${escapeHtml(fPath)}">
+                            </div>
+                            <div>
+                                <div style="font-size: 0.68rem; color: var(--color-text-slate); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Current: <code style="color: #93C5FD; font-size: 0.68rem;">${escapeHtml(fName)}</code></div>
+                                <label style="display: block; font-size: 0.65rem; color: var(--color-text-slate); margin-bottom: 2px;">Replace file (optional):</label>
+                                <input type="file" name="replace_files[${idx}]" accept=".pdf,.zip,.epub,.docx,.mp3" style="font-size: 0.72rem; color: var(--color-text-slate); width: 100%;">
+                            </div>
+                        </div>
+                    `;
+                    filesList.appendChild(div);
+                });
             }
 
             const modal = document.getElementById('edit-product-modal');

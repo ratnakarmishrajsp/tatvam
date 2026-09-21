@@ -14,6 +14,7 @@ $customer_name = "";
 $customer_email = "";
 $product_title = "";
 $download_link = "";
+$product_files = [];
 
 // 1. Cashfree Payment Verification (Cashfree redirects back with ?order_id=tatvam_xxx in the URL)
 if (!empty($_GET['order_id']) || !empty($_POST['cf_order_id'])) {
@@ -22,7 +23,7 @@ if (!empty($_GET['order_id']) || !empty($_POST['cf_order_id'])) {
 
     if ($cf_order_id) {
         // Fetch order from DB
-        $stmt = $db->prepare("SELECT orders.*, products.title, products.slug FROM orders JOIN products ON orders.product_id = products.id WHERE orders.razorpay_order_id = ?");
+        $stmt = $db->prepare("SELECT orders.*, products.title, products.slug, products.file_path FROM orders JOIN products ON orders.product_id = products.id WHERE orders.razorpay_order_id = ?");
         $stmt->execute([$cf_order_id]);
         $order = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -34,6 +35,7 @@ if (!empty($_GET['order_id']) || !empty($_POST['cf_order_id'])) {
                 $customer_email = $order['customer_email'];
                 $product_title  = $order['title'];
                 $download_link  = SITE_URL . "/download.php?token=" . $order['download_token'];
+                $product_files  = getProductFiles($order['file_path'] ?? '', $product_title);
             } else {
                 // Verify payment status via Cashfree API
                 $api_base = (defined('CASHFREE_ENV') && CASHFREE_ENV === 'TEST')
@@ -87,6 +89,7 @@ if (!empty($_GET['order_id']) || !empty($_POST['cf_order_id'])) {
                     $customer_email = $order['customer_email'];
                     $product_title  = $order['title'];
                     $download_link  = SITE_URL . "/download.php?token=" . $download_token;
+                    $product_files  = getProductFiles($order['file_path'] ?? '', $product_title);
 
                     // Send email notification to user
                     sendEbookEmail($customer_email, $customer_name, $product_title, $download_link);
@@ -113,7 +116,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($razorpay_order_id) {
         // Fetch order details
-        $stmt = $db->prepare("SELECT orders.*, products.title, products.slug FROM orders JOIN products ON orders.product_id = products.id WHERE orders.razorpay_order_id = ?");
+        $stmt = $db->prepare("SELECT orders.*, products.title, products.slug, products.file_path FROM orders JOIN products ON orders.product_id = products.id WHERE orders.razorpay_order_id = ?");
         $stmt->execute([$razorpay_order_id]);
         $order = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -149,6 +152,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $customer_email = $order['customer_email'];
                 $product_title = $order['title'];
                 $download_link = SITE_URL . "/download.php?token=" . $download_token;
+                $product_files = getProductFiles($order['file_path'] ?? '', $product_title);
 
                 // Send email notification to user
                 sendEbookEmail($customer_email, $customer_name, $product_title, $download_link);
@@ -211,10 +215,35 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <p style="font-size: 0.95rem; margin-bottom: var(--space-md); color: var(--color-text-slate);">Humne download link aapke registered email address par send kar di hai. Agar email inbox me na dikhe, to please <strong>Spam folder</strong> check karein.</p>
             
-            <div style="display: flex; flex-direction: column; gap: var(--space-sm);">
-                <a href="<?php echo htmlspecialchars($download_link); ?>" class="btn btn-primary" style="width: 100%;"><i data-lucide="download"></i> Instant Download Ebook</a>
-                <a href="index.html" class="btn btn-secondary" style="width: 100%;">Return to Store</a>
-            </div>
+            <?php if (!empty($product_files) && count($product_files) > 1): ?>
+                <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: var(--space-md); text-align: left;">
+                    <div style="font-size: 0.85rem; color: var(--color-gold); font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 6px;">
+                        <i data-lucide="layers" style="width: 16px; height: 16px;"></i> Included Downloads (<?php echo count($product_files); ?> Files):
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <?php foreach ($product_files as $idx => $f): ?>
+                            <a href="<?php echo htmlspecialchars($download_link . '&file=' . $idx); ?>" class="btn btn-primary" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; font-size: 0.9rem;">
+                                <span style="display: inline-flex; align-items: center; gap: 8px; text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                    <i data-lucide="file-down" style="width: 16px; height: 16px; flex-shrink: 0;"></i>
+                                    <?php echo htmlspecialchars($f['title']); ?>
+                                </span>
+                                <span style="font-size: 0.75rem; background: rgba(0,0,0,0.25); padding: 3px 8px; border-radius: 4px; flex-shrink: 0;">Download</span>
+                            </a>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: var(--space-sm);">
+                    <a href="<?php echo htmlspecialchars($download_link); ?>" class="btn btn-secondary" style="width: 100%;">
+                        <i data-lucide="external-link"></i> Open Full Download Hub
+                    </a>
+                    <a href="index.html" class="btn btn-secondary" style="width: 100%;">Return to Store</a>
+                </div>
+            <?php else: ?>
+                <div style="display: flex; flex-direction: column; gap: var(--space-sm);">
+                    <a href="<?php echo htmlspecialchars($download_link); ?>" class="btn btn-primary" style="width: 100%;"><i data-lucide="download"></i> Instant Download Ebook</a>
+                    <a href="index.html" class="btn btn-secondary" style="width: 100%;">Return to Store</a>
+                </div>
+            <?php endif; ?>
         <?php else: ?>
             <div style="font-size: 3.5rem; color: #EF4444; margin-bottom: var(--space-sm);">
                 <i data-lucide="alert-triangle" style="width: 64px; height: 64px; filter: drop-shadow(0 0 15px #EF4444);"></i>

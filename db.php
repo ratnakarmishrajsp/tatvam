@@ -77,3 +77,49 @@ try {
 } catch (PDOException $e) {
     die("Database Connection Failed: " . $e->getMessage());
 }
+
+/**
+ * Normalizes product file_path into a structured array of files.
+ * Supports both single file string (e.g. 'files/guide.pdf') and JSON array of multiple files.
+ * Returns: [ ['title' => 'Main Guide', 'file' => 'files/...'], ... ]
+ */
+function getProductFiles($file_path, $default_title = 'Main eBook') {
+    if (empty($file_path)) {
+        return [];
+    }
+
+    if (is_string($file_path)) {
+        $trimmed = trim($file_path);
+        if (str_starts_with($trimmed, '[') || str_starts_with($trimmed, '{')) {
+            $decoded = json_decode($trimmed, true);
+            if (is_array($decoded)) {
+                $files = [];
+                foreach ($decoded as $item) {
+                    if (is_array($item) && !empty($item['file'])) {
+                        $files[] = [
+                            'title' => !empty($item['title']) ? trim($item['title']) : $default_title,
+                            'file'  => trim($item['file'])
+                        ];
+                    } elseif (is_string($item) && !empty($item)) {
+                        $files[] = [
+                            'title' => $default_title,
+                            'file'  => trim($item)
+                        ];
+                    }
+                }
+                if (!empty($files)) {
+                    return $files;
+                }
+            }
+        }
+    }
+
+    // Single file fallback
+    return [
+        [
+            'title' => $default_title,
+            'file'  => (string)$file_path
+        ]
+    ];
+}
+
