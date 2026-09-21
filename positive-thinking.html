@@ -2602,53 +2602,61 @@
 
     <!-- ── SCRIPTS ── -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // 0. Live Price Sync from Database
-            window.tatvamLivePrice = 199;
-            (function syncLivePrice() {
-                fetch('get-product.php?slug=positive-thinking')
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data && data.success && data.price) {
-                            const p = Math.round(data.price);
-                            const orig = Math.round(data.original_price || (p * 5));
-                            const savings = Math.max(0, orig - p);
-                            window.tatvamLivePrice = p;
+        // 0. Live Price Sync from Database (Instant, No-Cache)
+        window.tatvamLivePrice = 199;
+        function syncLivePrice() {
+            fetch('get-product.php?slug=positive-thinking&_t=' + new Date().getTime(), { cache: 'no-store' })
+                .then(res => res.json())
+                .then(data => {
+                    if (data && data.success && data.price) {
+                        const p = Math.round(data.price);
+                        const orig = Math.round(data.original_price || (p * 5));
+                        const savings = Math.max(0, orig - p);
+                        window.tatvamLivePrice = p;
 
-                            // 1. Static price text spans
-                            document.querySelectorAll('.nav-price, .hero-current-price, .offer-final-price, .sticky-bar-price, .modal-summary-price, .offer-title-price, .toast-price').forEach(el => {
-                                el.textContent = '₹' + p;
-                            });
+                        // 1. Static price text spans
+                        document.querySelectorAll('.nav-price, .hero-current-price, .offer-final-price, .sticky-bar-price, .modal-summary-price, .offer-title-price, .toast-price').forEach(el => {
+                            el.textContent = '₹' + p;
+                        });
 
-                            document.querySelectorAll('.hero-original-price').forEach(el => {
-                                el.textContent = '₹' + orig;
-                            });
+                        document.querySelectorAll('.hero-original-price').forEach(el => {
+                            el.textContent = '₹' + orig;
+                        });
 
-                            document.querySelectorAll('.hero-savings-pill').forEach(el => {
-                                el.textContent = `₹${savings} बचाएं (One-Time)`;
-                            });
+                        document.querySelectorAll('.hero-savings-pill').forEach(el => {
+                            el.textContent = `₹${savings} बचाएं (One-Time)`;
+                        });
 
-                            // 2. CTA button texts containing ₹...
-                            document.querySelectorAll('.trigger-checkout').forEach(btn => {
-                                if (btn.innerHTML.includes('₹')) {
-                                    btn.innerHTML = btn.innerHTML.replace(/₹\s*\d+/g, '₹' + p);
-                                }
-                            });
-
-                            const submitBtn = document.getElementById('checkout-submit-btn');
-                            if (submitBtn && submitBtn.innerHTML.includes('₹')) {
-                                submitBtn.innerHTML = submitBtn.innerHTML.replace(/₹\s*\d+/g, '₹' + p);
+                        // 2. CTA button texts containing ₹...
+                        document.querySelectorAll('.trigger-checkout').forEach(btn => {
+                            if (btn.innerHTML.includes('₹')) {
+                                btn.innerHTML = btn.innerHTML.replace(/₹\s*\d+/g, '₹' + p);
                             }
+                        });
 
-                            // 3. Desktop pill price
-                            const pillPrice = document.querySelector('.desktop-floating-cta span');
-                            if (pillPrice && pillPrice.parentElement) {
-                                pillPrice.parentElement.innerHTML = `₹${p} <del style="font-size: 0.75rem; color: var(--color-text-subtle); font-weight: 400;">₹${orig}</del>`;
-                            }
+                        const submitBtn = document.getElementById('checkout-submit-btn');
+                        if (submitBtn && submitBtn.innerHTML.includes('₹')) {
+                            submitBtn.innerHTML = submitBtn.innerHTML.replace(/₹\s*\d+/g, '₹' + p);
                         }
-                    })
-                    .catch(err => console.debug('Live price sync notice:', err));
-            })();
+
+                        // 3. Desktop pill price
+                        const pillPrice = document.querySelector('.desktop-floating-cta span');
+                        if (pillPrice && pillPrice.parentElement) {
+                            pillPrice.parentElement.innerHTML = `₹${p} <del style="font-size: 0.75rem; color: var(--color-text-subtle); font-weight: 400;">₹${orig}</del>`;
+                        }
+
+                        if (typeof lucide !== 'undefined') {
+                            lucide.createIcons();
+                        }
+                    }
+                })
+                .catch(err => console.debug('Live price sync notice:', err));
+        }
+
+        syncLivePrice();
+
+        document.addEventListener('DOMContentLoaded', () => {
+            syncLivePrice();
 
             // 1. Initialize Icons
             if (typeof lucide !== 'undefined') {
