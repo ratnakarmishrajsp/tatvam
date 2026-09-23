@@ -16,7 +16,7 @@ $display_price = isset($product['price']) ? (int)$product['price'] : 199;
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SANSKAR 30 • Tatvam | 30 Days of Good Habits, Strong Values & Happy Growing</title>
   <meta name="description" content="हर दिन सिर्फ 10-15 मिनट में अपने बच्चे को सिखाएं 30 अनमोल भारतीय संस्कार और अच्छी आदतें। 72 पृष्ठों की मुख्य ई-बुक और 43 पृष्ठों का पैरेंट टूलकिट सिर्फ ₹199 में।">
-  <link rel="stylesheet" href="styles-sanskar.css?v=2.3">
+  <link rel="stylesheet" href="styles-sanskar.css?v=2.4">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -131,7 +131,7 @@ $display_price = isset($product['price']) ? (int)$product['price'] : 199;
           <!-- 3D Main Book Mockup (FRONT & CENTER - Hardcover Edition) -->
           <div class="book-mockup" title="SANSKAR 30 • 30 Days of Good Habits, Strong Values & Happy Growing">
             <div class="book-front">
-              <img src="assets/ebook-cover.jpg?v=2.3" alt="SANSKAR 30 Ebook Cover" class="book-cover-img" loading="eager" />
+              <img src="assets/ebook-cover.jpg?v=2.4" alt="SANSKAR 30 Ebook Cover" class="book-cover-img" loading="eager" />
               <div class="book-spine"></div>
               <div class="book-gutter"></div>
               <div class="book-gloss"></div>
@@ -284,7 +284,7 @@ $display_price = isset($product['price']) ? (int)$product['price'] : 199;
           <span class="featured-pill">मुख्य ई-बुक</span>
           <div>
             <div class="bundle-card-header" style="align-items: center; gap: 14px;">
-              <img src="assets/ebook-cover.jpg?v=2.3" alt="SANSKAR 30 eBook" style="width: 52px; height: 78px; object-fit: cover; border-radius: 4px; box-shadow: -2px 4px 12px rgba(0,0,0,0.25); border: 1.5px solid rgba(217, 119, 6, 0.35); flex-shrink: 0;" />
+              <img src="assets/ebook-cover.jpg?v=2.4" alt="SANSKAR 30 eBook" style="width: 52px; height: 78px; object-fit: cover; border-radius: 4px; box-shadow: -2px 4px 12px rgba(0,0,0,0.25); border: 1.5px solid rgba(217, 119, 6, 0.35); flex-shrink: 0;" />
               <div>
                 <h3 class="bundle-card-title">SANSKAR 30 सचित्र ई-बुक</h3>
                 <span class="bundle-card-tag">72 फुल-कलर प्रीमियम पेजेस</span>
@@ -793,7 +793,7 @@ $display_price = isset($product['price']) ? (int)$product['price'] : 199;
   <div class="preview-panel" id="tab-cover" style="display: block; width: 100%;">
     <div class="cover-showcase-container">
       <div class="cover-showcase-image-box">
-        <img src="assets/ebook-cover.jpg?v=2.3" alt="SANSKAR 30 Full Ebook Cover" loading="lazy" />
+        <img src="assets/ebook-cover.jpg?v=2.4" alt="SANSKAR 30 Full Ebook Cover" loading="lazy" />
       </div>
       <div class="cover-showcase-details">
         <span class="cover-showcase-pill">TATVAM COLLECTOR'S EDITION</span>
@@ -1408,6 +1408,6 @@ $display_price = isset($product['price']) ? (int)$product['price'] : 199;
   </div>
 
   <!-- JavaScript Interactions -->
-  <script src="script-sanskar.js?v=2.3"></script>
+  <script src="script-sanskar.js?v=2.4"></script>
 </body>
 </html>
