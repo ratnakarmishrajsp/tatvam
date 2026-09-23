@@ -1353,7 +1353,7 @@ $display_price = isset($product['price']) ? (int)$product['price'] : 199;
           TATVAM
         </div>
         <div style="font-size: 12px; margin-top: 4px; color: #94A3B8;">
-          Tatvam.shop • All Rights Reserved © 2026
+          Tatvam.shop • Legal Entity: Sushmakar Mishra • All Rights Reserved © 2026
         </div>
         <div style="font-size: 11px; margin-top: 2px; color: #64748B;">
           Brand Watermark: Tatvam.shop | Empowering Indian Families
@@ -1365,6 +1365,8 @@ $display_price = isset($product['price']) ? (int)$product['price'] : 199;
         <a href="#solution">समाधान</a>
         <a href="#bundle">बंडल</a>
         <a href="#faq">सवाल-जवाब</a>
+        <a href="contact-us.html">संपर्क करें (Contact Us)</a>
+        <a href="tel:+917880761504">📞 7880761504</a>
         <a href="mailto:support@tatvam.shop">सहयोग: support@tatvam.shop</a>
       </div>
     </div>
