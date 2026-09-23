@@ -1,14 +1,13 @@
-<?php
-if (!isset($product) || empty($product)) {
+﻿<?php
+if (!isset($product)) {
     require_once __DIR__ . '/db.php';
     try {
-        $stmt = $db->prepare("SELECT * FROM products WHERE slug = 'Sanskar30' OR slug = 'sanskar-30' OR slug = 'sanskar30' OR title LIKE '%Sanskar%' LIMIT 1");
-        $stmt->execute();
+        $stmt = $db->prepare("SELECT * FROM products WHERE slug = ?");
+        $stmt->execute(['Sanskar30']);
         $product = $stmt->fetch(PDO::FETCH_ASSOC);
     } catch(Exception $e) {}
 }
 $display_price = isset($product['price']) ? (int)$product['price'] : 199;
-$product_slug = isset($product['slug']) ? $product['slug'] : 'Sanskar30';
 ?>
 <!DOCTYPE html>
 <html lang="hi">
@@ -45,7 +44,7 @@ $product_slug = isset($product['slug']) ? $product['slug'] : 'Sanskar30';
       </nav>
 
       <div class="nav-cta">
-        <button type="button" class="btn btn-primary checkout-trigger" data-product-slug="<?php echo htmlspecialchars($product_slug); ?>" style="padding: 9px 20px; font-size: 14.5px;">अभी पाएं — ₹<?php echo $display_price; ?></button>
+        <button type="button" class="btn btn-primary checkout-trigger" data-product-slug="Sanskar30" style="padding: 9px 20px; font-size: 14.5px;">अभी पाएं — ₹<?php echo $display_price; ?></button>
       </div>
     </div>
   </header>
@@ -89,7 +88,7 @@ $product_slug = isset($product['slug']) ? $product['slug'] : 'Sanskar30';
             </div>
           </div>
 
-          <button type="button" class="btn btn-primary btn-large btn-pulse checkout-trigger" data-product-slug="<?php echo htmlspecialchars($product_slug); ?>" style="width: 100%;">पूरा डिजिटल बंडल तुरंत डाउनलोड करें — ₹<?php echo $display_price; ?> ➔</button>
+          <button type="button" class="btn btn-primary btn-large btn-pulse checkout-trigger" data-product-slug="Sanskar30" style="width: 100%;">पूरा डिजिटल बंडल तुरंत डाउनलोड करें — ₹<?php echo $display_price; ?> ➔</button>
 
           <div class="price-security-note">
             <span>⚡ सुरक्षित UPI / कार्ड पेमेंट</span>
@@ -105,306 +104,57 @@ $product_slug = isset($product['slug']) ? $product['slug'] : 'Sanskar30';
       <div class="mockup-wrapper">
         <div class="bundle-stage">
           
-          <!-- 3D Main Book Mockup -->
-          <div class="book-mockup">
-            <div class="book-spine"></div>
-            <div class="book-cover-content">
-              <div class="mockup-brand">TATVAM PRESENTS</div>
-              <div>
-                <div class="mockup-title">SANSKAR 30</div>
-                <div class="mockup-subtitle">30 Days of Good Habits, Strong Values & Happy Growing</div>
+          <!-- 3D Toolkit Mockup (Companion Workbook - Layered Behind) -->
+          <div class="toolkit-mockup" title="Parent & Activity Toolkit (43 Pages)">
+            <div class="toolkit-cover-content">
+              <div class="toolkit-header">
+                <span class="mockup-brand">TATVAM BUNDLE COMPANION</span>
+                <span class="toolkit-badge">43 PAGES</span>
               </div>
-              
-              <div class="mockup-hero-art">
-                <svg class="hero-cover-svg" viewBox="0 0 600 420" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="coverSky" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#0F2D3C"/>
-      <stop offset="45%" stop-color="#1E4E63"/>
-      <stop offset="80%" stop-color="#D97706"/>
-      <stop offset="100%" stop-color="#FBBF24"/>
-    </linearGradient>
-    <linearGradient id="groundGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#2D5A27"/>
-      <stop offset="100%" stop-color="#143313"/>
-    </linearGradient>
-    <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#FEF08A" stop-opacity="0.9"/>
-      <stop offset="40%" stop-color="#F59E0B" stop-opacity="0.4"/>
-      <stop offset="100%" stop-color="#D97706" stop-opacity="0"/>
-    </radialGradient>
-    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="6" result="blur"/>
-      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-    </filter>
-  </defs>
-
-  <!-- Sky -->
-  <rect width="600" height="420" fill="url(#coverSky)" rx="16"/>
-
-  <!-- Warm Evening Sun Glow -->
-  <circle cx="300" cy="240" r="140" fill="url(#sunGlow)"/>
-
-  <!-- Distant Hill Silhouettes -->
-  <path d="M0,320 Q150,260 320,290 T600,270 L600,420 L0,420 Z" fill="#20402E" opacity="0.75"/>
-  <path d="M0,340 Q220,300 420,330 T600,310 L600,420 L0,420 Z" fill="url(#groundGrad)"/>
-
-  <!-- Traditional Indian Courtyard Verandah / Banyan Canopy -->
-  <path d="M-20,90 Q120,40 280,70 T620,50 L620,-10 L-20,-10 Z" fill="#143313" opacity="0.8"/>
-  <path d="M20,120 Q160,70 300,100 T580,80 L580,-10 L20,-10 Z" fill="#254F22" opacity="0.6"/>
-
-  <!-- Hanging Warm Lanterns -->
-  <g filter="url(#softGlow)">
-    <circle cx="160" cy="140" r="18" fill="#FEF08A" opacity="0.6"/>
-    <circle cx="440" cy="130" r="18" fill="#FEF08A" opacity="0.6"/>
-  </g>
-  <!-- Lantern 1 -->
-  <line x1="160" y1="70" x2="160" y2="130" stroke="#FDE68A" stroke-width="2"/>
-  <rect x="150" y="130" width="20" height="24" rx="4" fill="#E06D28"/>
-  <rect x="154" y="134" width="12" height="16" rx="2" fill="#FEF08A"/>
-  <!-- Lantern 2 -->
-  <line x1="440" y1="60" x2="440" y2="120" stroke="#FDE68A" stroke-width="2"/>
-  <rect x="430" y="120" width="20" height="24" rx="4" fill="#E06D28"/>
-  <rect x="434" y="124" width="12" height="16" rx="2" fill="#FEF08A"/>
-
-  <!-- Grandparents in Background (Dadu & Dadi sitting on porch bench) -->
-  <g transform="translate(110, 240)">
-    <!-- Bench -->
-    <rect x="0" y="70" width="130" height="8" rx="3" fill="#854D0E"/>
-    <rect x="10" y="78" width="6" height="24" fill="#5A3207"/>
-    <rect x="114" y="78" width="6" height="24" fill="#5A3207"/>
-    <!-- Dadu (Grandpa) -->
-    <circle cx="35" cy="30" r="14" fill="#E0A96D"/>
-    <!-- White hair -->
-    <path d="M22,28 C22,16 48,16 48,28 C45,20 25,20 22,28 Z" fill="#E2E8F0"/>
-    <!-- Spectacles -->
-    <circle cx="31" cy="29" r="4" fill="none" stroke="#64748B" stroke-width="1.5"/>
-    <circle cx="39" cy="29" r="4" fill="none" stroke="#64748B" stroke-width="1.5"/>
-    <line x1="35" y1="29" x2="35" y2="29" stroke="#64748B" stroke-width="1.5"/>
-    <!-- Kurta -->
-    <path d="M20,44 C20,44 26,42 35,42 C44,42 50,44 50,44 L48,72 L22,72 Z" fill="#F8FAFC"/>
-
-    <!-- Dadi (Grandma) -->
-    <circle cx="85" cy="32" r="13" fill="#E0A96D"/>
-    <!-- Grey hair bun -->
-    <circle cx="97" cy="30" r="7" fill="#CBD5E1"/>
-    <!-- Saree pallu -->
-    <path d="M72,44 C72,44 80,42 88,42 C96,42 100,44 100,44 L98,72 L72,72 Z" fill="#D8B4E2"/>
-    <path d="M74,32 C74,24 94,22 96,34 L88,55 L74,45 Z" fill="#B388D6" opacity="0.85"/>
-  </g>
-
-  <!-- Parents in Warm Embrace Behind Children -->
-  <g transform="translate(370, 235)">
-    <!-- Papa -->
-    <circle cx="35" cy="28" r="14" fill="#E0A96D"/>
-    <!-- Dark neat hair -->
-    <path d="M21,26 C21,14 49,14 49,26 C45,18 25,18 21,26 Z" fill="#1C1917"/>
-    <!-- Shirt -->
-    <path d="M20,42 C20,42 26,40 35,40 C44,40 50,42 50,42 L50,75 L20,75 Z" fill="#0284C7"/>
-    <!-- Maa -->
-    <circle cx="75" cy="30" r="13" fill="#E0A96D"/>
-    <circle cx="87" cy="32" r="8" fill="#1C1917"/> <!-- Hair bun -->
-    <!-- Saree -->
-    <path d="M62,43 C62,43 70,41 78,41 C86,41 90,43 90,43 L88,75 L62,75 Z" fill="#F43F5E"/>
-    <path d="M63,30 C63,22 84,20 87,32 L80,56 L63,45 Z" fill="#E11D48" opacity="0.9"/>
-  </g>
-
-  <!-- Central Hero Children: AARAV & ANAYA Reading Together -->
-  <!-- Aarav (Left child) -->
-  <g transform="translate(205, 275)">
-    <!-- Body -->
-    <rect x="20" y="44" width="34" height="42" rx="8" fill="#E59834"/> <!-- Ochre T-shirt -->
-    <rect x="24" y="80" width="26" height="24" rx="4" fill="#1E3A8A"/> <!-- Navy shorts -->
-    <!-- Head -->
-    <circle cx="37" cy="24" r="18" fill="#E0A96D"/>
-    <!-- Messy lively dark hair -->
-    <path d="M19,22 C18,8 32,4 42,8 C50,12 55,20 54,26 C50,22 46,24 43,21 C40,24 35,21 31,23 C27,21 23,24 19,22 Z" fill="#1C1917"/>
-    <!-- Happy Face -->
-    <circle cx="32" cy="24" r="2.2" fill="#1C1917"/>
-    <circle cx="43" cy="24" r="2.2" fill="#1C1917"/>
-    <path d="M34,29 Q37.5,34 41,29" fill="none" stroke="#9A3412" stroke-width="2" stroke-linecap="round"/>
-    <!-- Hands holding book -->
-    <circle cx="48" cy="58" r="5" fill="#E0A96D"/>
-  </g>
-
-  <!-- The Open Golden Book between them -->
-  <g transform="translate(270, 318)">
-    <ellipse cx="30" cy="18" rx="34" ry="12" fill="#FEF3C7"/>
-    <path d="M-2,14 Q30,6 62,14 L60,34 Q30,26 -2,34 Z" fill="#FFFBEB" stroke="#D97706" stroke-width="1.5"/>
-    <line x1="30" y1="10" x2="30" y2="30" stroke="#B45309" stroke-width="1.5"/>
-    <!-- Glowing Golden rays from book -->
-    <path d="M10,8 L-4,-10 M30,4 L30,-14 M50,8 L64,-10" stroke="#FBBF24" stroke-width="2.5" stroke-linecap="round" opacity="0.85"/>
-  </g>
-
-  <!-- Anaya (Right child) -->
-  <g transform="translate(325, 280)">
-    <!-- Body -->
-    <path d="M18,44 L46,44 L54,84 L10,84 Z" fill="#FACC15"/> <!-- Marigold yellow dress -->
-    <path d="M14,84 L50,84 L52,87 L12,87 Z" fill="#0D9488"/> <!-- Teal hem -->
-    <!-- Head -->
-    <circle cx="32" cy="23" r="17" fill="#F3C99F"/>
-    <!-- Hair with two pigtails and teal bows -->
-    <path d="M15,22 C15,8 30,5 40,9 C48,13 49,22 48,26 C44,20 37,20 32,22 C26,20 20,22 15,22 Z" fill="#1C1917"/>
-    <circle cx="12" cy="22" r="7" fill="#1C1917"/> <!-- Left pigtail -->
-    <circle cx="51" cy="22" r="7" fill="#1C1917"/> <!-- Right pigtail -->
-    <circle cx="14" cy="25" r="3" fill="#0D9488"/> <!-- Teal bow -->
-    <circle cx="49" cy="25" r="3" fill="#0D9488"/> <!-- Teal bow -->
-    <!-- Sweet Face -->
-    <circle cx="28" cy="24" r="2.2" fill="#1C1917"/>
-    <circle cx="38" cy="24" r="2.2" fill="#1C1917"/>
-    <path d="M30,29 Q33,33 36,29" fill="none" stroke="#9A3412" stroke-width="2" stroke-linecap="round"/>
-    <circle cx="25" cy="27" r="2.5" fill="#FDA4AF" opacity="0.6"/> <!-- Rosy cheek -->
-    <circle cx="41" cy="27" r="2.5" fill="#FDA4AF" opacity="0.6"/>
-  </g>
-
-  <!-- Puppy Moti (Curled happily in front) -->
-  <g transform="translate(210, 355)">
-    <!-- Body -->
-    <ellipse cx="28" cy="18" rx="16" ry="11" fill="#FFFFFF"/>
-    <!-- Golden brown spot -->
-    <circle cx="32" cy="16" r="7" fill="#D97706"/>
-    <!-- Head -->
-    <circle cx="16" cy="12" r="10" fill="#FFFFFF"/>
-    <!-- Floppy ear -->
-    <ellipse cx="11" cy="13" rx="4" ry="7" fill="#B45309"/>
-    <!-- Eye & nose -->
-    <circle cx="16" cy="11" r="1.5" fill="#1C1917"/>
-    <circle cx="12" cy="14" r="1.5" fill="#1C1917"/>
-    <!-- Wagging tail -->
-    <path d="M42,16 Q48,10 50,14" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
-  </g>
-
-  <!-- Golden Sparkles / Stars in Sky -->
-  <g fill="#FEF08A" opacity="0.8">
-    <polygon points="120,45 122,50 127,52 122,54 120,59 118,54 113,52 118,50"/>
-    <polygon points="480,50 482,55 487,57 482,59 480,64 478,59 473,57 478,55"/>
-    <polygon points="260,35 261,39 265,40 261,41 260,45 259,41 255,40 259,39"/>
-    <polygon points="360,40 361,44 365,45 361,46 360,50 359,46 355,45 359,44"/>
-  </g>
-  </svg>
+              <div class="toolkit-title-group">
+                <div class="toolkit-title">PARENT &amp; ACTIVITY TOOLKIT</div>
+                <div class="toolkit-subtitle">डेली कन्वर्सेशन &amp; 50 स्क्रीन-फ्री एक्टिविटी गाइड</div>
               </div>
-
+              <div class="toolkit-art-box">
+                <div class="toolkit-feature-tag">💬 30 डिनर बातचीत सवाल</div>
+                <div class="toolkit-feature-tag">🎨 50 स्क्रीन-फ्री खेल व पहेलियाँ</div>
+                <div class="toolkit-feature-tag">⭐ 30-डे संस्कर स्टार ट्रैकर</div>
+                <div class="toolkit-feature-tag">📜 संस्कार रत्न रॉयल सर्टिफिकेट</div>
+              </div>
               <div class="mockup-footer">
-                <span>72 Full-Color Pages</span>
+                <span>Print-Ready A4 Worksheets</span>
                 <span>Tatvam.shop</span>
               </div>
             </div>
           </div>
 
-          <!-- 3D Toolkit Mockup (Behind Right) -->
-          <div class="toolkit-mockup">
-            <div class="toolkit-cover-content">
-              <div class="mockup-brand">PARENT & ACTIVITY TOOLKIT</div>
-              <div style="font-size: 18px; font-weight: 800; color: #FFFFFF; line-height: 1.15;">
-                डेली कन्वर्सेशन & एक्टिविटी गाइड
-              </div>
-              <div style="height: 140px; border-radius: 6px; overflow: hidden; border: 1px solid rgba(255,255,255,0.3);">
-                <svg class="toolkit-cover-svg" viewBox="0 0 600 380" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="tkSky" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#0E7490"/>
-      <stop offset="60%" stop-color="#155E75"/>
-      <stop offset="100%" stop-color="#F59E0B"/>
-    </linearGradient>
-  </defs>
-  <rect width="600" height="380" fill="url(#tkSky)" rx="16"/>
-
-  <!-- Warm Living Room Table Setting -->
-  <path d="M0,280 Q300,260 600,280 L600,380 L0,380 Z" fill="#F8FAFC" opacity="0.95"/>
-  <!-- Wooden Table Surface -->
-  <path d="M40,290 L560,290 L580,380 L20,380 Z" fill="#78350F" opacity="0.85"/>
-  <rect x="50" y="295" width="500" height="80" rx="6" fill="#B45309" opacity="0.9"/>
-
-  <!-- Family sitting around table (Maa, Papa, Aarav, Anaya) -->
-  <!-- Papa -->
-  <g transform="translate(100, 160)">
-    <circle cx="40" cy="40" r="22" fill="#E0A96D"/>
-    <path d="M18,36 C18,18 62,18 62,36 C55,25 25,25 18,36 Z" fill="#1C1917"/>
-    <path d="M15,62 C15,62 25,58 40,58 C55,58 65,62 65,62 L62,130 L18,130 Z" fill="#0284C7"/>
-  </g>
-
-  <!-- Maa -->
-  <g transform="translate(420, 160)">
-    <circle cx="40" cy="40" r="21" fill="#E0A96D"/>
-    <circle cx="60" cy="42" r="12" fill="#1C1917"/>
-    <path d="M16,62 C16,62 26,58 40,58 C54,58 64,62 64,62 L62,130 L16,130 Z" fill="#E11D48"/>
-  </g>
-
-  <!-- Aarav -->
-  <g transform="translate(200, 210)">
-    <circle cx="35" cy="35" r="20" fill="#E0A96D"/>
-    <path d="M15,32 C14,16 30,12 40,16 C50,20 55,30 53,36 C49,32 45,34 42,31 C39,34 34,31 30,33 C25,31 20,34 15,32 Z" fill="#1C1917"/>
-    <circle cx="29" cy="35" r="2.5" fill="#1C1917"/>
-    <circle cx="41" cy="35" r="2.5" fill="#1C1917"/>
-    <path d="M31,42 Q35,47 39,42" fill="none" stroke="#9A3412" stroke-width="2"/>
-    <rect x="15" y="55" width="40" height="45" rx="6" fill="#E59834"/>
-  </g>
-
-  <!-- Anaya -->
-  <g transform="translate(320, 215)">
-    <circle cx="35" cy="35" r="19" fill="#F3C99F"/>
-    <path d="M16,33 C16,18 32,15 44,19 C52,23 53,33 52,37 C48,31 41,31 35,33 C29,31 22,33 16,33 Z" fill="#1C1917"/>
-    <circle cx="12" cy="33" r="8" fill="#1C1917"/>
-    <circle cx="56" cy="33" r="8" fill="#1C1917"/>
-    <circle cx="15" cy="37" r="3.5" fill="#0D9488"/>
-    <circle cx="53" cy="37" r="3.5" fill="#0D9488"/>
-    <circle cx="30" cy="36" r="2.5" fill="#1C1917"/>
-    <circle cx="41" cy="36" r="2.5" fill="#1C1917"/>
-    <path d="M32,43 Q36,47 40,43" fill="none" stroke="#9A3412" stroke-width="2"/>
-    <rect x="18" y="54" width="36" height="46" rx="6" fill="#FACC15"/>
-  </g>
-
-  <!-- Toolkit Cards on the Table -->
-  <!-- Card 1: Conversation Card -->
-  <g transform="translate(130, 310) rotate(-6)">
-    <rect x="0" y="0" width="70" height="50" rx="4" fill="#FFFFFF" stroke="#0E7490" stroke-width="2"/>
-    <rect x="6" y="6" width="58" height="8" rx="2" fill="#0E7490"/>
-    <circle cx="35" cy="28" r="10" fill="#FEF08A"/>
-    <text x="35" y="32" font-size="10" text-anchor="middle" fill="#78350F" font-weight="bold">?</text>
-  </g>
-
-  <!-- Card 2: Star Chart / Tracker -->
-  <g transform="translate(240, 305)">
-    <rect x="0" y="0" width="120" height="60" rx="4" fill="#FFFFFF" stroke="#D97706" stroke-width="2"/>
-    <rect x="10" y="8" width="100" height="8" rx="2" fill="#FEF3C7"/>
-    <!-- Tiny Stars -->
-    <g fill="#F59E0B">
-      <polygon points="25,28 27,33 32,34 28,37 29,42 25,39 21,42 22,37 18,34 23,33"/>
-      <polygon points="50,28 52,33 57,34 53,37 54,42 50,39 46,42 47,37 43,34 48,33"/>
-      <polygon points="75,28 77,33 82,34 78,37 79,42 75,39 71,42 72,37 68,34 73,33"/>
-      <polygon points="100,28 102,33 107,34 103,37 104,42 100,39 96,42 97,37 93,34 98,33"/>
-    </g>
-  </g>
-
-  <!-- Card 3: Certificate / Gold Badge -->
-  <g transform="translate(390, 310) rotate(8)">
-    <rect x="0" y="0" width="75" height="52" rx="4" fill="#FFFBEB" stroke="#B45309" stroke-width="2"/>
-    <circle cx="37" cy="26" r="14" fill="#F59E0B"/>
-    <circle cx="37" cy="26" r="11" fill="#FEF3C7"/>
-    <text x="37" y="30" font-size="11" text-anchor="middle" fill="#B45309" font-weight="bold">★</text>
-  </g>
-
-  <!-- Colored pencils on table -->
-  <rect x="80" y="340" width="35" height="4" rx="2" fill="#EF4444" transform="rotate(15 80 340)"/>
-  <rect x="490" y="335" width="40" height="4" rx="2" fill="#10B981" transform="rotate(-20 490 335)"/>
-  </svg>
-              </div>
-              <div class="mockup-footer">
-                <span>43 Pages • Worksheets & Cards</span>
-                <span>Complete Kit</span>
-              </div>
+          <!-- 3D Main Book Mockup (FRONT & CENTER - Hardcover Edition) -->
+          <div class="book-mockup" title="SANSKAR 30 • 30 Days of Good Habits, Strong Values & Happy Growing">
+            <div class="book-front">
+              <img src="assets/ebook-cover.jpg" alt="SANSKAR 30 Ebook Cover" class="book-cover-img" loading="eager" />
+              <div class="book-spine"></div>
+              <div class="book-gutter"></div>
+              <div class="book-gloss"></div>
             </div>
+            <div class="book-pages-right"></div>
+            <div class="book-pages-bottom"></div>
           </div>
 
-          <!-- Floating Badge -->
-          <div class="floating-card-badge">
-            <div class="floating-icon">🏆</div>
-            <div>
-              <div class="floating-text-title">30 दिन का कम्पलीट ट्रांसफॉर्मेशन</div>
-              <div class="floating-text-sub">रोज़ाना सिर्फ 10-15 मिनट की जादुई आदत</div>
-            </div>
+          <!-- Floating Feature Badges -->
+          <div class="floating-pill-badge pill-badge-top-right">
+            <span class="pill-dot"></span>
+            <span>⭐ 72 सचित्र पृष्ठ • HD Print Ready</span>
           </div>
 
+        </div>
+
+        <!-- Floating Card Accent (Cleanly below the 3D book stage, never overlapping the artwork) -->
+        <div class="floating-card-badge">
+          <div class="floating-icon">🏆</div>
+          <div>
+            <div class="floating-text-title">30 दिन का कम्पलीट ट्रांसफॉर्मेशन बंडल</div>
+            <div class="floating-text-sub">रोज़ाना सिर्फ 10-15 मिनट की जादुई सीख और पक्की आदत</div>
+          </div>
         </div>
       </div>
 
@@ -533,8 +283,8 @@ $product_slug = isset($product['slug']) ? $product['slug'] : 'Sanskar30';
         <div class="bundle-card featured">
           <span class="featured-pill">मुख्य ई-बुक</span>
           <div>
-            <div class="bundle-card-header">
-              <div class="bundle-card-icon icon-blue">📘</div>
+            <div class="bundle-card-header" style="align-items: center; gap: 14px;">
+              <img src="assets/ebook-cover.jpg" alt="SANSKAR 30 eBook" style="width: 52px; height: 78px; object-fit: cover; border-radius: 4px; box-shadow: -2px 4px 12px rgba(0,0,0,0.25); border: 1.5px solid rgba(217, 119, 6, 0.35); flex-shrink: 0;" />
               <div>
                 <h3 class="bundle-card-title">SANSKAR 30 सचित्र ई-बुक</h3>
                 <span class="bundle-card-tag">72 फुल-कलर प्रीमियम पेजेस</span>
@@ -1041,184 +791,46 @@ $product_slug = isset($product['slug']) ? $product['slug'] : 'Sanskar30';
           
   <!-- Panel 1: eBook Cover -->
   <div class="preview-panel" id="tab-cover" style="display: block; width: 100%;">
-    <div style="background: linear-gradient(135deg, #0A1926 0%, #164E63 100%); border-radius: 12px; padding: 24px; color: #FFFFFF; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.25);">
-      <div style="font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 800; letter-spacing: 2px; color: #FEF08A; margin-bottom: 8px;">TATVAM PRESENTS</div>
-      <div style="font-family: 'Outfit', sans-serif; font-size: 32px; font-weight: 900; letter-spacing: 1px; color: #FFFFFF; line-height: 1.1;">SANSKAR 30</div>
-      <div style="font-size: 13px; color: #FDE047; font-weight: 700; margin: 4px 0 16px 0;">30 Days of Good Habits, Strong Values & Happy Growing</div>
-      <div style="max-width: 480px; margin: 0 auto; height: 260px; border-radius: 8px; overflow: hidden; border: 1.5px solid rgba(254, 240, 138, 0.4);">
-        <svg class="hero-cover-svg" viewBox="0 0 600 420" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="coverSky" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#0F2D3C"/>
-      <stop offset="45%" stop-color="#1E4E63"/>
-      <stop offset="80%" stop-color="#D97706"/>
-      <stop offset="100%" stop-color="#FBBF24"/>
-    </linearGradient>
-    <linearGradient id="groundGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#2D5A27"/>
-      <stop offset="100%" stop-color="#143313"/>
-    </linearGradient>
-    <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#FEF08A" stop-opacity="0.9"/>
-      <stop offset="40%" stop-color="#F59E0B" stop-opacity="0.4"/>
-      <stop offset="100%" stop-color="#D97706" stop-opacity="0"/>
-    </radialGradient>
-    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="6" result="blur"/>
-      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-    </filter>
-  </defs>
-
-  <!-- Sky -->
-  <rect width="600" height="420" fill="url(#coverSky)" rx="16"/>
-
-  <!-- Warm Evening Sun Glow -->
-  <circle cx="300" cy="240" r="140" fill="url(#sunGlow)"/>
-
-  <!-- Distant Hill Silhouettes -->
-  <path d="M0,320 Q150,260 320,290 T600,270 L600,420 L0,420 Z" fill="#20402E" opacity="0.75"/>
-  <path d="M0,340 Q220,300 420,330 T600,310 L600,420 L0,420 Z" fill="url(#groundGrad)"/>
-
-  <!-- Traditional Indian Courtyard Verandah / Banyan Canopy -->
-  <path d="M-20,90 Q120,40 280,70 T620,50 L620,-10 L-20,-10 Z" fill="#143313" opacity="0.8"/>
-  <path d="M20,120 Q160,70 300,100 T580,80 L580,-10 L20,-10 Z" fill="#254F22" opacity="0.6"/>
-
-  <!-- Hanging Warm Lanterns -->
-  <g filter="url(#softGlow)">
-    <circle cx="160" cy="140" r="18" fill="#FEF08A" opacity="0.6"/>
-    <circle cx="440" cy="130" r="18" fill="#FEF08A" opacity="0.6"/>
-  </g>
-  <!-- Lantern 1 -->
-  <line x1="160" y1="70" x2="160" y2="130" stroke="#FDE68A" stroke-width="2"/>
-  <rect x="150" y="130" width="20" height="24" rx="4" fill="#E06D28"/>
-  <rect x="154" y="134" width="12" height="16" rx="2" fill="#FEF08A"/>
-  <!-- Lantern 2 -->
-  <line x1="440" y1="60" x2="440" y2="120" stroke="#FDE68A" stroke-width="2"/>
-  <rect x="430" y="120" width="20" height="24" rx="4" fill="#E06D28"/>
-  <rect x="434" y="124" width="12" height="16" rx="2" fill="#FEF08A"/>
-
-  <!-- Grandparents in Background (Dadu & Dadi sitting on porch bench) -->
-  <g transform="translate(110, 240)">
-    <!-- Bench -->
-    <rect x="0" y="70" width="130" height="8" rx="3" fill="#854D0E"/>
-    <rect x="10" y="78" width="6" height="24" fill="#5A3207"/>
-    <rect x="114" y="78" width="6" height="24" fill="#5A3207"/>
-    <!-- Dadu (Grandpa) -->
-    <circle cx="35" cy="30" r="14" fill="#E0A96D"/>
-    <!-- White hair -->
-    <path d="M22,28 C22,16 48,16 48,28 C45,20 25,20 22,28 Z" fill="#E2E8F0"/>
-    <!-- Spectacles -->
-    <circle cx="31" cy="29" r="4" fill="none" stroke="#64748B" stroke-width="1.5"/>
-    <circle cx="39" cy="29" r="4" fill="none" stroke="#64748B" stroke-width="1.5"/>
-    <line x1="35" y1="29" x2="35" y2="29" stroke="#64748B" stroke-width="1.5"/>
-    <!-- Kurta -->
-    <path d="M20,44 C20,44 26,42 35,42 C44,42 50,44 50,44 L48,72 L22,72 Z" fill="#F8FAFC"/>
-
-    <!-- Dadi (Grandma) -->
-    <circle cx="85" cy="32" r="13" fill="#E0A96D"/>
-    <!-- Grey hair bun -->
-    <circle cx="97" cy="30" r="7" fill="#CBD5E1"/>
-    <!-- Saree pallu -->
-    <path d="M72,44 C72,44 80,42 88,42 C96,42 100,44 100,44 L98,72 L72,72 Z" fill="#D8B4E2"/>
-    <path d="M74,32 C74,24 94,22 96,34 L88,55 L74,45 Z" fill="#B388D6" opacity="0.85"/>
-  </g>
-
-  <!-- Parents in Warm Embrace Behind Children -->
-  <g transform="translate(370, 235)">
-    <!-- Papa -->
-    <circle cx="35" cy="28" r="14" fill="#E0A96D"/>
-    <!-- Dark neat hair -->
-    <path d="M21,26 C21,14 49,14 49,26 C45,18 25,18 21,26 Z" fill="#1C1917"/>
-    <!-- Shirt -->
-    <path d="M20,42 C20,42 26,40 35,40 C44,40 50,42 50,42 L50,75 L20,75 Z" fill="#0284C7"/>
-    <!-- Maa -->
-    <circle cx="75" cy="30" r="13" fill="#E0A96D"/>
-    <circle cx="87" cy="32" r="8" fill="#1C1917"/> <!-- Hair bun -->
-    <!-- Saree -->
-    <path d="M62,43 C62,43 70,41 78,41 C86,41 90,43 90,43 L88,75 L62,75 Z" fill="#F43F5E"/>
-    <path d="M63,30 C63,22 84,20 87,32 L80,56 L63,45 Z" fill="#E11D48" opacity="0.9"/>
-  </g>
-
-  <!-- Central Hero Children: AARAV & ANAYA Reading Together -->
-  <!-- Aarav (Left child) -->
-  <g transform="translate(205, 275)">
-    <!-- Body -->
-    <rect x="20" y="44" width="34" height="42" rx="8" fill="#E59834"/> <!-- Ochre T-shirt -->
-    <rect x="24" y="80" width="26" height="24" rx="4" fill="#1E3A8A"/> <!-- Navy shorts -->
-    <!-- Head -->
-    <circle cx="37" cy="24" r="18" fill="#E0A96D"/>
-    <!-- Messy lively dark hair -->
-    <path d="M19,22 C18,8 32,4 42,8 C50,12 55,20 54,26 C50,22 46,24 43,21 C40,24 35,21 31,23 C27,21 23,24 19,22 Z" fill="#1C1917"/>
-    <!-- Happy Face -->
-    <circle cx="32" cy="24" r="2.2" fill="#1C1917"/>
-    <circle cx="43" cy="24" r="2.2" fill="#1C1917"/>
-    <path d="M34,29 Q37.5,34 41,29" fill="none" stroke="#9A3412" stroke-width="2" stroke-linecap="round"/>
-    <!-- Hands holding book -->
-    <circle cx="48" cy="58" r="5" fill="#E0A96D"/>
-  </g>
-
-  <!-- The Open Golden Book between them -->
-  <g transform="translate(270, 318)">
-    <ellipse cx="30" cy="18" rx="34" ry="12" fill="#FEF3C7"/>
-    <path d="M-2,14 Q30,6 62,14 L60,34 Q30,26 -2,34 Z" fill="#FFFBEB" stroke="#D97706" stroke-width="1.5"/>
-    <line x1="30" y1="10" x2="30" y2="30" stroke="#B45309" stroke-width="1.5"/>
-    <!-- Glowing Golden rays from book -->
-    <path d="M10,8 L-4,-10 M30,4 L30,-14 M50,8 L64,-10" stroke="#FBBF24" stroke-width="2.5" stroke-linecap="round" opacity="0.85"/>
-  </g>
-
-  <!-- Anaya (Right child) -->
-  <g transform="translate(325, 280)">
-    <!-- Body -->
-    <path d="M18,44 L46,44 L54,84 L10,84 Z" fill="#FACC15"/> <!-- Marigold yellow dress -->
-    <path d="M14,84 L50,84 L52,87 L12,87 Z" fill="#0D9488"/> <!-- Teal hem -->
-    <!-- Head -->
-    <circle cx="32" cy="23" r="17" fill="#F3C99F"/>
-    <!-- Hair with two pigtails and teal bows -->
-    <path d="M15,22 C15,8 30,5 40,9 C48,13 49,22 48,26 C44,20 37,20 32,22 C26,20 20,22 15,22 Z" fill="#1C1917"/>
-    <circle cx="12" cy="22" r="7" fill="#1C1917"/> <!-- Left pigtail -->
-    <circle cx="51" cy="22" r="7" fill="#1C1917"/> <!-- Right pigtail -->
-    <circle cx="14" cy="25" r="3" fill="#0D9488"/> <!-- Teal bow -->
-    <circle cx="49" cy="25" r="3" fill="#0D9488"/> <!-- Teal bow -->
-    <!-- Sweet Face -->
-    <circle cx="28" cy="24" r="2.2" fill="#1C1917"/>
-    <circle cx="38" cy="24" r="2.2" fill="#1C1917"/>
-    <path d="M30,29 Q33,33 36,29" fill="none" stroke="#9A3412" stroke-width="2" stroke-linecap="round"/>
-    <circle cx="25" cy="27" r="2.5" fill="#FDA4AF" opacity="0.6"/> <!-- Rosy cheek -->
-    <circle cx="41" cy="27" r="2.5" fill="#FDA4AF" opacity="0.6"/>
-  </g>
-
-  <!-- Puppy Moti (Curled happily in front) -->
-  <g transform="translate(210, 355)">
-    <!-- Body -->
-    <ellipse cx="28" cy="18" rx="16" ry="11" fill="#FFFFFF"/>
-    <!-- Golden brown spot -->
-    <circle cx="32" cy="16" r="7" fill="#D97706"/>
-    <!-- Head -->
-    <circle cx="16" cy="12" r="10" fill="#FFFFFF"/>
-    <!-- Floppy ear -->
-    <ellipse cx="11" cy="13" rx="4" ry="7" fill="#B45309"/>
-    <!-- Eye & nose -->
-    <circle cx="16" cy="11" r="1.5" fill="#1C1917"/>
-    <circle cx="12" cy="14" r="1.5" fill="#1C1917"/>
-    <!-- Wagging tail -->
-    <path d="M42,16 Q48,10 50,14" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
-  </g>
-
-  <!-- Golden Sparkles / Stars in Sky -->
-  <g fill="#FEF08A" opacity="0.8">
-    <polygon points="120,45 122,50 127,52 122,54 120,59 118,54 113,52 118,50"/>
-    <polygon points="480,50 482,55 487,57 482,59 480,64 478,59 473,57 478,55"/>
-    <polygon points="260,35 261,39 265,40 261,41 260,45 259,41 255,40 259,39"/>
-    <polygon points="360,40 361,44 365,45 361,46 360,50 359,46 355,45 359,44"/>
-  </g>
-  </svg>
+    <div class="cover-showcase-container">
+      <div class="cover-showcase-image-box">
+        <img src="assets/ebook-cover.jpg" alt="SANSKAR 30 Full Ebook Cover" loading="lazy" />
       </div>
-      <div style="margin-top: 16px; font-size: 13px; color: #E2E8F0; font-weight: 600;">
-        ✨ 72 पृष्ठों की पूर्ण सचित्र ई-बुक • आरव और अनाया के संग 30 प्रेरणादायक कहानियाँ
+      <div class="cover-showcase-details">
+        <span class="cover-showcase-pill">TATVAM COLLECTOR'S EDITION</span>
+        <h3 class="cover-showcase-title">SANSKAR 30</h3>
+        <p class="cover-showcase-sub">
+          30 दिनों की अच्छी आदतें, मजबूत संस्कार और खुशहाल बचपन
+        </p>
+        <div class="cover-features-list">
+          <div class="cover-feature-item">
+            <span class="cover-feature-icon">📖</span>
+            <span><strong>30 मौलिक सचित्र कहानियाँ</strong> — आरव, अनाया और उनके प्यारे डॉगी मोती के साथ</span>
+          </div>
+          <div class="cover-feature-item">
+            <span class="cover-feature-icon">⭐</span>
+            <span><strong>30 दैनिक संस्कार व मूल्य</strong> — ईमानदारी, धैर्य, कृतज्ञता, अनुशासन और सहयोग</span>
+          </div>
+          <div class="cover-feature-item">
+            <span class="cover-feature-icon">🎨</span>
+            <span><strong>30 इंटरैक्टिव एक्टिविटीज़</strong> — ड्राइंग, पहेलियां और चिंतन-अभ्यास</span>
+          </div>
+          <div class="cover-feature-item">
+            <span class="cover-feature-icon">🌿</span>
+            <span><strong>100% स्क्रीन-मुक्त सामग्री</strong> — बच्चों के संतुलित मानसिक व भावनात्मक विकास हेतु</span>
+          </div>
+          <div class="cover-feature-item">
+            <span class="cover-feature-icon">📱</span>
+            <span><strong>72 फुल-कलर HD पृष्ठ</strong> — फोन, टैबलेट, लैपटॉप व A4 प्रिंटेबल PDF</span>
+          </div>
+        </div>
+        <div style="margin-top: 10px;">
+          <a href="#pricing" class="btn btn-primary" style="padding: 10px 22px; font-size: 14.5px;">
+            यह बंडल अभी डाउनलोड करें — ₹199 ➔
+          </a>
+        </div>
       </div>
     </div>
   </div>
-
   <!-- Panel 2: Story Page Spread -->
   <div class="preview-panel" id="tab-story" style="display: none; width: 100%;">
     <div style="background: #FFFFFF; border-radius: 12px; padding: 24px; border: 1px solid #E2E8F0; box-shadow: 0 8px 24px rgba(0,0,0,0.06); text-align: left;">
@@ -1614,7 +1226,7 @@ $product_slug = isset($product['slug']) ? $product['slug'] : 'Sanskar30';
           <li><span>✓</span> <strong>तुरंत डाउनलोड लिंक</strong> (ईमेल और स्क्रीन पर)</li>
         </ul>
 
-        <button type="button" class="btn btn-primary btn-large btn-pulse checkout-trigger" data-product-slug="<?php echo htmlspecialchars($product_slug); ?>" style="width: 100%;">पूरा बंडल तुरंत डाउनलोड करें — सिर्फ ₹<?php echo $display_price; ?> ➔</button>
+        <button type="button" class="btn btn-primary btn-large btn-pulse checkout-trigger" data-product-slug="Sanskar30" style="width: 100%;">पूरा बंडल तुरंत डाउनलोड करें — सिर्फ ₹<?php echo $display_price; ?> ➔</button>
 
         <div style="margin-top: 16px; font-size: 12.5px; color: var(--text-muted); display: flex; flex-direction: column; gap: 4px;">
           <span>🔒 256-Bit SSL सुरक्षित भुगतान (UPI, GPay, PhonePe, Paytm, नेटबैंकिंग, कार्ड)</span>
@@ -1729,7 +1341,7 @@ $product_slug = isset($product['slug']) ? $product['slug'] : 'Sanskar30';
         खिलौने और गैजेट्स कुछ ही दिनों में पुराने हो जाते हैं, लेकिन बचपन में सीखे गए अच्छे संस्कार जीवनभर साथ निभाते हैं।
       </p>
 
-      <button type="button" class="btn btn-primary btn-large btn-pulse checkout-trigger" data-product-slug="<?php echo htmlspecialchars($product_slug); ?>" style="font-size: 20px; padding: 18px 42px;">अभी शुरू करें — सिर्फ ₹<?php echo $display_price; ?> ➔</button>
+      <button type="button" class="btn btn-primary btn-large btn-pulse checkout-trigger" data-product-slug="Sanskar30" style="font-size: 20px; padding: 18px 42px;">अभी शुरू करें — सिर्फ ₹<?php echo $display_price; ?> ➔</button>
 
       <div class="brand-seal-footer">TATVAM • SANSKAR 30</div>
     </div>
@@ -1760,15 +1372,14 @@ $product_slug = isset($product['slug']) ? $product['slug'] : 'Sanskar30';
     </div>
   </footer>
 
-  
-  <!-- One Step Checkout Modal -->
+    <!-- One Step Checkout Modal -->
   <div class="modal-overlay" id="checkoutModal">
     <div class="modal-card">
       <button class="modal-close" id="modalCloseBtn" aria-label="Close">&times;</button>
       <div class="modal-title">विवरण भरें (Enter Details)</div>
       <div class="modal-subtitle">ई-बुक तुरंत डिलीवर करने के लिए अपना नाम और व्हाट्सएप नंबर दर्ज करें।</div>
       <form id="checkout-form">
-        <input type="hidden" name="product_slug" id="target-product-slug" value="<?php echo htmlspecialchars($product_slug); ?>">
+        <input type="hidden" name="product_slug" id="target-product-slug" value="Sanskar30">
         <div class="form-group">
           <label for="cust_name">आपका नाम (Your Name)</label>
           <input type="text" id="cust_name" name="name" class="form-input" placeholder="उदा. राहुल शर्मा" required>
@@ -1782,19 +1393,18 @@ $product_slug = isset($product['slug']) ? $product['slug'] : 'Sanskar30';
           <input type="tel" id="cust_phone" name="phone" class="form-input" placeholder="9876543210" pattern="[0-9]{10}" title="10 अंकों का मोबाइल नंबर" required>
         </div>
         <button type="submit" class="btn btn-primary btn-large" style="width: 100%; margin-top: 10px;" id="checkoutSubmitBtn">
-          सुरक्षित भुगतान करें (Pay ₹<?php echo $display_price; ?>) ➔
+          सुरक्षित भुगतान करें (Pay ₹<?php echo ; ?>) ➔
         </button>
       </form>
     </div>
   </div>
-
   <!-- Mobile Sticky Bottom CTA Bar -->
   <div class="mobile-sticky-bar">
     <div class="sticky-price">
       <span class="sticky-price-label">ऑफर प्राइस</span>
       <span class="sticky-price-num">₹<?php echo $display_price; ?></span>
     </div>
-    <button type="button" class="btn btn-primary sticky-btn checkout-trigger" data-product-slug="<?php echo htmlspecialchars($product_slug); ?>">अभी डाउनलोड करें ➔</button>
+    <button type="button" class="btn btn-primary sticky-btn checkout-trigger" data-product-slug="Sanskar30">अभी डाउनलोड करें ➔</button>
   </div>
 
   <!-- JavaScript Interactions -->

@@ -1,4 +1,4 @@
-/* styles.css - Premium Editorial Landing Page for SANSKAR 30 (Tatvam.shop) */
+﻿/* styles.css - Premium Editorial Landing Page for SANSKAR 30 (Tatvam.shop) */
 
 @import url('https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
@@ -363,135 +363,313 @@ img, svg {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px 0;
+  padding: 30px 10px;
+  perspective: 1600px;
 }
 
 .bundle-stage {
   position: relative;
   width: 100%;
-  max-width: 420px;
-  height: 480px;
-  perspective: 1200px;
+  max-width: 440px;
+  height: 520px;
+  perspective: 1600px;
+  transform-style: preserve-3d;
 }
 
-/* 3D Main Book Mockup */
+/* 3D Main Book Mockup - Hardcover Edition */
 .book-mockup {
   position: absolute;
-  width: 270px;
-  height: 380px;
-  left: 20px;
-  top: 40px;
-  background: #0F2D3C;
-  border-radius: 8px 16px 16px 8px;
-  box-shadow: -10px 20px 40px rgba(0,0,0,0.35), 0 2px 6px rgba(0,0,0,0.2);
-  transform: rotateY(-18deg) rotateX(8deg) translateZ(30px);
+  width: 290px;
+  height: 435px;
+  left: 15px;
+  top: 25px;
+  border-radius: 4px 14px 14px 4px;
   transform-style: preserve-3d;
-  transition: var(--transition);
-  border: 1px solid rgba(254, 240, 138, 0.3);
+  transform: rotateY(-18deg) rotateX(6deg) rotateZ(-1deg);
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.6s ease;
+  box-shadow: 
+    -20px 28px 50px rgba(10, 25, 40, 0.45),
+    -8px 14px 22px rgba(217, 119, 6, 0.22),
+    0 2px 6px rgba(0,0,0,0.18);
+  cursor: pointer;
+  z-index: 10;
+}
+
+.bundle-stage:hover .book-mockup,
+.book-mockup:hover {
+  transform: rotateY(-10deg) rotateX(2deg) rotateZ(0deg) translateY(-10px) scale(1.025);
+  box-shadow: 
+    -28px 40px 65px rgba(10, 25, 40, 0.52),
+    -12px 20px 30px rgba(217, 119, 6, 0.32),
+    0 4px 12px rgba(0,0,0,0.22);
+}
+
+.book-front {
+  position: absolute;
+  inset: 0;
+  border-radius: 4px 14px 14px 4px;
   overflow: hidden;
+  background: #0F2D3C;
+  box-shadow: inset 4px 0 10px rgba(0, 0, 0, 0.4);
 }
 
-.bundle-stage:hover .book-mockup {
-  transform: rotateY(-10deg) rotateX(4deg) translateZ(45px);
+.book-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 4px 14px 14px 4px;
+  backface-visibility: hidden;
 }
 
+/* Book Spine - Real Hardcover Left Ridge */
 .book-spine {
   position: absolute;
   left: 0;
   top: 0;
   bottom: 0;
+  width: 22px;
+  background: linear-gradient(90deg, 
+    rgba(0,0,0,0.55) 0%, 
+    rgba(255,255,255,0.3) 25%, 
+    rgba(0,0,0,0.15) 55%, 
+    rgba(0,0,0,0.65) 100%
+  );
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.4);
+  z-index: 5;
+  pointer-events: none;
+  border-radius: 4px 0 0 4px;
+}
+
+/* Spine Crease / Hinge Indentation Line */
+.book-gutter {
+  position: absolute;
+  left: 22px;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(90deg, rgba(0,0,0,0.45), rgba(255,255,255,0.25) 50%, rgba(0,0,0,0.45));
+  box-shadow: 1px 0 3px rgba(0,0,0,0.3);
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* 3D Stacked Pages on Right Edge */
+.book-pages-right {
+  position: absolute;
+  right: -16px;
+  top: 4px;
+  bottom: 4px;
   width: 16px;
-  background: linear-gradient(90deg, rgba(0,0,0,0.4), rgba(255,255,255,0.1) 40%, rgba(0,0,0,0.3));
+  background: repeating-linear-gradient(90deg,
+    #FAF7F0 0px,
+    #ECE5D8 1px,
+    #FFFFFF 2px,
+    #E2D8C3 3px
+  );
+  transform: rotateY(70deg) translateZ(-4px);
+  transform-origin: left center;
+  box-shadow: inset 1px 0 3px rgba(0,0,0,0.25), 2px 2px 5px rgba(0,0,0,0.15);
+  border-radius: 0 3px 3px 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* 3D Stacked Pages at Bottom Edge */
+.book-pages-bottom {
+  position: absolute;
+  left: 10px;
+  right: 2px;
+  bottom: -12px;
+  height: 12px;
+  background: repeating-linear-gradient(0deg,
+    #ECE5D8 0px,
+    #FAF7F0 1px,
+    #FFFFFF 2px,
+    #DFD4BD 3px
+  );
+  transform: rotateX(-70deg) translateZ(-4px);
+  transform-origin: top center;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
+  border-radius: 0 0 3px 3px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Glossy Laminate Reflection / Light Sweep */
+.book-gloss {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(125deg,
+    rgba(255,255,255,0.38) 0%,
+    rgba(255,255,255,0.12) 18%,
+    rgba(255,255,255,0) 42%,
+    rgba(255,255,255,0) 65%,
+    rgba(255,255,255,0.1) 100%
+  );
+  pointer-events: none;
+  z-index: 6;
+  transition: opacity 0.5s ease;
+  mix-blend-mode: overlay;
+}
+
+.bundle-stage:hover .book-gloss,
+.book-mockup:hover .book-gloss {
+  opacity: 0.85;
+}
+
+/* 3D Toolkit Mockup (Companion Workbook - Stacked Behind) */
+.toolkit-mockup {
+  position: absolute;
+  width: 255px;
+  height: 380px;
+  right: 12px;
+  top: 50px;
+  background: linear-gradient(145deg, #022c22 0%, #065f46 45%, #0f766e 100%);
+  border-radius: 6px 14px 14px 6px;
+  box-shadow: -10px 18px 40px rgba(0,0,0,0.35);
+  transform: rotateY(-6deg) rotateX(4deg) translateZ(-40px);
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.6s ease;
+  border: 1.5px solid rgba(254, 240, 138, 0.35);
+  overflow: hidden;
   z-index: 10;
 }
 
-.book-cover-content {
-  padding: 20px 16px;
+.bundle-stage:hover .toolkit-mockup {
+  transform: rotateY(-2deg) rotateX(2deg) translateX(30px) translateZ(-15px);
+  box-shadow: -14px 24px 48px rgba(0,0,0,0.42);
+}
+
+.toolkit-cover-content {
+  padding: 16px 14px;
   color: #FFFFFF;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
-  background: linear-gradient(180deg, #0A1926 0%, #164E63 70%, #0F2D3C 100%);
+}
+
+.toolkit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(254, 240, 138, 0.25);
+  padding-bottom: 6px;
+}
+
+.toolkit-badge {
+  background: #F59E0B;
+  color: #78350F;
+  font-size: 9px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 999px;
+}
+
+.toolkit-title-group {
+  margin: 6px 0;
+}
+
+.toolkit-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 16px;
+  font-weight: 900;
+  color: #FFFFFF;
+  letter-spacing: 0.5px;
+  line-height: 1.15;
+}
+
+.toolkit-subtitle {
+  font-size: 10.5px;
+  color: #FEF08A;
+  font-weight: 700;
+  margin-top: 3px;
+  line-height: 1.3;
+}
+
+.toolkit-art-box {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(254, 240, 138, 0.2);
+  border-radius: 8px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.toolkit-feature-tag {
+  font-size: 10px;
+  color: #F1F5F9;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 3px 6px;
+  border-radius: 4px;
 }
 
 .mockup-brand {
   font-family: 'Outfit', sans-serif;
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 800;
   letter-spacing: 1.5px;
   color: #FEF08A;
 }
 
-.mockup-title {
-  font-family: 'Outfit', sans-serif;
-  font-size: 26px;
-  font-weight: 900;
-  letter-spacing: 1px;
-  color: #FFFFFF;
-  line-height: 1.05;
-}
-
-.mockup-subtitle {
-  font-size: 9.5px;
-  color: #FBBF24;
-  font-weight: 700;
-  line-height: 1.3;
-  margin-top: 4px;
-}
-
-.mockup-hero-art {
-  width: 100%;
-  height: 160px;
-  border-radius: 6px;
-  overflow: hidden;
-  border: 1px solid rgba(254,240,138,0.4);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-}
-
 .mockup-footer {
   display: flex;
   justify-content: space-between;
-  font-size: 8px;
+  font-size: 8.5px;
   color: #CBD5E1;
   border-top: 1px solid rgba(255,255,255,0.2);
   padding-top: 6px;
 }
 
-/* 3D Toolkit Mockup (Stacked Behind/Right) */
-.toolkit-mockup {
+/* Floating Micro Badges around 3D Mockup */
+.floating-pill-badge {
   position: absolute;
-  width: 250px;
-  height: 350px;
-  right: 15px;
-  bottom: 25px;
-  background: #0E7490;
-  border-radius: 8px 16px 16px 8px;
-  box-shadow: -8px 16px 36px rgba(0,0,0,0.25);
-  transform: rotateY(-8deg) rotateX(5deg) translateZ(0);
-  transition: var(--transition);
-  border: 1px solid rgba(255,255,255,0.25);
-  overflow: hidden;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1.5px solid rgba(245, 158, 11, 0.4);
+  border-radius: 999px;
+  padding: 6px 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 8px 24px rgba(15, 45, 60, 0.18);
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--teal-deep);
+  z-index: 25;
+  animation: float-gentle 4s ease-in-out infinite;
 }
 
-.bundle-stage:hover .toolkit-mockup {
-  transform: rotateY(-2deg) rotateX(2deg) translateZ(10px) translateX(10px);
+.pill-badge-top-right {
+  top: 12px;
+  right: -5px;
+  animation-delay: -1.5s;
+  border-color: rgba(224, 109, 40, 0.45);
 }
 
-.toolkit-cover-content {
-  padding: 16px;
-  color: #FFFFFF;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
-  background: linear-gradient(180deg, #082F49 0%, #0E7490 100%);
+.pill-badge-top-right .pill-dot {
+  background: var(--saffron-main);
+}
+
+.pill-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10B981;
+  display: inline-block;
+  box-shadow: 0 0 6px currentColor;
 }
 
 /* Floating Card Accent */
 .floating-card-badge {
   position: absolute;
-  left: 0;
+  left: -10px;
   bottom: 10px;
   background: #FFFFFF;
   border: 1.5px solid var(--gold-warm);
@@ -1053,6 +1231,191 @@ img, svg {
   margin-top: 4px;
 }
 
+/* Showcase for Cover in Preview Tab */
+.cover-showcase-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  align-items: center;
+  background: linear-gradient(135deg, #0A1926 0%, #164E63 60%, #0F2D3C 100%);
+  border-radius: 16px;
+  padding: 24px;
+  color: #FFFFFF;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.3);
+  border: 1px solid rgba(254, 240, 138, 0.35);
+  text-align: left;
+}
+
+@media (min-width: 680px) {
+  .cover-showcase-container {
+    grid-template-columns: 240px 1fr;
+    padding: 30px;
+  }
+}
+
+.cover-showcase-image-box {
+  position: relative;
+  border-radius: 8px 14px 14px 8px;
+  overflow: hidden;
+  box-shadow: -8px 16px 36px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(254, 240, 138, 0.4);
+  transform: perspective(1000px) rotateY(-6deg);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  max-width: 260px;
+  margin: 0 auto;
+}
+
+.cover-showcase-image-box:hover {
+  transform: perspective(1000px) rotateY(-2deg) scale(1.02);
+  box-shadow: -12px 20px 45px rgba(0, 0, 0, 0.6), 0 0 24px rgba(254, 240, 138, 0.35);
+}
+
+.cover-showcase-image-box img {
+  width: 100%;
+  height: auto;
+  display: block;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+}
+
+.cover-showcase-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cover-showcase-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #FEF08A;
+  background: rgba(254, 240, 138, 0.15);
+  border: 1px solid rgba(254, 240, 138, 0.3);
+  padding: 4px 12px;
+  border-radius: 999px;
+  align-self: flex-start;
+}
+
+.cover-showcase-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 26px;
+  font-weight: 900;
+  color: #FFFFFF;
+  line-height: 1.15;
+  letter-spacing: 0.5px;
+}
+
+.cover-showcase-sub {
+  font-size: 13.5px;
+  color: #FDE047;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.cover-features-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 6px 0;
+}
+
+.cover-feature-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  color: #E2E8F0;
+}
+
+.cover-feature-icon {
+  color: #FBBF24;
+  font-size: 15px;
+}
+
+/* Mobile Responsiveness for 3D Mockup */
+@media (max-width: 768px) {
+  .mockup-wrapper {
+    flex-direction: column;
+    padding: 15px 0 25px 0;
+  }
+  
+  .bundle-stage {
+    width: 100%;
+    max-width: 340px;
+    height: 400px;
+    margin: 0 auto;
+    perspective: 1200px;
+  }
+  
+  /* Main Book - FRONT & CENTER, 100% UNBLOCKED */
+  .book-mockup {
+    width: 240px;
+    height: 360px;
+    left: 50%;
+    top: 20px;
+    transform: translateX(-56%) rotateY(-8deg) rotateX(4deg);
+    z-index: 30 !important;
+    box-shadow: 
+      -14px 22px 40px rgba(10, 25, 40, 0.48),
+      -6px 12px 20px rgba(217, 119, 6, 0.22);
+  }
+
+  .bundle-stage:hover .book-mockup,
+  .book-mockup:hover {
+    transform: translateX(-56%) rotateY(-4deg) rotateX(2deg) translateY(-6px) scale(1.02);
+  }
+
+  /* Toolkit Mockup - TUCKED BEHIND, NEVER COVERS MAIN BOOK */
+  .toolkit-mockup {
+    width: 175px;
+    height: 265px;
+    right: 8px;
+    top: 35px;
+    transform: rotateY(-3deg) rotateX(2deg) translateZ(-50px);
+    z-index: 10 !important;
+    opacity: 0.92;
+    box-shadow: -8px 14px 28px rgba(0,0,0,0.3);
+  }
+
+  .bundle-stage:hover .toolkit-mockup {
+    transform: rotateY(-1deg) rotateX(1deg) translateX(15px) translateZ(-20px);
+  }
+
+  .toolkit-title {
+    font-size: 12.5px;
+  }
+
+  .toolkit-subtitle {
+    font-size: 8.5px;
+  }
+
+  .toolkit-feature-tag {
+    font-size: 8.5px;
+    padding: 2px 4px;
+  }
+
+  .floating-pill-badge {
+    display: none;
+  }
+
+  /* Floating Card Badge - DOCKED CLEANLY BELOW THE BOOK */
+  .floating-card-badge {
+    position: relative;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    margin: 14px auto 0 auto;
+    width: 92%;
+    max-width: 330px;
+    z-index: 35;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    animation: none;
+  }
+}
+
 /* Bonus Box */
 .bonus-banner {
   background: linear-gradient(135deg, #0F2D3C 0%, #164E63 100%);
@@ -1425,6 +1788,7 @@ img, svg {
   font-size: 15px;
 }
 
+
 /* One Step Checkout Modal */
 .modal-overlay {
   position: fixed;
@@ -1440,6 +1804,10 @@ img, svg {
   align-items: center;
   justify-content: center;
   padding: 16px;
+}
+
+.modal-overlay.active {
+  display: flex;
 }
 
 .modal-card {

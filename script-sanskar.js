@@ -1,4 +1,4 @@
-// script-sanskar.js - Interactive & Cashfree Checkout for Sanskar 30 (Tatvam.shop)
+﻿// script-sanskar.js - Interactive & Cashfree Checkout for Sanskar 30 (Tatvam.shop)
 
 document.addEventListener('DOMContentLoaded', () => {
   // 1. Preview Gallery Tabs
@@ -169,6 +169,29 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.innerHTML = origText;
         submitBtn.disabled = false;
       });
+    });
+  }
+
+  // Interactive 3D Book Parallax / Tilt on Mouse Move
+  const bundleStage = document.querySelector('.bundle-stage');
+  const bookMockup = document.querySelector('.book-mockup');
+  
+  if (bundleStage && bookMockup) {
+    bundleStage.addEventListener('mousemove', (e) => {
+      const rect = bundleStage.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      const rotateX = ((y - centerY) / centerY) * -10 + 5;
+      const rotateY = ((x - centerX) / centerX) * 14 - 16;
+      
+      bookMockup.style.transform = otateY(${rotateY.toFixed(1)}deg) rotateX(${rotateX.toFixed(1)}deg) translateZ(20px);
+    });
+
+    bundleStage.addEventListener('mouseleave', () => {
+      bookMockup.style.transform = '';
     });
   }
 });
