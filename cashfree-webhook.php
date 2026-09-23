@@ -102,11 +102,16 @@ try {
 
     // Trigger Meta CAPI Purchase event
     sendMetaCapiEvent('Purchase', [
-        'email'    => $order['customer_email'],
-        'phone'    => $order['customer_phone'],
-        'name'     => $order['customer_name'],
-        'value'    => $order['amount'],
-        'currency' => 'INR',
+        'email'      => $order['customer_email'],
+        'phone'      => $order['customer_phone'],
+        'name'       => $order['customer_name'],
+        'value'      => $order['amount'],
+        'currency'   => 'INR',
+        'event_id'   => !empty($order['event_id']) ? $order['event_id'] : ('pur_' . $order['razorpay_order_id']),
+        'client_ip'  => $order['client_ip'] ?? null,
+        'user_agent' => $order['user_agent'] ?? null,
+        'fbp'        => $order['fbp'] ?? null,
+        'fbc'        => $order['fbc'] ?? null,
     ]);
 
     http_response_code(200);

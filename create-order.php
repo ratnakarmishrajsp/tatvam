@@ -103,9 +103,22 @@ try {
         exit;
     }
 
-    // 5. Register pending order in database with exact local timestamp (IST)
+    // 5. Capture Meta Attribution parameters & register pending order
     $current_now = date('Y-m-d H:i:s');
-    $order_stmt = $db->prepare("INSERT INTO orders (customer_name, customer_email, customer_phone, product_id, amount, payment_status, razorpay_order_id, created_at) VALUES (?, ?, ?, ?, ?, 'pending', ?, ?)");
+    $client_ip = $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? '';
+    if (strpos($client_ip, ',') !== false) {
+        $client_ip = trim(explode(',', $client_ip)[0]);
+    }
+    $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+    $fbp = trim($_POST['fbp'] ?? $_COOKIE['_fbp'] ?? '');
+    $fbc = trim($_POST['fbc'] ?? $_COOKIE['_fbc'] ?? '');
+    $fbclid = trim($_POST['fbclid'] ?? $_GET['fbclid'] ?? '');
+    if (empty($fbc) && !empty($fbclid)) {
+        $fbc = 'fb.1.' . time() . '.' . $fbclid;
+    }
+    $event_id = 'pur_' . $cf_order_id;
+
+    $order_stmt = $db->prepare("INSERT INTO orders (customer_name, customer_email, customer_phone, product_id, amount, payment_status, razorpay_order_id, created_at, client_ip, user_agent, fbp, fbc, event_id) VALUES (?, ?, ?, ?, ?, 'pending', ?, ?, ?, ?, ?, ?, ?)");
     $order_stmt->execute([
         $customer_name,
         $customer_email,
@@ -114,7 +127,32 @@ try {
         $amount,
         $cf_order_id,
         $current_now,
+        $client_ip,
+        $user_agent,
+        $fbp,
+        $fbc,
+        $event_id,
     ]);
+
+    // Dispatch Meta CAPI InitiateCheckout
+    try {
+        require_once __DIR__ . '/includes/meta-capi-helper.php';
+        sendMetaCapiEvent('InitiateCheckout', [
+            'email'        => $customer_email,
+            'phone'        => $customer_phone,
+            'name'         => $customer_name,
+            'value'        => $amount,
+            'currency'     => 'INR',
+            'event_id'     => 'ic_' . $cf_order_id,
+            'client_ip'    => $client_ip,
+            'user_agent'   => $user_agent,
+            'fbp'          => $fbp,
+            'fbc'          => $fbc,
+            'content_name' => $product['title']
+        ]);
+    } catch (Exception $e) {
+        error_log("InitiateCheckout CAPI notice: " . $e->getMessage());
+    }
 
     $db_order_id = $db->lastInsertId();
 

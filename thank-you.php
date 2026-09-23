@@ -94,13 +94,18 @@ if (!empty($_GET['order_id']) || !empty($_POST['cf_order_id'])) {
                     // Send email notification to user
                     sendEbookEmail($customer_email, $customer_name, $product_title, $download_link);
 
-                    // Trigger Meta CAPI "Purchase" event
+                    // Trigger Meta CAPI "Purchase" event with full attribution
                     sendMetaCapiEvent('Purchase', [
-                        'email'    => $customer_email,
-                        'phone'    => $order['customer_phone'],
-                        'name'     => $customer_name,
-                        'value'    => $order['amount'],
-                        'currency' => 'INR',
+                        'email'      => $customer_email,
+                        'phone'      => $order['customer_phone'],
+                        'name'       => $customer_name,
+                        'value'      => $order['amount'],
+                        'currency'   => 'INR',
+                        'event_id'   => !empty($order['event_id']) ? $order['event_id'] : ('pur_' . $order['razorpay_order_id']),
+                        'client_ip'  => $order['client_ip'] ?? null,
+                        'user_agent' => $order['user_agent'] ?? null,
+                        'fbp'        => $order['fbp'] ?? null,
+                        'fbc'        => $order['fbc'] ?? null,
                     ]);
                 }
             }
@@ -173,6 +178,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <?php require_once __DIR__ . '/includes/meta-pixel-header.php'; ?>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Confirmed | TATVAM</title>
@@ -261,6 +267,14 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script>
         window.addEventListener('load', () => {
             lucide.createIcons();
+            // Client-side Meta Pixel Purchase event with shared Deduplication Event ID
+            if (typeof fbq === 'function' && <?php echo $payment_verified ? 'true' : 'false'; ?>) {
+                fbq('track', 'Purchase', {
+                    content_name: <?php echo json_encode($product_title); ?>,
+                    value: <?php echo (float)($order['amount'] ?? 199.00); ?>,
+                    currency: 'INR'
+                }, { eventID: <?php echo json_encode(!empty($order['event_id']) ? $order['event_id'] : ('pur_' . ($order['razorpay_order_id'] ?? ''))); ?> });
+            }
             // Trigger beautiful success confetti burst
             if (typeof confetti !== 'undefined' && <?php echo $payment_verified ? 'true' : 'false'; ?>) {
                 const duration = 3 * 1000;

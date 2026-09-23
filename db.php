@@ -58,6 +58,13 @@ try {
             FOREIGN KEY(product_id) REFERENCES products(id)
         )");
         
+                // Auto-migrate orders table for Meta Attribution tracking fields
+        try { $db->exec("ALTER TABLE orders ADD COLUMN client_ip TEXT"); } catch (Exception $e) {}
+        try { $db->exec("ALTER TABLE orders ADD COLUMN user_agent TEXT"); } catch (Exception $e) {}
+        try { $db->exec("ALTER TABLE orders ADD COLUMN fbp TEXT"); } catch (Exception $e) {}
+        try { $db->exec("ALTER TABLE orders ADD COLUMN fbc TEXT"); } catch (Exception $e) {}
+        try { $db->exec("ALTER TABLE orders ADD COLUMN event_id TEXT"); } catch (Exception $e) {}
+
         // Seed default products if empty
         $count = $db->query("SELECT count(*) FROM products")->fetchColumn();
         if ($count == 0) {

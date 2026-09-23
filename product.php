@@ -51,6 +51,7 @@ $save_percent = round((($original_price - $price) / $original_price) * 100);
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <?php require_once __DIR__ . '/includes/meta-pixel-header.php'; ?>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($title); ?> | TATVAM Bookstore</title>

@@ -12,6 +12,7 @@ $display_price = isset($product['price']) ? (int)$product['price'] : 199;
 <!DOCTYPE html>
 <html lang="hi">
 <head>
+  <?php require_once __DIR__ . '/includes/meta-pixel-header.php'; ?>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SANSKAR 30 • Tatvam | 30 Days of Good Habits, Strong Values & Happy Growing</title>
