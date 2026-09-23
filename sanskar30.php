@@ -1393,7 +1393,7 @@ $display_price = isset($product['price']) ? (int)$product['price'] : 199;
           <input type="tel" id="cust_phone" name="phone" class="form-input" placeholder="9876543210" pattern="[0-9]{10}" title="10 अंकों का मोबाइल नंबर" required>
         </div>
         <button type="submit" class="btn btn-primary btn-large" style="width: 100%; margin-top: 10px;" id="checkoutSubmitBtn">
-          सुरक्षित भुगतान करें (Pay ₹<?php echo ; ?>) ➔
+          सुरक्षित भुगतान करें (Pay ₹<?php echo $display_price; ?>) ➔
         </button>
       </form>
     </div>
