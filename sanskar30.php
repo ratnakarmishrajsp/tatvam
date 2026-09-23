@@ -16,7 +16,7 @@ $display_price = isset($product['price']) ? (int)$product['price'] : 199;
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SANSKAR 30 • Tatvam | 30 Days of Good Habits, Strong Values & Happy Growing</title>
   <meta name="description" content="हर दिन सिर्फ 10-15 मिनट में अपने बच्चे को सिखाएं 30 अनमोल भारतीय संस्कार और अच्छी आदतें। 72 पृष्ठों की मुख्य ई-बुक और 43 पृष्ठों का पैरेंट टूलकिट सिर्फ ₹199 में।">
-  <link rel="stylesheet" href="styles-sanskar.css?v=2.4">
+  <link rel="stylesheet" href="styles-sanskar.css?v=2.5">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -1408,6 +1408,6 @@ $display_price = isset($product['price']) ? (int)$product['price'] : 199;
   </div>
 
   <!-- JavaScript Interactions -->
-  <script src="script-sanskar.js?v=2.4"></script>
+  <script src="script-sanskar.js?v=2.5"></script>
 </body>
 </html>
