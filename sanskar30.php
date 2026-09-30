@@ -1708,12 +1708,12 @@ $display_price = isset($product['price']) ? (int)$product['price'] : 199;
         });
       }
 
-      // First notification appears after 3.5 seconds
+      // First notification appears after 2.5 seconds
       setTimeout(() => {
         showNextNotification();
-        // Subsequent notifications every 13 seconds
-        setInterval(showNextNotification, 13000);
-      }, 3500);
+        // Subsequent notifications every 12 seconds
+        setInterval(showNextNotification, 12000);
+      }, 2500);
     })();
   </script>
 </body>
