@@ -17,7 +17,7 @@ $display_price = isset($product['price']) ? (int)$product['price'] : 199;
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SANSKAR 30 • Tatvam | 30 Days of Good Habits, Strong Values & Happy Growing</title>
   <meta name="description" content="हर दिन सिर्फ 10-15 मिनट में अपने बच्चे को सिखाएं 30 अनमोल भारतीय संस्कार और अच्छी आदतें। 72 पृष्ठों की मुख्य ई-बुक और 43 पृष्ठों का पैरेंट टूलकिट सिर्फ ₹199 में।">
-  <link rel="stylesheet" href="styles-sanskar.css?v=2.5">
+  <link rel="stylesheet" href="styles-sanskar.css?v=3.0">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -1409,15 +1409,99 @@ $display_price = isset($product['price']) ? (int)$product['price'] : 199;
   </div>
 
   <!-- JavaScript Interactions -->
-  <script src="script-sanskar.js?v=2.5"></script>
-  <!-- Floating WhatsApp Support Button -->
-  <div class="whatsapp-floating-widget" id="whatsappFloatingWidget">
-    <a href="https://wa.me/918417894808?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20TATVAM%20%E0%A4%9F%E0%A5%80%E0%A4%AE%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9D%E0%A5%87%20SANSKAR%2030%20%E0%A4%88-%E0%A4%AC%E0%A5%81%E0%A4%95%20%E0%A4%91%E0%A4%B0%E0%A5%8D%E0%A4%A1%E0%A4%B0%20%E0%A4%95%E0%A4%B0%E0%A4%A8%E0%A5%87%20%E0%A4%AE%E0%A5%87%E0%A4%82%20%E0%A4%B8%E0%A4%B9%E0%A4%BE%E0%A4%AF%E0%A4%A4%E0%A4%BE%20%E0%A4%9A%E0%A4%BE%E0%A4%B9%E0%A4%BF%E0%A4%8F%E0%A5%A4" target="_blank" rel="noopener" class="whatsapp-floating-btn" aria-label="WhatsApp Support">
-      <span class="whatsapp-floating-tooltip">मदद चाहिए? WhatsApp करें</span>
-      <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+  <script src="script-sanskar.js?v=3.0"></script>
+  
+  <!-- Floating WhatsApp Support Button (Self-Contained & Cache-Proof) -->
+  <style>
+    .whatsapp-floating-widget {
+      position: fixed !important;
+      bottom: 25px !important;
+      right: 22px !important;
+      z-index: 99999 !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 10px !important;
+    }
+    .whatsapp-floating-btn {
+      width: 58px !important;
+      height: 58px !important;
+      border-radius: 50% !important;
+      background: linear-gradient(135deg, #25D366 0%, #128C7E 100%) !important;
+      color: #FFFFFF !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      box-shadow: 0 6px 24px rgba(37, 211, 102, 0.55), 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+      text-decoration: none !important;
+      position: relative !important;
+      cursor: pointer !important;
+      transition: transform 0.25s ease, box-shadow 0.25s ease !important;
+      animation: waFloatPulse 2.5s infinite !important;
+    }
+    .whatsapp-floating-btn:hover {
+      transform: scale(1.1) translateY(-2px) !important;
+      box-shadow: 0 10px 30px rgba(37, 211, 102, 0.75) !important;
+    }
+    .whatsapp-online-dot {
+      position: absolute !important;
+      top: 2px !important;
+      right: 2px !important;
+      width: 14px !important;
+      height: 14px !important;
+      background: #10B981 !important;
+      border: 2px solid #FFFFFF !important;
+      border-radius: 50% !important;
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.9) !important;
+    }
+    .whatsapp-floating-badge {
+      background: rgba(15, 23, 42, 0.92) !important;
+      backdrop-filter: blur(8px) !important;
+      -webkit-backdrop-filter: blur(8px) !important;
+      color: #FFFFFF !important;
+      font-size: 13px !important;
+      font-weight: 700 !important;
+      padding: 7px 14px !important;
+      border-radius: 999px !important;
+      border: 1px solid rgba(37, 211, 102, 0.4) !important;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      text-decoration: none !important;
+      letter-spacing: 0.2px !important;
+    }
+    .whatsapp-floating-badge span {
+      color: #34D399 !important;
+    }
+    @keyframes waFloatPulse {
+      0% { box-shadow: 0 6px 24px rgba(37, 211, 102, 0.55); }
+      50% { box-shadow: 0 6px 28px rgba(37, 211, 102, 0.85), 0 0 0 12px rgba(37, 211, 102, 0.18); }
+      100% { box-shadow: 0 6px 24px rgba(37, 211, 102, 0.55); }
+    }
+    @media (max-width: 768px) {
+      .whatsapp-floating-widget {
+        bottom: 84px !important;
+        right: 14px !important;
+      }
+      .whatsapp-floating-btn {
+        width: 52px !important;
+        height: 52px !important;
+      }
+      .whatsapp-floating-badge {
+        display: none !important;
+      }
+    }
+  </style>
+
+  <div class="whatsapp-floating-widget" id="whatsappFloatingWidget" style="position: fixed; bottom: 25px; right: 22px; z-index: 99999; display: flex; align-items: center; gap: 10px;">
+    <a href="https://wa.me/918417894808?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20TATVAM%20%E0%A4%9F%E0%A5%80%E0%A4%AE%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9D%E0%A5%87%20SANSKAR%2030%20%E0%A4%88-%E0%A4%AC%E0%A5%81%E0%A4%95%20%E0%A4%91%E0%A4%B0%E0%A5%8D%E0%A4%A1%E0%A4%B0%20%E0%A4%95%E0%A4%B0%E0%A4%A8%E0%A5%87%20%E0%A4%AE%E0%A5%87%E0%A4%82%20%E0%A4%B8%E0%A4%B9%E0%A4%BE%E0%A4%AF%E0%A4%A4%E0%A4%BE%20%E0%A4%9A%E0%A4%BE%E0%A4%B9%E0%A4%BF%E0%A4%8F%E0%A5%A4" target="_blank" rel="noopener" class="whatsapp-floating-badge" style="background: rgba(15, 23, 42, 0.92); color: #FFFFFF; font-size: 13px; font-weight: 700; padding: 7px 14px; border-radius: 999px; border: 1px solid rgba(37, 211, 102, 0.4); text-decoration: none; box-shadow: 0 4px 16px rgba(0,0,0,0.4);">
+      <span>●</span> WhatsApp पर मदद लें
+    </a>
+    <a href="https://wa.me/918417894808?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20TATVAM%20%E0%A4%9F%E0%A5%80%E0%A4%AE%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9D%E0%A5%87%20SANSKAR%2030%20%E0%A4%88-%E0%A4%AC%E0%A5%81%E0%A4%95%20%E0%A4%91%E0%A4%B0%E0%A5%8D%E0%A4%A1%E0%A4%B0%20%E0%A4%95%E0%A4%B0%E0%A4%A8%E0%A5%87%20%E0%A4%AE%E0%A5%87%E0%A4%82%20%E0%A4%B8%E0%A4%B9%E0%A4%BE%E0%A4%AF%E0%A4%A4%E0%A4%BE%20%E0%A4%9A%E0%A4%BE%E0%A4%B9%E0%A4%BF%E0%A4%8F%E0%A5%A4" target="_blank" rel="noopener" class="whatsapp-floating-btn" aria-label="WhatsApp Support" style="width: 58px; height: 58px; border-radius: 50%; background: linear-gradient(135deg, #25D366 0%, #128C7E 100%); color: #FFFFFF; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 24px rgba(37, 211, 102, 0.55); position: relative; text-decoration: none;">
+      <svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor">
         <path d="M12.031 2C6.51 2 2.015 6.484 2.015 12c0 1.954.563 3.774 1.532 5.32L2 22l4.83-1.503A9.957 9.957 0 0 0 12.031 22c5.522 0 10.015-4.484 10.015-10S17.553 2 12.031 2zm5.836 14.195c-.244.688-1.42 1.32-1.957 1.378-.512.055-1.18.077-1.914-.158-.47-.15-1.077-.35-1.859-.69-3.28-1.422-5.412-4.734-5.577-4.953-.165-.218-1.332-1.773-1.332-3.383 0-1.61.844-2.404 1.144-2.733.3-.328.656-.41.875-.41.219 0 .438.002.63.011.203.01.474-.077.74.563.275.66.936 2.285 1.018 2.453.082.167.137.364.027.583-.11.218-.165.355-.328.547-.164.192-.346.429-.494.577-.165.163-.337.34-.145.669.192.328.854 1.408 1.832 2.28 1.258 1.121 2.318 1.468 2.646 1.632.328.164.52.137.712-.082.192-.218.82-1.018 1.04-1.368.218-.35.437-.291.738-.182.3.11 1.913.902 2.242 1.066.328.164.547.246.63.383.082.137.082.793-.164 1.48z"/>
       </svg>
-      <span class="whatsapp-online-dot"></span>
+      <span class="whatsapp-online-dot" style="position: absolute; top: 2px; right: 2px; width: 14px; height: 14px; background: #10B981; border: 2px solid #FFFFFF; border-radius: 50%;"></span>
     </a>
   </div>
 </body>
