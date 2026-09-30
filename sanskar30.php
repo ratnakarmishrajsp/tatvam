@@ -1410,5 +1410,15 @@ $display_price = isset($product['price']) ? (int)$product['price'] : 199;
 
   <!-- JavaScript Interactions -->
   <script src="script-sanskar.js?v=2.5"></script>
+  <!-- Floating WhatsApp Support Button -->
+  <div class="whatsapp-floating-widget" id="whatsappFloatingWidget">
+    <a href="https://wa.me/918417894808?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20TATVAM%20%E0%A4%9F%E0%A5%80%E0%A4%AE%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9D%E0%A5%87%20SANSKAR%2030%20%E0%A4%88-%E0%A4%AC%E0%A5%81%E0%A4%95%20%E0%A4%91%E0%A4%B0%E0%A5%8D%E0%A4%A1%E0%A4%B0%20%E0%A4%95%E0%A4%B0%E0%A4%A8%E0%A5%87%20%E0%A4%AE%E0%A5%87%E0%A4%82%20%E0%A4%B8%E0%A4%B9%E0%A4%BE%E0%A4%AF%E0%A4%A4%E0%A4%BE%20%E0%A4%9A%E0%A4%BE%E0%A4%B9%E0%A4%BF%E0%A4%8F%E0%A5%A4" target="_blank" rel="noopener" class="whatsapp-floating-btn" aria-label="WhatsApp Support">
+      <span class="whatsapp-floating-tooltip">मदद चाहिए? WhatsApp करें</span>
+      <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+        <path d="M12.031 2C6.51 2 2.015 6.484 2.015 12c0 1.954.563 3.774 1.532 5.32L2 22l4.83-1.503A9.957 9.957 0 0 0 12.031 22c5.522 0 10.015-4.484 10.015-10S17.553 2 12.031 2zm5.836 14.195c-.244.688-1.42 1.32-1.957 1.378-.512.055-1.18.077-1.914-.158-.47-.15-1.077-.35-1.859-.69-3.28-1.422-5.412-4.734-5.577-4.953-.165-.218-1.332-1.773-1.332-3.383 0-1.61.844-2.404 1.144-2.733.3-.328.656-.41.875-.41.219 0 .438.002.63.011.203.01.474-.077.74.563.275.66.936 2.285 1.018 2.453.082.167.137.364.027.583-.11.218-.165.355-.328.547-.164.192-.346.429-.494.577-.165.163-.337.34-.145.669.192.328.854 1.408 1.832 2.28 1.258 1.121 2.318 1.468 2.646 1.632.328.164.52.137.712-.082.192-.218.82-1.018 1.04-1.368.218-.35.437-.291.738-.182.3.11 1.913.902 2.242 1.066.328.164.547.246.63.383.082.137.082.793-.164 1.48z"/>
+      </svg>
+      <span class="whatsapp-online-dot"></span>
+    </a>
+  </div>
 </body>
 </html>
