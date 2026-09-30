@@ -258,7 +258,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <p style="font-size: 1.1rem; margin-bottom: var(--space-md); color: var(--color-text-slate);">Aapke payment details properly verify nahi ho sake. Agar aapka bank account se money deduct ho chuki hai, to please support desk par issue notify karein.</p>
             
             <div style="display: flex; flex-direction: column; gap: var(--space-sm);">
-                <a href="mailto:support@tatvam.shop" class="btn btn-primary" style="width: 100%;"><i data-lucide="mail"></i> Email Support Desk</a>
+                <a href="mailto:tatvam.shop01@gmail.com" class="btn btn-primary" style="width: 100%;"><i data-lucide="mail"></i> Email Support Desk</a>
                 <a href="index.html" class="btn btn-secondary" style="width: 100%;">Return to Store</a>
             </div>
         <?php endif; ?>

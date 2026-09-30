@@ -31,7 +31,7 @@ try {
     // 3. Validate Token Expiration Limit (7 Days expiry)
     $expiry_time = strtotime($order['token_expiry']);
     if (time() > $expiry_time) {
-        die("Error: This download link has expired (7 days usage limit exceeded). Please contact support@tatvam.shop to request a renewal.");
+        die("Error: This download link has expired (7 days usage limit exceeded). Please contact tatvam.shop01@gmail.com to request a renewal.");
     }
 
     // 4. Retrieve structured product files
@@ -224,8 +224,8 @@ try {
                     आपकी ई-बुक फाइल तैयार हो रही है। यदि डाउनलोड तुरंत शुरू न हो, तो कृपया नीचे दिए गए लिंक से तुरंत WhatsApp या Email सहायता लें।
                 </p>
                 <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px;">
-                    <a href="mailto:support@tatvam.shop?subject=Download%20Help%20Order%20<?php echo urlencode($order['id']); ?>" class="btn btn-primary" style="width: 100%;">
-                        <i data-lucide="mail"></i> Email Support (support@tatvam.shop)
+                    <a href="mailto:tatvam.shop01@gmail.com?subject=Download%20Help%20Order%20<?php echo urlencode($order['id']); ?>" class="btn btn-primary" style="width: 100%;">
+                        <i data-lucide="mail"></i> Email Support (tatvam.shop01@gmail.com)
                     </a>
                     <a href="javascript:location.reload()" class="btn btn-secondary" style="width: 100%;">
                         <i data-lucide="refresh-cw"></i> Retry Download (पुनः प्रयास करें)

@@ -1367,8 +1367,8 @@ $display_price = isset($product['price']) ? (int)$product['price'] : 199;
         <a href="#bundle">बंडल</a>
         <a href="#faq">सवाल-जवाब</a>
         <a href="contact-us.html">संपर्क करें (Contact Us)</a>
-        <a href="tel:+917880761504">📞 7880761504</a>
-        <a href="mailto:support@tatvam.shop">सहयोग: support@tatvam.shop</a>
+        <a href="tel:+918417894808">📞 8417894808</a>
+        <a href="mailto:tatvam.shop01@gmail.com">सहयोग: tatvam.shop01@gmail.com</a>
       </div>
     </div>
   </footer>

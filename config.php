@@ -18,7 +18,7 @@ if (DEBUG_MODE) {
 // Site Configurations
 define('SITE_URL', 'https://tatvam.shop'); // Always use tatvam.shop
 define('SITE_NAME', 'TATVAM');
-define('SUPPORT_EMAIL', 'support@tatvam.shop');
+define('SUPPORT_EMAIL', 'tatvam.shop01@gmail.com');
 
 // Database Setup Selector
 define('DB_DRIVE', 'sqlite'); // 'sqlite' or 'mysql'
