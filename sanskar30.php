@@ -1504,5 +1504,217 @@ $display_price = isset($product['price']) ? (int)$product['price'] : 199;
       <span class="whatsapp-online-dot" style="position: absolute; top: 2px; right: 2px; width: 14px; height: 14px; background: #10B981; border: 2px solid #FFFFFF; border-radius: 50%;"></span>
     </a>
   </div>
+
+  <!-- Live Purchase Activity Notification Popup (Social Proof) -->
+  <style>
+    .buyer-toast-container {
+      position: fixed !important;
+      bottom: 25px !important;
+      left: 22px !important;
+      z-index: 99990 !important;
+      pointer-events: none !important;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease !important;
+      transform: translate3d(-35px, 0, 0) scale(0.96) !important;
+      opacity: 0 !important;
+    }
+    .buyer-toast-container.show {
+      transform: translate3d(0, 0, 0) scale(1) !important;
+      opacity: 1 !important;
+      pointer-events: auto !important;
+    }
+    .buyer-toast-card {
+      background: rgba(15, 23, 42, 0.96) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      border: 1px solid rgba(251, 191, 36, 0.45) !important;
+      border-radius: 14px !important;
+      padding: 10px 14px !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 12px !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65), 0 0 15px rgba(251, 191, 36, 0.15) !important;
+      max-width: 340px !important;
+      position: relative !important;
+    }
+    .buyer-toast-thumb {
+      width: 42px !important;
+      height: 56px !important;
+      border-radius: 4px !important;
+      object-fit: cover !important;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4) !important;
+      border: 1px solid rgba(251, 191, 36, 0.3) !important;
+      flex-shrink: 0 !important;
+    }
+    .buyer-toast-content {
+      flex: 1 !important;
+      line-height: 1.35 !important;
+    }
+    .buyer-toast-top {
+      display: flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      font-size: 11px !important;
+      color: #10B981 !important;
+      font-weight: 700 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.3px !important;
+      margin-bottom: 2px !important;
+    }
+    .buyer-toast-verified-dot {
+      width: 6px !important;
+      height: 6px !important;
+      background: #10B981 !important;
+      border-radius: 50% !important;
+      box-shadow: 0 0 6px #10B981 !important;
+      display: inline-block !important;
+    }
+    .buyer-toast-name {
+      font-size: 13.5px !important;
+      font-weight: 800 !important;
+      color: #FFFFFF !important;
+    }
+    .buyer-toast-location {
+      font-size: 12px !important;
+      color: #94A3B8 !important;
+      font-weight: 500 !important;
+    }
+    .buyer-toast-desc {
+      font-size: 12px !important;
+      color: #CBD5E1 !important;
+      margin-top: 2px !important;
+    }
+    .buyer-toast-product {
+      color: #FBBF24 !important;
+      font-weight: 700 !important;
+    }
+    .buyer-toast-time {
+      font-size: 11px !important;
+      color: #64748B !important;
+      display: block !important;
+      margin-top: 2px !important;
+    }
+    .buyer-toast-close {
+      position: absolute !important;
+      top: 6px !important;
+      right: 8px !important;
+      background: none !important;
+      border: none !important;
+      color: #64748B !important;
+      font-size: 16px !important;
+      line-height: 1 !important;
+      cursor: pointer !important;
+      padding: 2px !important;
+    }
+    .buyer-toast-close:hover {
+      color: #FFFFFF !important;
+    }
+    @media (max-width: 768px) {
+      .buyer-toast-container {
+        bottom: 84px !important;
+        left: 12px !important;
+        max-width: calc(100vw - 85px) !important;
+      }
+      .buyer-toast-card {
+        padding: 8px 12px !important;
+        max-width: 100% !important;
+      }
+      .buyer-toast-thumb {
+        width: 36px !important;
+        height: 48px !important;
+      }
+      .buyer-toast-name {
+        font-size: 12.5px !important;
+      }
+      .buyer-toast-desc {
+        font-size: 11px !important;
+      }
+    }
+  </style>
+
+  <div class="buyer-toast-container" id="buyerToastContainer" role="alert" aria-live="polite">
+    <div class="buyer-toast-card">
+      <button type="button" class="buyer-toast-close" id="buyerToastClose" aria-label="Close Notification">&times;</button>
+      <img src="assets/ebook-cover.jpg?v=3.0" alt="SANSKAR 30" class="buyer-toast-thumb">
+      <div class="buyer-toast-content">
+        <div class="buyer-toast-top">
+          <span class="buyer-toast-verified-dot"></span>
+          <span>वेरीफाइड खरीददार</span>
+        </div>
+        <div class="buyer-toast-name">
+          <span id="toastBuyerName">राघव शर्मा</span> 
+          <span class="buyer-toast-location" id="toastBuyerLocation">(इंदौर, म.प्र.)</span>
+        </div>
+        <div class="buyer-toast-desc">
+          ने <span class="buyer-toast-product">SANSKAR 30</span> ई-बुक खरीदी
+        </div>
+        <span class="buyer-toast-time" id="toastBuyerTime">2 मिनट पहले</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const toastEl = document.getElementById('buyerToastContainer');
+      const nameEl = document.getElementById('toastBuyerName');
+      const locEl = document.getElementById('toastBuyerLocation');
+      const timeEl = document.getElementById('toastBuyerTime');
+      const closeBtn = document.getElementById('buyerToastClose');
+
+      if (!toastEl) return;
+
+      const recentBuyers = [
+        { name: 'राघव शर्मा', loc: 'इंदौर, म.प्र.', time: '2 मिनट पहले' },
+        { name: 'सुनीता वर्मा', loc: 'जयपुर, राजस्थान', time: '5 मिनट पहले' },
+        { name: 'अमित पटेल', loc: 'अहमदाबाद, गुजरात', time: '8 मिनट पहले' },
+        { name: 'डॉ. राजेश मिश्रा', loc: 'लखनऊ, उ.प्र.', time: '12 मिनट पहले' },
+        { name: 'प्रियंका कुलकर्णी', loc: 'पुणे, महाराष्ट्र', time: '15 मिनट पहले' },
+        { name: 'दीपक चौधरी', loc: 'पटना, बिहार', time: '19 मिनट पहले' },
+        { name: 'विकास गुप्ता', loc: 'दिल्ली NCR', time: '23 मिनट पहले' },
+        { name: 'नेहा जोशी', loc: 'भोपाल, म.प्र.', time: '28 मिनट पहले' },
+        { name: 'संजय तिवारी', loc: 'वाराणसी, उ.प्र.', time: '34 मिनट पहले' },
+        { name: 'कविता देशपांडे', loc: 'नागपुर, महाराष्ट्र', time: '38 मिनट पहले' },
+        { name: 'मनोज कुमार', loc: 'चंडीगढ़', time: '42 मिनट पहले' },
+        { name: 'पूजा राजपूत', loc: 'कानपुर, उ.प्र.', time: '47 मिनट पहले' }
+      ];
+
+      let buyerIndex = 0;
+      let isDismissed = false;
+      let hideTimeout = null;
+
+      function showNextNotification() {
+        if (isDismissed || document.hidden) return;
+
+        const buyer = recentBuyers[buyerIndex];
+        buyerIndex = (buyerIndex + 1) % recentBuyers.length;
+
+        if (nameEl) nameEl.textContent = buyer.name;
+        if (locEl) locEl.textContent = '(' + buyer.loc + ')';
+        if (timeEl) timeEl.textContent = buyer.time;
+
+        toastEl.classList.add('show');
+
+        // Stay visible for 4.5 seconds
+        hideTimeout = setTimeout(() => {
+          toastEl.classList.remove('show');
+        }, 4500);
+      }
+
+      if (closeBtn) {
+        closeBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          isDismissed = true;
+          toastEl.classList.remove('show');
+          if (hideTimeout) clearTimeout(hideTimeout);
+        });
+      }
+
+      // First notification appears after 3.5 seconds
+      setTimeout(() => {
+        showNextNotification();
+        // Subsequent notifications every 13 seconds
+        setInterval(showNextNotification, 13000);
+      }, 3500);
+    })();
+  </script>
 </body>
 </html>
