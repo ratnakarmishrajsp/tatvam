@@ -24,6 +24,11 @@ if ($clean_slug === 'sanskar30') {
     exit;
 }
 
+if (strpos($clean_slug, 'ai') !== false && strpos($clean_slug, 'digital') !== false) {
+    header('Location: ai-digital-product.html');
+    exit;
+}
+
 try {
     $stmt = $db->prepare("SELECT * FROM products WHERE slug = ?");
     $stmt->execute([$slug]);
