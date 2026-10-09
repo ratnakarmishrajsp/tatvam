@@ -1,7 +1,7 @@
 ﻿/**
- * TATTVAM â€” AI DIGITAL PRODUCT INCOME SYSTEM
+ * TATTVAM — AI DIGITAL PRODUCT INCOME SYSTEM
  * Interactive Client Logic & Accessibility Controller
- * Brand: TATTVAM | Website: https://tattvam.shop
+ * Brand: TATTVAM | Website: https://tatvam.shop
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -106,7 +106,7 @@ const workflowData = [
   {
     num: "STAGE 05",
     title: "Build an Irresistible Offer",
-    desc: "Alex Hormozi Value Equation apply à¤•à¤°à¥‡à¤‚. Core asset à¤•à¥‡ à¤¸à¤¾à¤¥ 2-3 instant-implementation speed bonuses stack à¤•à¤°à¥‡à¤‚. Zero-friction entry price anchor à¤•à¤°à¥‡à¤‚ (â‚¹299â€“â‚¹999).",
+    desc: "Alex Hormozi Value Equation apply à¤•à¤°à¥‡à¤‚. Core asset à¤•à¥‡ à¤¸à¤¾à¤¥ 2-3 instant-implementation speed bonuses stack à¤•à¤°à¥‡à¤‚. Zero-friction entry price anchor à¤•à¤°à¥‡à¤‚ (â‚¹299–â‚¹999).",
     deliverable: "Deliverable: 10x Value Stack with Risk-Reversal Guarantee."
   },
   {
@@ -276,23 +276,23 @@ function initPolicyModals() {
 
   const policies = {
     privacy: {
-      title: "Privacy Policy â€” TATTVAM",
+      title: "Privacy Policy — TATTVAM",
       content: `
         <p><strong>Last Updated:</strong> October 2026</p>
-        <p>At TATTVAM (https://tattvam.shop), we respect and protect customer privacy. This Privacy Policy outlines our data handling practices for digital product purchases.</p>
+        <p>At TATTVAM (https://tatvam.shop), we respect and protect customer privacy. This Privacy Policy outlines our data handling practices for digital product purchases.</p>
         <h4>Information We Collect</h4>
-        <p>When you purchase or request access to the AI Digital Product Income System, we collect your name, email address, and transaction identifier provided through our secure payment processor (e.g., Razorpay / Stripe / Gumroad). We do not store or process sensitive credit card or UPI passwords directly on our servers.</p>
+        <p>When you purchase or request access to the AI Digital Product Income System, we collect your name, email address, and transaction identifier provided through our secure payment processor (e.g., Cashfree Payments (UPI, Cards, NetBanking)). We do not store or process sensitive credit card or UPI passwords directly on our servers.</p>
         <h4>How We Use Information</h4>
         <p>Your email address is strictly used to deliver digital PDF download links, important system updates, and transaction receipts. We never sell, rent, or trade customer information to third-party data brokers.</p>
         <h4>Contact & Inquiries</h4>
-        <p>For questions regarding your data or to request deletion of your purchase email record, please reach out via our contact channels at support@tattvam.shop.</p>
+        <p>For questions regarding your data or to request deletion of your purchase email record, please reach out via our contact channels at tatvam.shop01@gmail.com.</p>
       `
     },
     terms: {
-      title: "Terms & Conditions â€” TATTVAM",
+      title: "Terms & Conditions — TATTVAM",
       content: `
         <p><strong>Last Updated:</strong> October 2026</p>
-        <p>By accessing or purchasing the "AI Digital Product Income System" and companion "Bonus Vault" from TATTVAM (tattvam.shop), you agree to the following terms:</p>
+        <p>By accessing or purchasing the "AI Digital Product Income System" and companion "Bonus Vault" from TATTVAM (tatvam.shop), you agree to the following terms:</p>
         <h4>Educational Purpose & No Income Guarantee</h4>
         <p>This product provides structured educational training, frameworks, worksheets, and prompts on digital product creation and AI workflows. TATTVAM does not promise, represent, or guarantee that you will make any specific amount of money or achieve business success. Your results depend on your effort, product concept, market demand, and execution.</p>
         <h4>Intellectual Property & Single-User License</h4>
@@ -302,24 +302,24 @@ function initPolicyModals() {
       `
     },
     refund: {
-      title: "Refund & Cancellation Policy â€” TATTVAM",
+      title: "Refund & Cancellation Policy — TATTVAM",
       content: `
         <p><strong>Clear & Transparent Terms:</strong></p>
         <p>Because the "AI Digital Product Income System" and "Bonus Vault" are instant-download digital assets provided immediately in full PDF format upon payment confirmation, traditional return of goods is not applicable.</p>
         <h4>Customer Satisfaction Commitment</h4>
-        <p>We are dedicated to providing high-quality educational value. If you experience any technical difficulties downloading your files, corrupted files, or payment processing discrepancies, our support team will resolve it within 24â€“48 hours.</p>
+        <p>We are dedicated to providing high-quality educational value. If you experience any technical difficulties downloading your files, corrupted files, or payment processing discrepancies, our support team will resolve it within 24–48 hours.</p>
         <p>Please review the product overview, 12 modules list, and interior page previews prior to purchase to confirm that this curriculum aligns with your goals.</p>
       `
     },
     contact: {
-      title: "Contact & Business Support â€” TATTVAM",
+      title: "Contact & Business Support — TATTVAM",
       content: `
         <p>Have questions before enrolling or need assistance with your digital download?</p>
         <div style="background: rgba(255,255,255,0.04); padding: 18px; border-radius: 8px; margin: 15px 0;">
           <p style="margin-bottom: 8px;"><strong>Brand:</strong> TATTVAM</p>
-          <p style="margin-bottom: 8px;"><strong>Website:</strong> <a href="https://tattvam.shop" target="_blank" style="color: #60a5fa;">https://tattvam.shop</a></p>
-          <p style="margin-bottom: 8px;"><strong>Customer Support Email:</strong> <a href="mailto:support@tattvam.shop" style="color: #60a5fa;">support@tattvam.shop</a></p>
-          <p style="margin-bottom: 0;"><strong>Operational Hours:</strong> Monday â€“ Saturday (10:00 AM â€“ 6:00 PM IST)</p>
+          <p style="margin-bottom: 8px;"><strong>Website:</strong> <a href="https://tatvam.shop" target="_blank" style="color: #60a5fa;">https://tatvam.shop</a></p>
+          <p style="margin-bottom: 8px;"><strong>Customer Support Email:</strong> <a href="mailto:tatvam.shop01@gmail.com" style="color: #60a5fa;">tatvam.shop01@gmail.com</a></p>
+          <p style="margin-bottom: 0;"><strong>Operational Hours:</strong> Monday – Saturday (10:00 AM – 6:00 PM IST)</p>
         </div>
         <p style="font-size: 0.85rem; color: #94a3b8;">Queries are typically answered within 24 business hours.</p>
       `

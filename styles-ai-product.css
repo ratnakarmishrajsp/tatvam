@@ -940,7 +940,9 @@ h1, h2, h3, h4, h5, h6 {
 .preview-mask {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(7, 9, 14, 0.1) 0%, rgba(7, 9, 14, 0.4) 65%, rgba(7, 9, 14, 0.9) 100%);
+  background: linear-gradient(180deg, rgba(7, 9, 14, 0.05) 0%, rgba(7, 9, 14, 0.35) 45%, rgba(7, 9, 14, 0.92) 100%);
+  backdrop-filter: blur(2.5px);
+  -webkit-backdrop-filter: blur(2.5px);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -948,8 +950,21 @@ h1, h2, h3, h4, h5, h6 {
   transition: var(--transition-fast);
 }
 
+.preview-card.no-blur .preview-mask {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: linear-gradient(180deg, rgba(7, 9, 14, 0) 0%, rgba(7, 9, 14, 0.25) 55%, rgba(7, 9, 14, 0.88) 100%) !important;
+}
+
 .preview-card:hover .preview-mask {
-  background: linear-gradient(180deg, rgba(7, 9, 14, 0.05) 0%, rgba(7, 9, 14, 0.3) 50%, rgba(7, 9, 14, 0.85) 100%);
+  background: linear-gradient(180deg, rgba(7, 9, 14, 0.02) 0%, rgba(7, 9, 14, 0.25) 45%, rgba(7, 9, 14, 0.85) 100%);
+  backdrop-filter: blur(1.5px);
+  -webkit-backdrop-filter: blur(1.5px);
+}
+
+.preview-card.no-blur:hover .preview-mask {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
 .preview-tag {
@@ -1408,6 +1423,18 @@ h1, h2, h3, h4, h5, h6 {
   max-height: 500px;
   transition: max-height 0.4s ease-in-out;
   padding-bottom: 22px;
+}
+
+
+/* ===================================================================
+   SECTION: FINAL CALL TO ACTION BANNER
+   =================================================================== */
+.section-final-cta {
+  padding: 95px 0;
+  background: radial-gradient(circle at 50% 50%, rgba(37, 99, 235, 0.15) 0%, transparent 70%),
+              linear-gradient(180deg, var(--bg-deep) 0%, #0a0e17 100%);
+  border-top: 1px solid var(--border-subtle);
+  position: relative;
 }
 
 /* ===================================================================
