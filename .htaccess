@@ -1,3 +1,6 @@
+AddDefaultCharset UTF-8
+AddCharset UTF-8 .html .css .js
+
 # TATVAM - Optimized LiteSpeed Server Configuration
 <IfModule mod_rewrite.c>
     RewriteEngine On
@@ -6,7 +9,9 @@
     RewriteCond %{HTTPS} off
     RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-    # Pretty URL routing: route /positive-thinking to positive-thinking.html
+    # Pretty URL routing
+    RewriteRule ^ai-digital-product/?$ ai-digital-product.html [L,QSA]
+    RewriteRule ^ai-product/?$ ai-digital-product.html [L,QSA]
     RewriteRule ^positive-thinking/?$ positive-thinking.html [L,QSA]
     RewriteRule ^sanskar30/?$ sanskar30.php [L,QSA]
     RewriteRule ^sanskar-30/?$ sanskar30.php [L,QSA]
