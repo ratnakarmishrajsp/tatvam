@@ -13,12 +13,12 @@ try {
 }
 
 // Function to resolve product URLs
-function getProductUrl($slug) {
-    $normalized = strtolower(trim(str_replace(['-', '_', '+'], ' ', (string)$slug)));
-    if (strpos($normalized, 'ai') !== false && strpos($normalized, 'digital') !== false) {
+function getProductUrl($slug, $title = '') {
+    $combined = strtolower(trim((string)$slug . ' ' . (string)$title));
+    if (strpos($combined, 'ai') !== false && strpos($combined, 'digital') !== false) {
         return 'ai-digital-product.html';
     }
-    if ($normalized === 'sanskar30' || $normalized === 'sanskar 30') {
+    if (strpos($combined, 'sanskar') !== false) {
         return 'sanskar30.php';
     }
     switch ($slug) {
@@ -230,7 +230,7 @@ function getProductUrl($slug) {
             <div class="library-grid" id="library-grid-container">
                 
                 <?php foreach ($products as $prod): ?>
-                    <a href="<?php echo getProductUrl($prod['slug']); ?>" class="ebook-card" data-category="<?php echo htmlspecialchars($prod['category']); ?>" data-title="<?php echo htmlspecialchars(strtolower($prod['title'])); ?>" style="text-decoration: none; display: flex; flex-direction: column; justify-content: space-between;">
+                    <a href="<?php echo getProductUrl($prod['slug'], $prod['title'] ?? ''); ?>" class="ebook-card" data-category="<?php echo htmlspecialchars($prod['category']); ?>" data-title="<?php echo htmlspecialchars(strtolower($prod['title'])); ?>" style="text-decoration: none; display: flex; flex-direction: column; justify-content: space-between;">
                         
                         <div>
                             <!-- Cover visual area -->
