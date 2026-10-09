@@ -1,6 +1,6 @@
-﻿/**
+/**
  * TATTVAM — AI DIGITAL PRODUCT INCOME SYSTEM
- * Interactive Client Logic & Accessibility Controller
+ * Interactive Client Logic, Modals, Checkout & Accessibility Controller
  * Brand: TATTVAM | Website: https://tatvam.shop
  */
 
@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initFaqAccordion();
   initPolicyModals();
   initCheckoutTriggers();
+  initSmoothScroll();
   initScrollReveal();
 });
 
@@ -35,18 +36,28 @@ function initNavbar() {
 
   // Mobile menu toggle
   if (mobileToggle && mobileMenu) {
-    mobileToggle.addEventListener('click', () => {
+    mobileToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
       const isOpen = mobileMenu.classList.toggle('open');
       mobileToggle.setAttribute('aria-expanded', isOpen);
-      mobileToggle.innerHTML = isOpen ? 'âœ•' : 'â˜°';
+      mobileToggle.innerHTML = isOpen ? '✕' : '☰';
     });
 
     mobileLinks.forEach(link => {
       link.addEventListener('click', () => {
         mobileMenu.classList.remove('open');
         mobileToggle.setAttribute('aria-expanded', 'false');
-        mobileToggle.innerHTML = 'â˜°';
+        mobileToggle.innerHTML = '☰';
       });
+    });
+
+    // Close mobile menu on clicking outside
+    document.addEventListener('click', (e) => {
+      if (!mobileMenu.contains(e.target) && !mobileToggle.contains(e.target) && mobileMenu.classList.contains('open')) {
+        mobileMenu.classList.remove('open');
+        mobileToggle.setAttribute('aria-expanded', 'false');
+        mobileToggle.innerHTML = '☰';
+      }
     });
   }
 
@@ -82,50 +93,50 @@ const workflowData = [
   {
     num: "STAGE 01",
     title: "Find a Real Problem (Problem First)",
-    desc: "Digital product à¤¬à¤¨à¤¾à¤¨à¥‡ à¤¸à¥‡ à¤ªà¤¹à¤²à¥‡ customer à¤•à¥€ bleeding-neck pain identify à¤•à¤°à¥‡à¤‚. AI prompts à¤•à¥‡ à¤œà¤°à¤¿à¤ Reddit, Quora à¤”à¤° niche forums à¤•à¥‹ scan à¤•à¤°à¤•à¥‡ unfulfilled market demands uncover à¤•à¤°à¥‡à¤‚.",
-    deliverable: "Deliverable: Validated Customer Pain Profile & High-Intent Search Queries."
+    desc: "Digital product बनाने से पहले customer की bleeding-neck pain identify करें. AI prompts के जरिए Reddit, Quora और niche forums को scan करके unfulfilled market demand discover करें.",
+    deliverable: "Deliverable: Verified Customer Problem Statement & Audience Profile."
   },
   {
     num: "STAGE 02",
-    title: "Validate Demand & Solvability",
-    desc: "8-Vector Validation Scorecard (Bonus 6) use à¤•à¤°à¥‡à¤‚. Problem à¤•à¥€ severity, urgency, target audience accessibility, à¤”à¤° customer willingness-to-pay mathematically verify à¤•à¤°à¥‡à¤‚.",
-    deliverable: "Deliverable: Completed Validation Scorecard (>30/40 Score) with Green Light."
+    title: "Pick the Right Product Format",
+    desc: "Format overthinking बंद करें. शुरुआती stage पर eBook, practical Playbook, Prompt Pack या Checklist सबसे fast ship होते हैं. कम complexity में maximum value deliver करें.",
+    deliverable: "Deliverable: Product Format Decision Matrix & Scope Lock."
   },
   {
     num: "STAGE 03",
-    title: "Create with AI (The 12-Step Engine)",
-    desc: "AI-First 12-step creation pipeline execute à¤•à¤°à¥‡à¤‚. 15 forbidden generic buzzwords bypass à¤•à¤°à¥‡à¤‚, high-value original frameworks establish à¤•à¤°à¥‡à¤‚, à¤”à¤° structured content draft à¤•à¤°à¥‡à¤‚.",
-    deliverable: "Deliverable: Comprehensive, Original Digital Publication Draft."
+    title: "Structure the Outline (Anti-Chaos Blueprint)",
+    desc: "AI से सीधा 'write an ebook' नहीं बोलना है. पहले transformation journey map करें: Point A (Problem) से Point B (Desired Result). 12 practical modules में outline freeze करें.",
+    deliverable: "Deliverable: 12-Module Chapter-by-Chapter Architectural Outline."
   },
   {
     num: "STAGE 04",
-    title: "Package & Premiumize The Asset",
-    desc: "Visual hierarchy, typography, fillable worksheets, and 3D device mockups à¤œà¥‹à¤¡à¤¼à¤•à¤° perceived value elevate à¤•à¤°à¥‡à¤‚. Plain text dump à¤•à¥‹ commercial publication à¤®à¥‡à¤‚ transform à¤•à¤°à¥‡à¤‚.",
-    deliverable: "Deliverable: Commercially Formatted Master Guide & Printable Workbook."
+    title: "Create Content with AI (Module by Module)",
+    desc: "Anti-Generic Prompting formulas use करें. 15 forbidden buzzwords को bypass करके real-world examples, worksheets, action steps और relatable Hinglish context inject करें.",
+    deliverable: "Deliverable: Complete Production-Grade Content Manuscript."
   },
   {
     num: "STAGE 05",
     title: "Build an Irresistible Offer",
-    desc: "Alex Hormozi Value Equation apply à¤•à¤°à¥‡à¤‚. Core asset à¤•à¥‡ à¤¸à¤¾à¤¥ 2-3 instant-implementation speed bonuses stack à¤•à¤°à¥‡à¤‚. Zero-friction entry price anchor à¤•à¤°à¥‡à¤‚ (â‚¹299–â‚¹999).",
+    desc: "Alex Hormozi Value Equation apply करें. Core asset के साथ 2-3 instant-implementation speed bonuses stack करें. Zero-friction entry price anchor करें (₹199 launch offer).",
     deliverable: "Deliverable: 10x Value Stack with Risk-Reversal Guarantee."
   },
   {
     num: "STAGE 06",
-    title: "Build the 12-Section Landing Page",
-    desc: "Direct-response conversion framework deploy à¤•à¤°à¥‡à¤‚. Hero hook, pain agitation, solution contrast, feature breakdown, social proof, objection FAQs, à¤”à¤° clear single CTA.",
-    deliverable: "Deliverable: High-Converting Sales Page with Integrated Checkout."
+    title: "Design a High-Converting Landing Page",
+    desc: "12 essential conversion sections build करें: Hero with clear promise, social proof, module breakdown, real interior previews, risk reversal और transparent FAQ stack.",
+    deliverable: "Deliverable: Mobile-Optimized, Fast-Loading Sales Page."
   },
   {
     num: "STAGE 07",
-    title: "Market with Organic Content & AI Ads",
-    desc: "Problem -> Hook -> Agitation -> Solution -> CTA formula use à¤•à¤°à¤•à¥‡ short-form Reels, carousels, à¤”à¤° micro-budget Meta ads generate à¤•à¤°à¥‡à¤‚. 50 battle-tested ad hooks deploy à¤•à¤°à¥‡à¤‚.",
-    deliverable: "Deliverable: 30-Day Content Matrix & 5 High-CTR Creative Assets."
+    title: "Organic Traffic & High-Retention Ads",
+    desc: "50 proven ad hooks और short-form video frameworks use करें. Instagram reels, carousel breakdowns और Twitter/LinkedIn threads से targeted audience attract करें.",
+    deliverable: "Deliverable: 30-Day Content Distribution & Ad Creative Matrix."
   },
   {
     num: "STAGE 08",
-    title: "Launch, Acquire Customers & Optimize",
-    desc: "Disciplined 7-Day Launch Checklist execute à¤•à¤°à¥‡à¤‚. Initial 10 paying customers acquire à¤•à¤°à¥‡à¤‚, real user feedback loops collect à¤•à¤°à¥‡à¤‚, à¤”à¤° product à¤•à¥‹ scale à¤•à¤°à¥‡à¤‚.",
-    deliverable: "Deliverable: First Paying Customers & Repeatable Sales Loop."
+    title: "7-Day Launch & The First Sale Engine",
+    desc: "Day 01 से Day 07 तक structured countdown execute करें. Customer onboarding flow, instant delivery automation और feedback collection loop establish करें.",
+    deliverable: "Deliverable: Automated Delivery Funnel & First-Sale Execution Plan."
   }
 ];
 
@@ -178,7 +189,7 @@ function initModuleFilters() {
 
       moduleCards.forEach(card => {
         if (filter === 'all' || card.getAttribute('data-category') === filter) {
-          card.style.display = 'flex';
+          card.style.display = '';
         } else {
           card.style.display = 'none';
         }
@@ -206,9 +217,9 @@ function initPreviewModal() {
       const title = card.getAttribute('data-preview-title');
       const desc = card.getAttribute('data-preview-desc');
 
-      modalImg.src = src;
-      modalTitle.textContent = title;
-      modalDesc.textContent = desc;
+      if (modalImg) modalImg.src = src;
+      if (modalTitle) modalTitle.textContent = title;
+      if (modalDesc) modalDesc.textContent = desc;
 
       modal.classList.add('active');
       document.body.style.overflow = 'hidden';
@@ -281,11 +292,11 @@ function initPolicyModals() {
         <p><strong>Last Updated:</strong> October 2026</p>
         <p>At TATTVAM (https://tatvam.shop), we respect and protect customer privacy. This Privacy Policy outlines our data handling practices for digital product purchases.</p>
         <h4>Information We Collect</h4>
-        <p>When you purchase or request access to the AI Digital Product Income System, we collect your name, email address, and transaction identifier provided through our secure payment processor (e.g., Cashfree Payments (UPI, Cards, NetBanking)). We do not store or process sensitive credit card or UPI passwords directly on our servers.</p>
+        <p>When you purchase or request access to the AI Digital Product Income System, we collect your name, email address, and transaction identifier provided through our secure payment processor (Cashfree Payments). We do not store or process sensitive credit card numbers or UPI passwords directly on our servers.</p>
         <h4>How We Use Information</h4>
         <p>Your email address is strictly used to deliver digital PDF download links, important system updates, and transaction receipts. We never sell, rent, or trade customer information to third-party data brokers.</p>
         <h4>Contact & Inquiries</h4>
-        <p>For questions regarding your data or to request deletion of your purchase email record, please reach out via our contact channels at tatvam.shop01@gmail.com.</p>
+        <p>For questions regarding your data or to request deletion of your purchase email record, please reach out via our contact channels at <a href="mailto:tatvam.shop01@gmail.com" style="color: #60a5fa;">tatvam.shop01@gmail.com</a>.</p>
       `
     },
     terms: {
@@ -330,11 +341,11 @@ function initPolicyModals() {
     link.addEventListener('click', (e) => {
       e.preventDefault();
       const policyKey = link.getAttribute('data-policy-modal');
-      const policy = policies[policyKey];
+      const data = policies[policyKey];
 
-      if (policy) {
-        policyTitle.textContent = policy.title;
-        policyBody.innerHTML = policy.content;
+      if (data && policyTitle && policyBody) {
+        policyTitle.textContent = data.title;
+        policyBody.innerHTML = data.content;
         policyModal.classList.add('active');
         document.body.style.overflow = 'hidden';
       }
@@ -363,7 +374,7 @@ function initPolicyModals() {
    7. CHECKOUT TRIGGER & LIVE CASHFREE ORDER FLOW
    =================================================================== */
 function initCheckoutTriggers() {
-  const buyButtons = document.querySelectorAll('.btn-buy-trigger, .checkout-trigger');
+  const buyButtons = document.querySelectorAll('.btn-buy-trigger, .checkout-trigger, a[href="#pricing"]');
   const checkoutModal = document.getElementById('checkout-modal');
   const checkoutClose = document.getElementById('checkout-modal-close');
   const checkoutForm = document.getElementById('ai-checkout-form');
@@ -371,6 +382,17 @@ function initCheckoutTriggers() {
 
   function openCheckout() {
     if (checkoutModal) {
+      // Close mobile menu if open
+      const mobileMenu = document.querySelector('.mobile-nav-menu');
+      const mobileToggle = document.querySelector('.mobile-toggle');
+      if (mobileMenu && mobileMenu.classList.contains('open')) {
+        mobileMenu.classList.remove('open');
+        if (mobileToggle) {
+          mobileToggle.setAttribute('aria-expanded', 'false');
+          mobileToggle.innerHTML = '☰';
+        }
+      }
+
       checkoutModal.classList.add('active');
       document.body.style.overflow = 'hidden';
     }
@@ -467,25 +489,43 @@ function initCheckoutTriggers() {
     });
   }
 }
+
+/* ===================================================================
+   8. SMOOTH SCROLLING FOR ALL SECTION ANCHOR LINKS
+   =================================================================== */
+function initSmoothScroll() {
+  const anchorLinks = document.querySelectorAll('a[href^="#"]:not([href="#pricing"]):not([href="#"])');
+  anchorLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      const targetId = link.getAttribute('href').substring(1);
+      const targetEl = document.getElementById(targetId);
+      if (targetEl) {
+        e.preventDefault();
+        const navbar = document.querySelector('.navbar');
+        const navHeight = navbar ? navbar.offsetHeight : 70;
+        const targetPos = targetEl.getBoundingClientRect().top + window.pageYOffset - navHeight - 10;
+        window.scrollTo({
+          top: targetPos,
+          behavior: 'smooth'
+        });
+
+        // Close mobile menu if open
+        const mobileMenu = document.querySelector('.mobile-nav-menu');
+        const mobileToggle = document.querySelector('.mobile-toggle');
+        if (mobileMenu && mobileMenu.classList.contains('open')) {
+          mobileMenu.classList.remove('open');
+          if (mobileToggle) {
+            mobileToggle.setAttribute('aria-expanded', 'false');
+            mobileToggle.innerHTML = '☰';
+          }
+        }
+      }
     });
   });
-
-  if (checkoutModal) {
-    const closeCheckout = () => {
-      checkoutModal.classList.remove('active');
-      document.body.style.overflow = '';
-    };
-
-    if (checkoutClose) checkoutClose.addEventListener('click', closeCheckout);
-
-    checkoutModal.addEventListener('click', (e) => {
-      if (e.target === checkoutModal) closeCheckout();
-    });
-  }
 }
 
 /* ===================================================================
-   8. SCROLL REVEAL OBSERVER
+   9. SCROLL REVEAL OBSERVER
    =================================================================== */
 function initScrollReveal() {
   if (!('IntersectionObserver' in window)) return;
@@ -509,4 +549,3 @@ function initScrollReveal() {
 
   targets.forEach(el => observer.observe(el));
 }
-
