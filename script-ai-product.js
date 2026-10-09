@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCheckoutTriggers();
   initSmoothScroll();
   initScrollReveal();
+  initStickyBuyBar();
 });
 
 /* ===================================================================
@@ -548,4 +549,23 @@ function initScrollReveal() {
   });
 
   targets.forEach(el => observer.observe(el));
+}
+
+/* ===================================================================
+   10. STICKY BOTTOM BUY NOW BAR (ON-SCROLL REVEAL)
+   =================================================================== */
+function initStickyBuyBar() {
+  const stickyBar = document.getElementById('sticky-buy-bar');
+  if (!stickyBar) return;
+
+  const handleScroll = () => {
+    if (window.scrollY > 320) {
+      stickyBar.classList.add('is-visible');
+    } else {
+      stickyBar.classList.remove('is-visible');
+    }
+  };
+
+  window.addEventListener('scroll', handleScroll, { passive: true });
+  handleScroll();
 }
