@@ -36,6 +36,12 @@ try {
         $product = $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    if (!$product && (strpos(strtolower((string)$product_slug), 'ai') !== false && strpos(strtolower((string)$product_slug), 'digital') !== false)) {
+        $stmt = $db->prepare("SELECT * FROM products WHERE slug LIKE '%AI%digital%' OR slug LIKE '%ai-digital%' OR title LIKE '%AI Digital%' LIMIT 1");
+        $stmt->execute();
+        $product = $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
     if (!$product) {
         echo json_encode(['success' => false, 'message' => 'Selected product not found.']);
         exit;

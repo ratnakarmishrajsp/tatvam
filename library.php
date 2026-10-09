@@ -14,6 +14,13 @@ try {
 
 // Function to resolve product URLs
 function getProductUrl($slug) {
+    $normalized = strtolower(trim(str_replace(['-', '_', '+'], ' ', (string)$slug)));
+    if (strpos($normalized, 'ai') !== false && strpos($normalized, 'digital') !== false) {
+        return 'ai-digital-product.html';
+    }
+    if ($normalized === 'sanskar30' || $normalized === 'sanskar 30') {
+        return 'sanskar30.php';
+    }
     switch ($slug) {
         case 'positive-thinking':
             return 'positive-thinking.html';
