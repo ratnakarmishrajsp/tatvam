@@ -334,25 +334,22 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: var(--radius-md);
 }
 
-/* --- 5. STICKY TOP NAVIGATION --- */
+/* --- 5. TOP NAVIGATION (NATURAL SCROLL, NON-STICKY) --- */
 .navbar {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
+  z-index: 100;
   transition: var(--transition-normal);
   padding: 18px 0;
-  border-bottom: 1px solid transparent;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .navbar.scrolled {
-  background: rgba(7, 10, 18, 0.86);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border-bottom: 1px solid var(--border-subtle);
-  padding: 12px 0;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.55);
+  background: transparent;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: none;
 }
 
 .nav-container {
