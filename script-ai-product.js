@@ -1,89 +1,45 @@
-/**
+﻿/**
  * TATTVAM — AI DIGITAL PRODUCT INCOME SYSTEM
  * Interactive Client Logic, Modals, Checkout & Accessibility Controller
  * Brand: TATTVAM | Website: https://tatvam.shop
  */
 
-document.addEventListener('DOMContentLoaded', () => {
-  initNavbar();
-  initWorkflowStepper();
-  initModuleFilters();
-  initPreviewModal();
-  initFaqAccordion();
-  initPolicyModals();
-  initCheckoutTriggers();
-  initSmoothScroll();
-  initScrollReveal();
-  initStickyBuyBar();
-});
+/* ===================================================================
+   MASTER INITIALIZATION CONTROLLER
+   Ensures all event listeners attach regardless of script load timing
+   =================================================================== */
+function initAll() {
+  try { initNavbar(); } catch (err) { console.error('Navbar error:', err); }
+  try { initWorkflowStepper(); } catch (err) { console.error('Workflow error:', err); }
+  try { initModuleFilters(); } catch (err) { console.error('Filters error:', err); }
+  try { initPreviewModal(); } catch (err) { console.error('Preview error:', err); }
+  try { initFaqAccordion(); } catch (err) { console.error('FAQ error:', err); }
+  try { initPolicyModals(); } catch (err) { console.error('Policy error:', err); }
+  try { initCheckoutTriggers(); } catch (err) { console.error('Checkout error:', err); }
+  try { initSmoothScroll(); } catch (err) { console.error('Scroll error:', err); }
+  try { initScrollReveal(); } catch (err) { console.error('Reveal error:', err); }
+  try { initStickyBuyBar(); } catch (err) { console.error('Sticky error:', err); }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initAll);
+} else {
+  initAll();
+}
 
 /* ===================================================================
    1. NAVIGATION & SCROLL OBSERVER
    =================================================================== */
 function initNavbar() {
   const navbar = document.querySelector('.navbar');
-  const mobileToggle = document.querySelector('.mobile-toggle');
-  const mobileMenu = document.querySelector('.mobile-nav-menu');
-  const mobileLinks = document.querySelectorAll('.mobile-nav-link');
+  if (!navbar) return;
 
-  // Sticky Navbar state
   window.addEventListener('scroll', () => {
     if (window.scrollY > 40) {
       navbar.classList.add('scrolled');
     } else {
       navbar.classList.remove('scrolled');
     }
-  }, { passive: true });
-
-  // Mobile menu toggle
-  if (mobileToggle && mobileMenu) {
-    mobileToggle.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const isOpen = mobileMenu.classList.toggle('open');
-      mobileToggle.setAttribute('aria-expanded', isOpen);
-      mobileToggle.innerHTML = isOpen ? '✕' : '☰';
-    });
-
-    mobileLinks.forEach(link => {
-      link.addEventListener('click', () => {
-        mobileMenu.classList.remove('open');
-        mobileToggle.setAttribute('aria-expanded', 'false');
-        mobileToggle.innerHTML = '☰';
-      });
-    });
-
-    // Close mobile menu on clicking outside
-    document.addEventListener('click', (e) => {
-      if (!mobileMenu.contains(e.target) && !mobileToggle.contains(e.target) && mobileMenu.classList.contains('open')) {
-        mobileMenu.classList.remove('open');
-        mobileToggle.setAttribute('aria-expanded', 'false');
-        mobileToggle.innerHTML = '☰';
-      }
-    });
-  }
-
-  // Active link scroll spy
-  const sections = document.querySelectorAll('section[id]');
-  const navLinks = document.querySelectorAll('.nav-link');
-
-  window.addEventListener('scroll', () => {
-    let current = '';
-    const scrollPos = window.scrollY + 200;
-
-    sections.forEach(section => {
-      const top = section.offsetTop;
-      const height = section.offsetHeight;
-      if (scrollPos >= top && scrollPos < top + height) {
-        current = section.getAttribute('id');
-      }
-    });
-
-    navLinks.forEach(link => {
-      link.classList.remove('active');
-      if (link.getAttribute('href') === `#${current}`) {
-        link.classList.add('active');
-      }
-    });
   }, { passive: true });
 }
 
@@ -94,49 +50,49 @@ const workflowData = [
   {
     num: "STAGE 01",
     title: "Find a Real Problem (Problem First)",
-    desc: "Digital product बनाने से पहले customer की bleeding-neck pain identify करें. AI prompts के जरिए Reddit, Quora और niche forums को scan करके unfulfilled market demand discover करें.",
+    desc: "Digital product बनाने से पहले customer की bleeding-neck pain identify करें। AI prompts के जरिए Reddit, Quora और niche forums को scan करके unfulfilled market demand discover करें।",
     deliverable: "Deliverable: Verified Customer Problem Statement & Audience Profile."
   },
   {
     num: "STAGE 02",
     title: "Pick the Right Product Format",
-    desc: "Format overthinking बंद करें. शुरुआती stage पर eBook, practical Playbook, Prompt Pack या Checklist सबसे fast ship होते हैं. कम complexity में maximum value deliver करें.",
+    desc: "Format overthinking बंद करें। शुरुआती stage पर eBook, practical Playbook, Prompt Pack या Checklist सबसे fast ship होते हैं। कम complexity में maximum value deliver करें।",
     deliverable: "Deliverable: Product Format Decision Matrix & Scope Lock."
   },
   {
     num: "STAGE 03",
     title: "Structure the Outline (Anti-Chaos Blueprint)",
-    desc: "AI से सीधा 'write an ebook' नहीं बोलना है. पहले transformation journey map करें: Point A (Problem) से Point B (Desired Result). 12 practical modules में outline freeze करें.",
+    desc: "AI से सीधा 'write an ebook' नहीं बोलना है। पहले transformation journey map करें: Point A (Problem) से Point B (Desired Result)। 12 practical modules में outline freeze करें।",
     deliverable: "Deliverable: 12-Module Chapter-by-Chapter Architectural Outline."
   },
   {
     num: "STAGE 04",
     title: "Create Content with AI (Module by Module)",
-    desc: "Anti-Generic Prompting formulas use करें. 15 forbidden buzzwords को bypass करके real-world examples, worksheets, action steps और relatable Hinglish context inject करें.",
+    desc: "Anti-Generic Prompting formulas use करें। 15 forbidden buzzwords को bypass करके real-world examples, worksheets, action steps और relatable Hinglish context inject करें।",
     deliverable: "Deliverable: Complete Production-Grade Content Manuscript."
   },
   {
     num: "STAGE 05",
     title: "Build an Irresistible Offer",
-    desc: "Alex Hormozi Value Equation apply करें. Core asset के साथ 2-3 instant-implementation speed bonuses stack करें. Zero-friction entry price anchor करें (₹199 launch offer).",
+    desc: "Alex Hormozi Value Equation apply करें। Core asset के साथ 2-3 instant-implementation speed bonuses stack करें। Zero-friction entry price anchor करें (₹199 launch offer)।",
     deliverable: "Deliverable: 10x Value Stack with Risk-Reversal Guarantee."
   },
   {
     num: "STAGE 06",
     title: "Design a High-Converting Landing Page",
-    desc: "12 essential conversion sections build करें: Hero with clear promise, social proof, module breakdown, real interior previews, risk reversal और transparent FAQ stack.",
+    desc: "12 essential conversion sections build करें: Hero with clear promise, social proof, module breakdown, real interior previews, risk reversal और transparent FAQ stack।",
     deliverable: "Deliverable: Mobile-Optimized, Fast-Loading Sales Page."
   },
   {
     num: "STAGE 07",
     title: "Organic Traffic & High-Retention Ads",
-    desc: "50 proven ad hooks और short-form video frameworks use करें. Instagram reels, carousel breakdowns और Twitter/LinkedIn threads से targeted audience attract करें.",
+    desc: "50 proven ad hooks और short-form video frameworks use करें। Instagram reels, carousel breakdowns और Twitter/LinkedIn threads से targeted audience attract करें।",
     deliverable: "Deliverable: 30-Day Content Distribution & Ad Creative Matrix."
   },
   {
     num: "STAGE 08",
     title: "7-Day Launch & The First Sale Engine",
-    desc: "Day 01 से Day 07 तक structured countdown execute करें. Customer onboarding flow, instant delivery automation और feedback collection loop establish करें.",
+    desc: "Day 01 से Day 07 तक structured countdown execute करें। Customer onboarding flow, instant delivery automation और feedback collection loop establish करें।",
     deliverable: "Deliverable: Automated Delivery Funnel & First-Sale Execution Plan."
   }
 ];
@@ -147,26 +103,29 @@ function initWorkflowStepper() {
   const descEl = document.querySelector('.workflow-detail-desc');
   const deliverableEl = document.querySelector('.workflow-deliverable-card');
 
-  if (!steps.length || !titleEl) return;
+  if (!steps.length) return;
 
   steps.forEach(step => {
-    step.addEventListener('click', () => {
+    const activateStep = () => {
       const index = parseInt(step.getAttribute('data-step'), 10);
       steps.forEach(s => s.classList.remove('active'));
       step.classList.add('active');
 
       const data = workflowData[index];
       if (data) {
-        titleEl.textContent = `${data.num}: ${data.title}`;
-        descEl.textContent = data.desc;
-        deliverableEl.innerHTML = `<strong>Deliverable:</strong> ${data.deliverable.replace('Deliverable: ', '')}`;
+        if (titleEl) titleEl.textContent = `${data.num}: ${data.title}`;
+        if (descEl) descEl.textContent = data.desc;
+        if (deliverableEl) {
+          deliverableEl.innerHTML = `<strong>Deliverable:</strong> ${data.deliverable.replace('Deliverable: ', '')}`;
+        }
       }
-    });
+    };
 
+    step.addEventListener('click', activateStep);
     step.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
-        step.click();
+        activateStep();
       }
     });
   });
@@ -212,13 +171,18 @@ function initPreviewModal() {
 
   if (!modal || !previewCards.length) return;
 
+  const closeModal = () => {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  };
+
   previewCards.forEach(card => {
     card.addEventListener('click', () => {
-      const src = card.getAttribute('data-preview-src');
-      const title = card.getAttribute('data-preview-title');
-      const desc = card.getAttribute('data-preview-desc');
+      const src = card.getAttribute('data-preview-src') || card.querySelector('img')?.src;
+      const title = card.getAttribute('data-preview-title') || 'Page Preview';
+      const desc = card.getAttribute('data-preview-desc') || 'Authentic sample from official publication.';
 
-      if (modalImg) modalImg.src = src;
+      if (modalImg && src) modalImg.src = src;
       if (modalTitle) modalTitle.textContent = title;
       if (modalDesc) modalDesc.textContent = desc;
 
@@ -226,11 +190,6 @@ function initPreviewModal() {
       document.body.style.overflow = 'hidden';
     });
   });
-
-  const closeModal = () => {
-    modal.classList.remove('active');
-    document.body.style.overflow = '';
-  };
 
   if (closeBtn) closeBtn.addEventListener('click', closeModal);
 
@@ -255,7 +214,8 @@ function initFaqAccordion() {
     const questionBtn = item.querySelector('.faq-question');
     if (!questionBtn) return;
 
-    questionBtn.addEventListener('click', () => {
+    questionBtn.addEventListener('click', (e) => {
+      e.preventDefault();
       const isActive = item.classList.contains('active');
 
       // Close other accordion items for clean single-open view
@@ -269,7 +229,7 @@ function initFaqAccordion() {
 
       // Toggle current
       item.classList.toggle('active', !isActive);
-      questionBtn.setAttribute('aria-expanded', !isActive);
+      questionBtn.setAttribute('aria-expanded', String(!isActive));
     });
   });
 }
@@ -375,7 +335,7 @@ function initPolicyModals() {
    7. CHECKOUT TRIGGER & LIVE CASHFREE ORDER FLOW
    =================================================================== */
 function initCheckoutTriggers() {
-  const buyButtons = document.querySelectorAll('.btn-buy-trigger, .checkout-trigger, a[href="#pricing"]');
+  const checkoutTriggers = document.querySelectorAll('.checkout-trigger, .pricing-cta, #pricing-checkout-btn');
   const checkoutModal = document.getElementById('checkout-modal');
   const checkoutClose = document.getElementById('checkout-modal-close');
   const checkoutForm = document.getElementById('ai-checkout-form');
@@ -383,17 +343,6 @@ function initCheckoutTriggers() {
 
   function openCheckout() {
     if (checkoutModal) {
-      // Close mobile menu if open
-      const mobileMenu = document.querySelector('.mobile-nav-menu');
-      const mobileToggle = document.querySelector('.mobile-toggle');
-      if (mobileMenu && mobileMenu.classList.contains('open')) {
-        mobileMenu.classList.remove('open');
-        if (mobileToggle) {
-          mobileToggle.setAttribute('aria-expanded', 'false');
-          mobileToggle.innerHTML = '☰';
-        }
-      }
-
       checkoutModal.classList.add('active');
       document.body.style.overflow = 'hidden';
     }
@@ -406,14 +355,21 @@ function initCheckoutTriggers() {
     }
   }
 
-  buyButtons.forEach(btn => {
-    btn.addEventListener('click', (e) => {
+  // Robust Click Delegation: captures all Buy Buttons across entire DOM
+  document.addEventListener('click', (e) => {
+    const buyTrigger = e.target.closest('.btn-buy-trigger, .checkout-trigger, .sticky-buy-btn, .pricing-cta, a[href="#pricing"]');
+    if (buyTrigger) {
       e.preventDefault();
       openCheckout();
-    });
+    }
   });
 
-  if (checkoutClose) checkoutClose.addEventListener('click', closeCheckout);
+  if (checkoutClose) {
+    checkoutClose.addEventListener('click', (e) => {
+      e.preventDefault();
+      closeCheckout();
+    });
+  }
 
   if (checkoutModal) {
     checkoutModal.addEventListener('click', (e) => {
@@ -435,6 +391,19 @@ function initCheckoutTriggers() {
       if (submitBtn) {
         submitBtn.innerHTML = '<span>कृपया प्रतीक्षा करें... (Processing...)</span>';
         submitBtn.disabled = true;
+      }
+
+      // Check if running on local file:// protocol
+      if (window.location.protocol === 'file:') {
+        setTimeout(() => {
+          alert('Demo Order Mode (Local File View):\n\nइस समय आप लोकल फाइल (file://) देख रहे हैं।\nलाइव वेबसाइट (https://tatvam.shop) पर यह फॉर्म सीधे Cashfree Payment Gateway से कनेक्ट होता है और UPI/Card से ₹199 पेमेंट पूरी होती है।');
+          if (submitBtn) {
+            submitBtn.innerHTML = origText;
+            submitBtn.disabled = false;
+          }
+          closeCheckout();
+        }, 500);
+        return;
       }
 
       const formData = new FormData(checkoutForm);
@@ -481,7 +450,7 @@ function initCheckoutTriggers() {
       })
       .catch(err => {
         console.error('Order Error:', err);
-        alert('सर्वर से कनेक्ट करने में समस्या आई। कृपया इंटरनेट चेक करें।');
+        alert('सर्वर से कनेक्ट करने में समस्या आई। Live server पर यह Cashfree Gateway से कनेक्ट होता है।');
         if (submitBtn) {
           submitBtn.innerHTML = origText;
           submitBtn.disabled = false;
@@ -495,7 +464,7 @@ function initCheckoutTriggers() {
    8. SMOOTH SCROLLING FOR ALL SECTION ANCHOR LINKS
    =================================================================== */
 function initSmoothScroll() {
-  const anchorLinks = document.querySelectorAll('a[href^="#"]:not([href="#pricing"]):not([href="#"])');
+  const anchorLinks = document.querySelectorAll('a[href^="#"]:not([href="#"])');
   anchorLinks.forEach(link => {
     link.addEventListener('click', (e) => {
       const targetId = link.getAttribute('href').substring(1);
@@ -504,22 +473,11 @@ function initSmoothScroll() {
         e.preventDefault();
         const navbar = document.querySelector('.navbar');
         const navHeight = navbar ? navbar.offsetHeight : 70;
-        const targetPos = targetEl.getBoundingClientRect().top + window.pageYOffset - navHeight - 10;
+        const targetPos = targetEl.getBoundingClientRect().top + window.scrollY - navHeight - 15;
         window.scrollTo({
           top: targetPos,
           behavior: 'smooth'
         });
-
-        // Close mobile menu if open
-        const mobileMenu = document.querySelector('.mobile-nav-menu');
-        const mobileToggle = document.querySelector('.mobile-toggle');
-        if (mobileMenu && mobileMenu.classList.contains('open')) {
-          mobileMenu.classList.remove('open');
-          if (mobileToggle) {
-            mobileToggle.setAttribute('aria-expanded', 'false');
-            mobileToggle.innerHTML = '☰';
-          }
-        }
       }
     });
   });
@@ -544,8 +502,8 @@ function initScrollReveal() {
       }
     });
   }, {
-    threshold: 0.1,
-    rootMargin: '0px 0px -40px 0px'
+    threshold: 0.08,
+    rootMargin: '0px 0px -20px 0px'
   });
 
   targets.forEach(el => observer.observe(el));
@@ -558,14 +516,16 @@ function initStickyBuyBar() {
   const stickyBar = document.getElementById('sticky-buy-bar');
   if (!stickyBar) return;
 
-  const handleScroll = () => {
-    if (window.scrollY > 320) {
+  const updateSticky = () => {
+    if (window.scrollY > 260) {
       stickyBar.classList.add('is-visible');
     } else {
       stickyBar.classList.remove('is-visible');
     }
   };
 
-  window.addEventListener('scroll', handleScroll, { passive: true });
-  handleScroll();
+  window.addEventListener('scroll', updateSticky, { passive: true });
+  // Initial check
+  updateSticky();
 }
+
