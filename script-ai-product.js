@@ -562,7 +562,7 @@ function initPurchaseToast() {
 
     const data = purchases[currentIndex];
     if (userEl) userEl.textContent = `${data.name} from ${data.city}`;
-    if (timeEl) timeEl.textContent = `${data.time} • Verified Purchase ✓`;
+    if (timeEl) timeEl.textContent = `${data.time} • Instant PDF Download ✓`;
 
     toast.classList.add('is-visible');
 
