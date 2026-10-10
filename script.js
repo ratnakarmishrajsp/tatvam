@@ -20,6 +20,7 @@ function initAll() {
   try { initScrollReveal(); } catch (err) { console.error('Reveal error:', err); }
   try { initStickyBuyBar(); } catch (err) { console.error('Sticky error:', err); }
   try { initPurchaseToast(); } catch (err) { console.error('Toast error:', err); }
+  try { loadDynamicProductPrice(); } catch (err) { console.error('Price error:', err); }
 }
 
 if (document.readyState === 'loading') {
@@ -598,5 +599,44 @@ function initPurchaseToast() {
     }
   });
 }
+
+/* ===================================================================
+   12. DYNAMIC ADMIN PRODUCT PRICING SYNC
+   Fetches live price from database (get-product.php) and updates all
+   landing page price tags, CTAs, sticky bar, and checkout modal.
+   =================================================================== */
+function updatePagePrices(price, originalPrice) {
+  if (!price || isNaN(price)) return;
+  const priceNum = Math.round(Number(price));
+  
+  // 1. Update all dynamic price elements
+  document.querySelectorAll('.dynamic-price-val').forEach(el => {
+    el.textContent = priceNum;
+  });
+
+  // 2. Update all dynamic MRP elements if available
+  if (originalPrice && !isNaN(originalPrice) && Number(originalPrice) > 0) {
+    const origNum = Math.round(Number(originalPrice));
+    const formattedMrp = origNum.toLocaleString('en-IN');
+    document.querySelectorAll('.dynamic-mrp-val').forEach(el => {
+      el.textContent = formattedMrp;
+    });
+  }
+}
+
+function loadDynamicProductPrice() {
+  const slug = encodeURIComponent('AI digital product income system ');
+  fetch(`get-product.php?slug=${slug}&t=${Date.now()}`)
+    .then(res => res.json())
+    .then(data => {
+      if (data && data.success && data.price) {
+        updatePagePrices(data.price, data.original_price);
+      }
+    })
+    .catch(err => {
+      console.log('Dynamic price sync notice:', err);
+    });
+}
+
 
 
