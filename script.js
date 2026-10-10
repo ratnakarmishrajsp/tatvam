@@ -574,10 +574,10 @@ function initPurchaseToast() {
     currentIndex = (currentIndex + 1) % purchases.length;
   }
 
-  // Initial trigger after 4 seconds, then repeat every 15 seconds
+  // Initial trigger after 4 seconds, then repeat every 20 seconds
   setTimeout(() => {
     showToast();
-    setInterval(showToast, 15000);
+    setInterval(showToast, 20000);
   }, 4000);
 
   if (closeBtn) {
