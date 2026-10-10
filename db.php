@@ -142,8 +142,15 @@ try {
 
             if (!empty($aiRows)) {
                 foreach ($aiRows as $aRow) {
-                    $upStmt = $db->prepare("UPDATE products SET price = 199.00, original_price = 2499.00, file_path = ? WHERE id = ?");
-                    $upStmt->execute([$properAiFiles, $aRow['id']]);
+                    $needsFix = false;
+                    $rawPath = (string)$aRow['file_path'];
+                    if (empty($rawPath) || strpos($rawPath, 'AI Digital Product') === false) {
+                        $needsFix = true;
+                    }
+                    if ($needsFix) {
+                        $upStmt = $db->prepare("UPDATE products SET file_path = ? WHERE id = ?");
+                        $upStmt->execute([$properAiFiles, $aRow['id']]);
+                    }
                 }
             } else {
                 $insertAi = $db->prepare("INSERT INTO products (title, slug, price, original_price, file_path, category, description, cover_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");

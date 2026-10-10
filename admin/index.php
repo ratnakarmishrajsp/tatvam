@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * TATVAM - Advanced SaaS Admin Dashboard & Order Management
  * Includes:
@@ -192,6 +192,8 @@ function syncLandingPagePrice($slug, $new_price, $new_orig_price) {
 
     if ($slug === 'positive-thinking') {
         $files[] = $base_dir . '/positive-thinking.html';
+    } elseif (stripos($slug, 'ai digital product') !== false || stripos($slug, 'ai-digital-product') !== false) {
+        $files[] = $base_dir . '/ai-digital-product.html';
     } else {
         $candidate = $base_dir . '/' . $slug . '.html';
         if (file_exists($candidate)) {
@@ -211,6 +213,8 @@ function syncLandingPagePrice($slug, $new_price, $new_orig_price) {
         $content = preg_replace('/(<span class="sticky-bar-price">)[^<]*(<\/span>)/i', '$1₹' . $new_price_num . '$2', $content);
         $content = preg_replace('/(<div class="modal-summary-price">)[^<]*(<\/div>)/i', '$1₹' . $new_price_num . '$2', $content);
 
+        $content = preg_replace('/(<span class="dynamic-price-val">)[^<]*(<\/span>)/i', '$1' . $new_price_num . '$2', $content);
+        $content = preg_replace('/(<span class="dynamic-mrp-val">)[^<]*(<\/span>)/i', '$1' . number_format($new_orig_num) . '$2', $content);
         file_put_contents($file_path, $content);
     }
 }
