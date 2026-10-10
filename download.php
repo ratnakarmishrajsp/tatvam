@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * TATVAM - Secure Token-Guarded Ebook Download Engine
  * Validates expiration limits, increments access counters, and pipes file bytes securely.
@@ -183,6 +183,26 @@ try {
     if (!$resolved_file_path && preg_match('/file_2_/i', $target_file)) {
         if (file_exists($baseDir . '/files/sanskar_30_parent_toolkit.pdf')) {
             $resolved_file_path = $baseDir . '/files/sanskar_30_parent_toolkit.pdf';
+        }
+    }
+
+
+    // Smart Resolution for AI Digital Product Income System
+    $isAiProd = stripos($order['title'], 'ai digital product') !== false 
+             || stripos($order['product_slug'] ?? '', 'ai digital product') !== false
+             || stripos($target_file, 'ai digital product') !== false 
+             || stripos($target_title, 'ai digital product') !== false;
+
+    if (!$resolved_file_path && $isAiProd) {
+        if ($target_index === 1 || stripos($target_title, 'vault') !== false || stripos($target_title, 'bonus') !== false) {
+            $candidate = $baseDir . '/files/AI Digital Product Income System â€” BONUS VAULT.pdf';
+            if (!file_exists($candidate)) {
+                $candidate = $baseDir . '/files/AI Digital Product Income System - BONUS VAULT.pdf';
+            }
+            if (file_exists($candidate)) $resolved_file_path = $candidate;
+        } else {
+            $candidate = $baseDir . '/files/AI Digital Product Income System.pdf';
+            if (file_exists($candidate)) $resolved_file_path = $candidate;
         }
     }
 

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * TATVAM - Database Connectivity & Auto-Initialization Engine
  * Supporting both SQLite (zero-config localhost) and MySQL (production standard)
@@ -119,6 +119,46 @@ try {
             }
         } catch (Exception $e) {}
 
+        // Auto-heal / Ensure AI Digital Product Income System product exists, price is locked at 199.00, and delivers both PDFs
+        try {
+            $mainAiPdf = 'files/AI Digital Product Income System.pdf';
+            $bonusAiPdf = file_exists(__DIR__ . '/files/AI Digital Product Income System - BONUS VAULT.pdf')
+                ? 'files/AI Digital Product Income System - BONUS VAULT.pdf'
+                : 'files/AI Digital Product Income System â€” BONUS VAULT.pdf';
+
+            $properAiFiles = json_encode([
+                [
+                    'title' => 'AI Digital Product Income System - Main Guide (62 Pages)',
+                    'file'  => $mainAiPdf
+                ],
+                [
+                    'title' => 'AI Digital Product Income System - Bonus Vault (31 Pages)',
+                    'file'  => $bonusAiPdf
+                ]
+            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+            $stmtAi = $db->query("SELECT id, slug, price, file_path FROM products WHERE slug LIKE '%AI%digital%product%' OR title LIKE '%AI%digital%product%'");
+            $aiRows = $stmtAi->fetchAll(PDO::FETCH_ASSOC);
+
+            if (!empty($aiRows)) {
+                foreach ($aiRows as $aRow) {
+                    $upStmt = $db->prepare("UPDATE products SET price = 199.00, original_price = 2499.00, file_path = ? WHERE id = ?");
+                    $upStmt->execute([$properAiFiles, $aRow['id']]);
+                }
+            } else {
+                $insertAi = $db->prepare("INSERT INTO products (title, slug, price, original_price, file_path, category, description, cover_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+                $insertAi->execute([
+                    "AI Digital Product Income System - Create, Launch & Sell with AI",
+                    "AI digital product income system ",
+                    199.00,
+                    2499.00,
+                    $properAiFiles,
+                    "business",
+                    "Complete 12-Module Practical Blueprint + 31-Page Bonus Vault",
+                    "assets/ai-product/ebook_cover_2026.png"
+                ]);
+            }
+        } catch (Exception $e) {}
     } else {
         // Initialize MySQL Connection
         $dsn = "mysql:host=" . MYSQL_HOST . ";port=" . MYSQL_PORT . ";dbname=" . MYSQL_DB . ";charset=utf8mb4";
@@ -195,6 +235,28 @@ function getProductFiles($file_path, $default_title = 'Main eBook') {
                 ]
             ];
         }
+    }
+
+    // Smart Fallback & Multi-File delivery for AI Digital Product Income System
+    $isAiProduct = stripos((string)$default_title, 'ai digital product') !== false 
+                || stripos((string)$file_path, 'AI Digital Product') !== false;
+
+    if ($isAiProduct) {
+        $mainAiPdf = 'files/AI Digital Product Income System.pdf';
+        $bonusAiPdf = file_exists(__DIR__ . '/files/AI Digital Product Income System - BONUS VAULT.pdf')
+            ? 'files/AI Digital Product Income System - BONUS VAULT.pdf'
+            : 'files/AI Digital Product Income System â€” BONUS VAULT.pdf';
+
+        return [
+            [
+                'title' => 'AI Digital Product Income System - Main Guide (62 Pages)',
+                'file'  => $mainAiPdf
+            ],
+            [
+                'title' => 'AI Digital Product Income System - Bonus Vault (31 Pages)',
+                'file'  => $bonusAiPdf
+            ]
+        ];
     }
 
     return $files;

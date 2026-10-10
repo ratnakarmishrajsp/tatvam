@@ -1,4 +1,4 @@
-﻿/**
+/**
  * TATTVAM — AI DIGITAL PRODUCT INCOME SYSTEM
  * Interactive Client Logic, Modals, Checkout & Accessibility Controller
  * Brand: TATTVAM | Website: https://tatvam.shop
