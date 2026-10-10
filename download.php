@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * TATVAM - Secure Token-Guarded Ebook Download Engine
  * Validates expiration limits, increments access counters, and pipes file bytes securely.
@@ -7,7 +7,7 @@
 
 require_once __DIR__ . '/db.php';
 
-$token = filter_input(INPUT_GET, 'token', FILTER_SANITIZE_SPECIAL_CHARS);
+$token = filter_input(INPUT_GET, 'token', FILTER_SANITIZE_SPECIAL_CHARS) ?: (isset($_GET['token']) ? htmlspecialchars($_GET['token']) : null);
 
 if (!$token) {
     die("Error: No download token provided.");
@@ -195,14 +195,47 @@ try {
 
     if (!$resolved_file_path && $isAiProd) {
         if ($target_index === 1 || stripos($target_title, 'vault') !== false || stripos($target_title, 'bonus') !== false) {
-            $candidate = $baseDir . '/files/AI Digital Product Income System â€” BONUS VAULT.pdf';
-            if (!file_exists($candidate)) {
-                $candidate = $baseDir . '/files/AI Digital Product Income System - BONUS VAULT.pdf';
+            $candidates = [
+                $baseDir . '/files/AI Digital Product Income System - BONUS VAULT.pdf',
+                $baseDir . '/files/AI_Digital_Product_Income_System_BONUS_VAULT.pdf',
+                $baseDir . '/files/bonus_vault.pdf',
+            ];
+            foreach ($candidates as $cand) {
+                if (file_exists($cand)) {
+                    $resolved_file_path = $cand;
+                    break;
+                }
             }
-            if (file_exists($candidate)) $resolved_file_path = $candidate;
+            // Dynamic scan fallback: find any bonus vault PDF in files directory regardless of filename encoding
+            if (!$resolved_file_path && is_dir($baseDir . '/files')) {
+                $dirFiles = scandir($baseDir . '/files');
+                foreach ($dirFiles as $df) {
+                    if (stripos($df, 'bonus') !== false && stripos($df, 'vault') !== false && str_ends_with(strtolower($df), '.pdf')) {
+                        $resolved_file_path = $baseDir . '/files/' . $df;
+                        break;
+                    }
+                }
+            }
         } else {
-            $candidate = $baseDir . '/files/AI Digital Product Income System.pdf';
-            if (file_exists($candidate)) $resolved_file_path = $candidate;
+            $candidates = [
+                $baseDir . '/files/AI Digital Product Income System.pdf',
+                $baseDir . '/files/AI_Digital_Product_Income_System.pdf',
+            ];
+            foreach ($candidates as $cand) {
+                if (file_exists($cand)) {
+                    $resolved_file_path = $cand;
+                    break;
+                }
+            }
+            if (!$resolved_file_path && is_dir($baseDir . '/files')) {
+                $dirFiles = scandir($baseDir . '/files');
+                foreach ($dirFiles as $df) {
+                    if (stripos($df, 'income system') !== false && stripos($df, 'bonus') === false && str_ends_with(strtolower($df), '.pdf')) {
+                        $resolved_file_path = $baseDir . '/files/' . $df;
+                        break;
+                    }
+                }
+            }
         }
     }
 
@@ -265,6 +298,10 @@ try {
         $clean_filename = ($target_index === 1 || stripos($target_title, 'toolkit') !== false || stripos($target_title, 'parent') !== false)
             ? 'SANSKAR 30 - Parent and Activity Toolkit.pdf'
             : 'SANSKAR 30 - 30 Days of Good Habits and Strong Values.pdf';
+    } elseif ($isAiProd) {
+        $clean_filename = ($target_index === 1 || stripos($target_title, 'vault') !== false || stripos($target_title, 'bonus') !== false)
+            ? 'AI Digital Product Income System - Bonus Vault.pdf'
+            : 'AI Digital Product Income System - Main Guide.pdf';
     } else {
         $clean_filename = preg_replace('/[^A-Za-z0-9_\-\. ]/', '', $target_title);
         $ext = pathinfo($resolved_file_path, PATHINFO_EXTENSION) ?: 'pdf';

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * TATVAM - Database Connectivity & Auto-Initialization Engine
  * Supporting both SQLite (zero-config localhost) and MySQL (production standard)
@@ -122,9 +122,17 @@ try {
         // Auto-heal / Ensure AI Digital Product Income System product exists, price is locked at 199.00, and delivers both PDFs
         try {
             $mainAiPdf = 'files/AI Digital Product Income System.pdf';
-            $bonusAiPdf = file_exists(__DIR__ . '/files/AI Digital Product Income System - BONUS VAULT.pdf')
-                ? 'files/AI Digital Product Income System - BONUS VAULT.pdf'
-                : 'files/AI Digital Product Income System â€” BONUS VAULT.pdf';
+            $bonusAiPdf = 'files/AI Digital Product Income System - BONUS VAULT.pdf';
+            // Auto copy if clean file missing but em-dash file exists
+            if (!file_exists(__DIR__ . '/' . $bonusAiPdf)) {
+                $dirFiles = @scandir(__DIR__ . '/files') ?: [];
+                foreach ($dirFiles as $df) {
+                    if (stripos($df, 'bonus') !== false && stripos($df, 'vault') !== false && str_ends_with(strtolower($df), '.pdf')) {
+                        @copy(__DIR__ . '/files/' . $df, __DIR__ . '/' . $bonusAiPdf);
+                        break;
+                    }
+                }
+            }
 
             $properAiFiles = json_encode([
                 [
@@ -144,7 +152,7 @@ try {
                 foreach ($aiRows as $aRow) {
                     $needsFix = false;
                     $rawPath = (string)$aRow['file_path'];
-                    if (empty($rawPath) || strpos($rawPath, 'AI Digital Product') === false) {
+                                        if (empty($rawPath) || strpos($rawPath, 'AI Digital Product') === false || strpos($rawPath, "\xE2\x80\x94") !== false || strpos($rawPath, "â€”") !== false || strpos($rawPath, "?") !== false) {
                         $needsFix = true;
                     }
                     if ($needsFix) {
@@ -250,9 +258,16 @@ function getProductFiles($file_path, $default_title = 'Main eBook') {
 
     if ($isAiProduct) {
         $mainAiPdf = 'files/AI Digital Product Income System.pdf';
-        $bonusAiPdf = file_exists(__DIR__ . '/files/AI Digital Product Income System - BONUS VAULT.pdf')
-            ? 'files/AI Digital Product Income System - BONUS VAULT.pdf'
-            : 'files/AI Digital Product Income System â€” BONUS VAULT.pdf';
+        $bonusAiPdf = 'files/AI Digital Product Income System - BONUS VAULT.pdf';
+        if (!file_exists(__DIR__ . '/' . $bonusAiPdf)) {
+            $dirFiles = @scandir(__DIR__ . '/files') ?: [];
+            foreach ($dirFiles as $df) {
+                if (stripos($df, 'bonus') !== false && stripos($df, 'vault') !== false && str_ends_with(strtolower($df), '.pdf')) {
+                    $bonusAiPdf = 'files/' . $df;
+                    break;
+                }
+            }
+        }
 
         return [
             [
