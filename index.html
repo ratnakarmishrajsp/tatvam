@@ -27,7 +27,7 @@
   <!-- Cashfree Payment SDK -->
   <script src="https://sdk.cashfree.com/js/v3/cashfree.js" defer></script>
   <!-- Stylesheet with Cache Buster -->
-  <link rel="stylesheet" href="styles.css?v=3.1">
+  <link rel="stylesheet" href="styles.css?v=3.5">
 </head>
 <body>
 
@@ -42,7 +42,7 @@
       </a>
 
       <div class="nav-actions">
-        <a href="#pricing" class="btn btn-primary btn-sm">Get Instant Access — ₹199</a>
+        <a href="#pricing" class="btn btn-primary btn-sm btn-buy-trigger">Get Instant Access — ₹199</a>
       </div>
     </div>
   </nav>
@@ -105,7 +105,11 @@
 
       <div class="hero-visual">
         <div class="mockup-frame">
-          <img src="assets/ebook_cover_2026.png?v=3.2" alt="TATTVAM AI Digital Product Income System 3D Publication Mockup" class="mockup-image" loading="eager">
+          <img src="assets/ebook_cover_2026.png?v=3.5" alt="TATTVAM AI Digital Product Income System 3D Publication Mockup" class="mockup-image" loading="eager">
+        </div>
+        <div class="hero-bonus-callout">
+          <span>🎁</span>
+          <span><strong>INCLUDED FREE:</strong> 31-Page Bonus Vault (113 Prompts • 50 Concepts • ₹4,999 Value)</span>
         </div>
       </div>
 
@@ -569,6 +573,16 @@
         </div>
       </div>
 
+      <!-- Visual Bridge to Bonus Vault -->
+      <div class="bonus-teaser-banner">
+        <div class="bonus-teaser-info">
+          <span class="bonus-teaser-badge">🔥 SPECIAL INCLUSION • ₹4,999 VALUE</span>
+          <h3 class="bonus-teaser-title">Wait! You Also Get the 31-Page Bonus Vault 100% Free</h3>
+          <p class="bonus-teaser-desc">A full production-grade reference toolkit with 113 tested AI prompts, 50 profitable product concepts, ad hooks, and worksheets.</p>
+        </div>
+        <a href="#bonus" class="btn btn-gold btn-md">Explore All 9 Free Bonuses &darr;</a>
+      </div>
+
     </div>
   </section>
 
@@ -578,25 +592,35 @@
   <section class="section-bonus" id="bonus">
     <div class="container">
       <div class="bonus-box">
-        <div class="bonus-header-row">
+        <!-- Grand 3D Bonus Vault Showcase Card -->
+        <div class="bonus-hero-showcase">
           <div>
-            <div class="bonus-tag-banner">BONUS VAULT INCLUDED — COMPANION TOOLKIT</div>
-            <h2 style="font-size: 2.1rem; color: #ffffff; margin-top: 10px; margin-bottom: 6px;">
+            <div class="bonus-tag-banner" style="margin-bottom: 12px;">🔥 SPECIAL INCLUSION • ₹4,999 VALUE • 100% FREE</div>
+            <h3 style="font-size: 1.85rem; font-weight: 800; color: #ffffff; margin-bottom: 8px;">
               Volume 2: The Companion <span class="text-gold-gradient">Reference Vault (31 Pages)</span>
-            </h2>
-            <p style="font-size: 0.95rem; color: #cbd5e1; max-width: 680px;">
-              A 31-page companion reference toolkit engineered to accelerate your implementation. Copy-paste prompt suites, product directories, and evaluation scorecards included with your access.
+            </h3>
+            <p style="font-size: 0.95rem; color: #cbd5e1; line-height: 1.6; margin-bottom: 0;">
+              Zero theory. Pure execution. 9 production-grade companion assets designed to accelerate your launch, craft irresistible offers, write Meta ad hooks, and audit product feasibility with surgical AI prompts.
             </p>
+            <div class="bonus-hero-stats">
+              <span class="bonus-stat-pill"><strong>9</strong> Master Toolkits</span>
+              <span class="bonus-stat-pill"><strong>31</strong> Printable Pages</span>
+              <span class="bonus-stat-pill"><strong>113</strong> Copy-Paste Prompts</span>
+              <span class="bonus-stat-pill"><strong style="color: #34d399;">₹4,999 Value</strong> — FREE Today</span>
+            </div>
           </div>
-          <div style="text-align: right; display: none;" class="desktop-only-badge">
-            <span style="font-family: var(--font-display); font-size: 2.5rem; font-weight: 800; color: #f59e0b;">31</span>
-            <span style="display: block; font-size: 0.8rem; color: #94a3b8;">Pages of Tools</span>
+          <div>
+            <img src="assets/preview_bonus_cover.png" alt="Bonus Vault 3D Cover" class="bonus-hero-thumb">
           </div>
         </div>
 
         <div class="bonus-grid">
           <!-- Bonus 1 -->
           <div class="bonus-item-card">
+            <div class="bonus-card-top-row">
+              <div class="bonus-card-icon">⚡</div>
+              <span class="bonus-card-value-pill">₹999 VALUE • FREE</span>
+            </div>
             <div class="bonus-item-num">BONUS 01 • PROMPT SUITE</div>
             <h4 class="bonus-item-title">113 Master AI Prompts</h4>
             <p class="bonus-item-desc">
@@ -606,6 +630,10 @@
 
           <!-- Bonus 2 -->
           <div class="bonus-item-card">
+            <div class="bonus-card-top-row">
+              <div class="bonus-card-icon">💡</div>
+              <span class="bonus-card-value-pill">₹799 VALUE • FREE</span>
+            </div>
             <div class="bonus-item-num">BONUS 02 • DIRECTORY</div>
             <h4 class="bonus-item-title">50 Digital Product Concepts</h4>
             <p class="bonus-item-desc">
@@ -615,6 +643,10 @@
 
           <!-- Bonus 3 -->
           <div class="bonus-item-card">
+            <div class="bonus-card-top-row">
+              <div class="bonus-card-icon">✍️</div>
+              <span class="bonus-card-value-pill">₹699 VALUE • FREE</span>
+            </div>
             <div class="bonus-item-num">BONUS 03 • COPYWRITING</div>
             <h4 class="bonus-item-title">22 Offer & Sales Prompts</h4>
             <p class="bonus-item-desc">
@@ -624,6 +656,10 @@
 
           <!-- Bonus 4 -->
           <div class="bonus-item-card">
+            <div class="bonus-card-top-row">
+              <div class="bonus-card-icon">🎯</div>
+              <span class="bonus-card-value-pill">₹599 VALUE • FREE</span>
+            </div>
             <div class="bonus-item-num">BONUS 04 • AD CREATIVE</div>
             <h4 class="bonus-item-title">50 Thumb-Stopping Ad Hooks</h4>
             <p class="bonus-item-desc">
@@ -633,6 +669,10 @@
 
           <!-- Bonus 5 -->
           <div class="bonus-item-card">
+            <div class="bonus-card-top-row">
+              <div class="bonus-card-icon">🖥️</div>
+              <span class="bonus-card-value-pill">₹699 VALUE • FREE</span>
+            </div>
             <div class="bonus-item-num">BONUS 05 • LANDING PAGE</div>
             <h4 class="bonus-item-title">Section-by-Section LP Prompts</h4>
             <p class="bonus-item-desc">
@@ -642,6 +682,10 @@
 
           <!-- Bonus 6 -->
           <div class="bonus-item-card">
+            <div class="bonus-card-top-row">
+              <div class="bonus-card-icon">📊</div>
+              <span class="bonus-card-value-pill">₹499 VALUE • FREE</span>
+            </div>
             <div class="bonus-item-num">BONUS 06 • SCORECARD</div>
             <h4 class="bonus-item-title">Printable Feasibility Scorecard</h4>
             <p class="bonus-item-desc">
@@ -651,6 +695,10 @@
 
           <!-- Bonus 7 -->
           <div class="bonus-item-card">
+            <div class="bonus-card-top-row">
+              <div class="bonus-card-icon">📅</div>
+              <span class="bonus-card-value-pill">₹399 VALUE • FREE</span>
+            </div>
             <div class="bonus-item-num">BONUS 07 • DESK COMPANION</div>
             <h4 class="bonus-item-title">7-Day Launch Compact Checklist</h4>
             <p class="bonus-item-desc">
@@ -660,6 +708,10 @@
 
           <!-- Bonus 8 -->
           <div class="bonus-item-card">
+            <div class="bonus-card-top-row">
+              <div class="bonus-card-icon">🛠️</div>
+              <span class="bonus-card-value-pill">₹499 VALUE • FREE</span>
+            </div>
             <div class="bonus-item-num">BONUS 08 • SOFTWARE</div>
             <h4 class="bonus-item-title">Curated AI Tool Stack</h4>
             <p class="bonus-item-desc">
@@ -669,6 +721,10 @@
 
           <!-- Bonus 9 -->
           <div class="bonus-item-card">
+            <div class="bonus-card-top-row">
+              <div class="bonus-card-icon">🚀</div>
+              <span class="bonus-card-value-pill">₹899 VALUE • FREE</span>
+            </div>
             <div class="bonus-item-num">BONUS 09 • MILESTONE PLAN</div>
             <h4 class="bonus-item-title">The First-Sale Action Plan</h4>
             <p class="bonus-item-desc">
@@ -714,6 +770,17 @@
               </div>
             </div>
           </div>
+        </div>
+
+        <!-- Section G Direct CTA -->
+        <div style="text-align: center; margin-top: 36px;">
+          <button class="btn btn-gold btn-lg btn-buy-trigger" aria-label="Claim Core Guide and 9 Bonuses for ₹199">
+            <span>Claim Core System + All 9 Bonuses for ₹199</span>
+            <span>&rarr;</span>
+          </button>
+          <p style="font-size: 0.8rem; color: #64748b; margin-top: 10px;">
+            ⚡ Instant Download: 62-Page Core System + 31-Page Bonus Vault • 100% Secure Checkout
+          </p>
         </div>
 
       </div>
@@ -1103,6 +1170,32 @@
       </p>
     </div>
   </section>
+
+  <!-- ===================================================================
+       STICKY BOTTOM BUY NOW BAR (FLOATING CTA)
+       =================================================================== -->
+  <aside class="sticky-buy-bar" id="sticky-buy-bar" aria-label="Quick Purchase Bar">
+    <div class="container sticky-buy-container">
+      <div class="sticky-buy-info">
+        <span class="sticky-buy-badge">EDITION 2026</span>
+        <div class="sticky-buy-title-group">
+          <strong class="sticky-buy-title">AI Digital Product Income System</strong>
+          <span class="sticky-buy-sub">Complete 2-Volume Bundle (93 Pages) • Instant Access</span>
+        </div>
+      </div>
+      <div class="sticky-buy-action">
+        <div class="sticky-buy-price-wrap">
+          <span class="sticky-buy-mrp">₹2,499</span>
+          <span class="sticky-buy-price">₹199</span>
+        </div>
+        <button class="btn btn-gold btn-md btn-buy-trigger sticky-buy-btn" aria-label="Buy Now for ₹199">
+          <span>Buy Now — ₹199</span>
+          <span>&rarr;</span>
+        </button>
+      </div>
+    </div>
+  </aside>
+
   <!-- ===================================================================
        MODALS: PREVIEW MODAL & POLICY MODALS & CHECKOUT MODAL
        =================================================================== -->
@@ -1188,6 +1281,6 @@
   </div>
 
   <!-- Scripts with Cache Buster -->
-  <script src="script.js?v=2.4" defer></script>
+  <script src="script.js?v=3.5" defer></script>
 </body>
 </html>

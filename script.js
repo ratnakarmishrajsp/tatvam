@@ -18,6 +18,7 @@ function initAll() {
   try { initCheckoutTriggers(); } catch (err) { console.error('Checkout error:', err); }
   try { initSmoothScroll(); } catch (err) { console.error('Scroll error:', err); }
   try { initScrollReveal(); } catch (err) { console.error('Reveal error:', err); }
+  try { initStickyBuyBar(); } catch (err) { console.error('Sticky error:', err); }
 }
 
 if (document.readyState === 'loading') {
@@ -354,12 +355,13 @@ function initCheckoutTriggers() {
     }
   }
 
-  // Open checkout modal when clicking dedicated buy buttons
-  checkoutTriggers.forEach(btn => {
-    btn.addEventListener('click', (e) => {
+  // Robust Click Delegation: captures all Buy Buttons across entire DOM
+  document.addEventListener('click', (e) => {
+    const buyTrigger = e.target.closest('.btn-buy-trigger, .checkout-trigger, .sticky-buy-btn, .pricing-cta, a[href="#pricing"]');
+    if (buyTrigger) {
       e.preventDefault();
       openCheckout();
-    });
+    }
   });
 
   if (checkoutClose) {
@@ -506,3 +508,24 @@ function initScrollReveal() {
 
   targets.forEach(el => observer.observe(el));
 }
+
+/* ===================================================================
+   10. STICKY BOTTOM BUY NOW BAR (ON-SCROLL REVEAL)
+   =================================================================== */
+function initStickyBuyBar() {
+  const stickyBar = document.getElementById('sticky-buy-bar');
+  if (!stickyBar) return;
+
+  const updateSticky = () => {
+    if (window.scrollY > 260) {
+      stickyBar.classList.add('is-visible');
+    } else {
+      stickyBar.classList.remove('is-visible');
+    }
+  };
+
+  window.addEventListener('scroll', updateSticky, { passive: true });
+  // Initial check
+  updateSticky();
+}
+
