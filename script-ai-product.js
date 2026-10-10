@@ -19,6 +19,7 @@ function initAll() {
   try { initSmoothScroll(); } catch (err) { console.error('Scroll error:', err); }
   try { initScrollReveal(); } catch (err) { console.error('Reveal error:', err); }
   try { initStickyBuyBar(); } catch (err) { console.error('Sticky error:', err); }
+  try { initPurchaseToast(); } catch (err) { console.error('Toast error:', err); }
 }
 
 if (document.readyState === 'loading') {
@@ -528,4 +529,74 @@ function initStickyBuyBar() {
   // Initial check
   updateSticky();
 }
+
+/* ===================================================================
+   11. RECENT PURCHASE NOTIFICATION TOAST (EVERY 15 SECONDS)
+   =================================================================== */
+function initPurchaseToast() {
+  const toast = document.getElementById('purchase-toast');
+  const userEl = document.getElementById('toast-user');
+  const timeEl = document.getElementById('toast-time');
+  const closeBtn = document.getElementById('purchase-toast-close');
+
+  if (!toast) return;
+
+  const purchases = [
+    { name: "Rahul S.", city: "Bengaluru", time: "2 minutes ago" },
+    { name: "Priya M.", city: "Mumbai", time: "4 minutes ago" },
+    { name: "Amit K.", city: "Delhi NCR", time: "Just now" },
+    { name: "Sneha P.", city: "Pune", time: "6 minutes ago" },
+    { name: "Vikram R.", city: "Hyderabad", time: "8 minutes ago" },
+    { name: "Ananya D.", city: "Kolkata", time: "11 minutes ago" },
+    { name: "Rohan V.", city: "Jaipur", time: "14 minutes ago" },
+    { name: "Deepak S.", city: "Ahmedabad", time: "Just now" },
+    { name: "Pooja N.", city: "Chandigarh", time: "3 minutes ago" },
+    { name: "Arjun T.", city: "Chennai", time: "9 minutes ago" }
+  ];
+
+  let currentIndex = 0;
+  let isDismissed = false;
+
+  function showToast() {
+    if (isDismissed) return;
+
+    const data = purchases[currentIndex];
+    if (userEl) userEl.textContent = `${data.name} from ${data.city}`;
+    if (timeEl) timeEl.textContent = `${data.time} • Verified Purchase ✓`;
+
+    toast.classList.add('is-visible');
+
+    // Display for 4.5 seconds then smoothly hide
+    setTimeout(() => {
+      toast.classList.remove('is-visible');
+    }, 4500);
+
+    currentIndex = (currentIndex + 1) % purchases.length;
+  }
+
+  // Initial trigger after 4 seconds, then repeat every 15 seconds
+  setTimeout(() => {
+    showToast();
+    setInterval(showToast, 15000);
+  }, 4000);
+
+  if (closeBtn) {
+    closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toast.classList.remove('is-visible');
+      isDismissed = true;
+    });
+  }
+
+  // Clicking on toast opens the instant checkout modal
+  toast.addEventListener('click', () => {
+    const checkoutModal = document.getElementById('checkout-modal');
+    if (checkoutModal) {
+      checkoutModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      toast.classList.remove('is-visible');
+    }
+  });
+}
+
 

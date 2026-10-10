@@ -26,7 +26,7 @@
   <!-- Cashfree Payment SDK -->
   <script src="https://sdk.cashfree.com/js/v3/cashfree.js" defer></script>
   <!-- Stylesheet with Cache Buster -->
-  <link rel="stylesheet" href="styles-ai-product.css?v=3.6">
+  <link rel="stylesheet" href="styles-ai-product.css?v=3.7">
 </head>
 <body>
 
@@ -942,6 +942,19 @@
   </aside>
 
   <!-- ===================================================================
+       RECENT PURCHASE SOCIAL PROOF TOAST (EVERY 15 SECONDS)
+       =================================================================== -->
+  <aside class="purchase-toast" id="purchase-toast" aria-live="polite" aria-atomic="true">
+    <button class="purchase-toast-close" id="purchase-toast-close" aria-label="Dismiss Purchase Notification">✕</button>
+    <div class="purchase-toast-avatar">✓</div>
+    <div class="purchase-toast-content">
+      <div class="purchase-toast-user" id="toast-user">Rahul S. from Bengaluru</div>
+      <div class="purchase-toast-action">Enrolled in <span class="purchase-toast-product">AI Digital Product Income System</span></div>
+      <div class="purchase-toast-time" id="toast-time">2 minutes ago • Verified Purchase ✓</div>
+    </div>
+  </aside>
+
+  <!-- ===================================================================
        MODALS: PREVIEW MODAL & POLICY MODALS & CHECKOUT MODAL
        =================================================================== -->
   
@@ -1026,6 +1039,6 @@
   </div>
 
   <!-- Scripts with Cache Buster -->
-  <script src="script-ai-product.js?v=3.6" defer></script>
+  <script src="script-ai-product.js?v=3.7" defer></script>
 </body>
 </html>
