@@ -7,6 +7,3 @@ RewriteBase /
 
 # If requesting root domain, serve index.html
 RewriteRule ^$ index.html [L]
-
-# Handle 404 - redirect to index.html
-ErrorDocument 404 /index.html
