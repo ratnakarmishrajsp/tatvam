@@ -625,12 +625,16 @@ function updatePagePrices(price, originalPrice) {
 }
 
 function loadDynamicProductPrice() {
+  // Price hardcoded to 199 — set immediately on page load
+  updatePagePrices(199);
+
+  // Also sync MRP from DB if available
   const slug = encodeURIComponent('AI digital product income system ');
   fetch(`get-product.php?slug=${slug}&t=${Date.now()}`)
     .then(res => res.json())
     .then(data => {
-      if (data && data.success && data.price) {
-        updatePagePrices(data.price, data.original_price);
+      if (data && data.success) {
+        updatePagePrices(199, data.original_price);
       }
     })
     .catch(err => {
