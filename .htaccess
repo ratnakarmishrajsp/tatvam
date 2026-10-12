@@ -1,0 +1,12 @@
+Options -Indexes
+DirectoryIndex index.html index.php
+
+# Redirect root to index.html
+RewriteEngine On
+RewriteBase /
+
+# If requesting root domain, serve index.html
+RewriteRule ^$ index.html [L]
+
+# Handle 404 - redirect to index.html
+ErrorDocument 404 /index.html
