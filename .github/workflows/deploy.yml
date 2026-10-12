@@ -1,0 +1,18 @@
+name: Deploy to Hostinger
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    name: Deployment Notice
+    steps:
+      - name: Code deployed via Hostinger Git Integration
+        run: |
+          echo "✅ Code pushed to GitHub main branch."
+          echo "📦 Hostinger Git Version Control will auto-pull this commit."
+          echo "🔑 config.secret.php is managed separately on server (gitignored, persistent)."
+          echo "ℹ️  To update secrets: edit config.secret.php directly via Hostinger File Manager."

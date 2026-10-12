@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 Page Not Found | TATVAM</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+
+    <!-- Master CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at center, var(--color-bg-2) 0%, var(--color-bg-1) 100%); overflow-x: hidden;">
+
+    <!-- BACKGROUND LIGHTING -->
+    <div class="bg-canvas">
+        <div class="aurora aurora-1" style="opacity: 0.15;"></div>
+        <div class="aurora aurora-2" style="opacity: 0.15;"></div>
+    </div>
+    <div class="noise-overlay"></div>
+
+    <div class="glass-card" style="width: 90%; max-width: 500px; text-align: center; padding: var(--space-lg); border-color: rgba(255, 255, 255, 0.15); box-shadow: var(--shadow-soft); z-index: 10; position: relative;">
+        <div style="font-size: 4.5rem; color: var(--color-primary); margin-bottom: var(--space-sm); font-family: var(--font-heading); font-weight: 800; letter-spacing: -0.05em; line-height: 1;">
+            404
+        </div>
+        <h1 class="gradient-gold" style="font-size: 2rem; margin-bottom: var(--space-xs);"> खो गए हैं आप?</h1>
+        <p style="font-size: 1.1rem; margin-bottom: var(--space-md); color: var(--color-text-gray);">Yeh page exist nahi karta. Lagta hai aap galti se kisi galat link par aa gaye hain.</p>
+        
+        <div style="display: flex; flex-direction: column; gap: var(--space-sm); margin-top: 2rem;">
+            <a href="index.html" class="btn btn-primary" style="width: 100%;"><i data-lucide="home"></i> Return to TATVAM Store</a>
+            <a href="index.html#collection" class="btn btn-secondary" style="width: 100%;"><i data-lucide="book-open"></i> Explore Mindset Library</a>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('load', () => {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+    </script>
+</body>
+</html>

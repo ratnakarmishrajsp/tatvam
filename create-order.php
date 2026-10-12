@@ -1,0 +1,181 @@
+<?php
+/**
+ * TATVAM - Secure Cashfree Order Generation API
+ * Registers pending transaction and returns Cashfree payment_session_id
+ */
+
+header('Content-Type: application/json');
+require_once __DIR__ . '/db.php';
+
+// Validate request method
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    echo json_encode(['success' => false, 'message' => 'Invalid request method.']);
+    exit;
+}
+
+// Sanitize post variables
+$customer_name  = trim($_POST['name'] ?? filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS) ?? '');
+$customer_email = filter_var($_POST['email'] ?? filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL), FILTER_VALIDATE_EMAIL);
+$customer_phone = trim($_POST['phone'] ?? filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_SPECIAL_CHARS) ?? '');
+$product_slug   = trim($_POST['product_slug'] ?? filter_input(INPUT_POST, 'product_slug', FILTER_SANITIZE_SPECIAL_CHARS) ?? '');
+
+if (!$customer_name || !$customer_email || !$customer_phone || !$product_slug) {
+    echo json_encode(['success' => false, 'message' => 'Please fill in all details correctly.']);
+    exit;
+}
+
+try {
+    // 1. Fetch target product details
+    $stmt = $db->prepare("SELECT * FROM products WHERE slug = ?");
+    $stmt->execute([$product_slug]);
+    $product = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$product && strtolower(str_replace(['-', '_', ' '], '', (string)$product_slug)) === 'sanskar30') {
+        $stmt = $db->prepare("SELECT * FROM products WHERE slug = 'Sanskar30' OR slug = 'sanskar-30' OR slug = 'sanskar30' OR title LIKE '%Sanskar%' LIMIT 1");
+        $stmt->execute();
+        $product = $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    if (!$product && (strpos(strtolower((string)$product_slug), 'ai') !== false && strpos(strtolower((string)$product_slug), 'digital') !== false)) {
+        $stmt = $db->prepare("SELECT * FROM products WHERE slug LIKE '%AI%digital%' OR slug LIKE '%ai-digital%' OR title LIKE '%AI Digital%' LIMIT 1");
+        $stmt->execute();
+        $product = $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    if (!$product) {
+        echo json_encode(['success' => false, 'message' => 'Selected product not found.']);
+        exit;
+    }
+
+    $amount = (float)$product['price'];
+
+    // 2. Generate unique order ID for Cashfree
+    $cf_order_id = 'tatvam_' . time() . '_' . bin2hex(random_bytes(4));
+
+    // 3. Determine Cashfree API URL based on environment
+    $is_sandbox = (defined('CASHFREE_ENV') && CASHFREE_ENV === 'TEST');
+    $api_base   = $is_sandbox
+        ? 'https://sandbox.cashfree.com/pg'
+        : 'https://api.cashfree.com/pg';
+
+    $payment_session_id = null;
+
+    // 4. Call Cashfree Orders API
+    $payload = json_encode([
+        'order_id'       => $cf_order_id,
+        'order_amount'   => $amount,
+        'order_currency' => 'INR',
+        'customer_details' => [
+            'customer_id'    => 'cust_' . preg_replace('/[^a-zA-Z0-9]/', '', $customer_email),
+            'customer_name'  => $customer_name,
+            'customer_email' => $customer_email,
+            'customer_phone' => preg_replace('/[^0-9]/', '', $customer_phone),
+        ],
+        'order_meta' => [
+            'return_url'   => SITE_URL . '/thank-you.php?order_id={order_id}',
+            'notify_url'   => SITE_URL . '/cashfree-webhook.php',
+        ],
+        'order_note' => 'TATVAM Ebook: ' . $product['title'],
+    ]);
+
+    $ch = curl_init($api_base . '/orders');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+        'x-client-id: ' . CASHFREE_APP_ID,
+        'x-client-secret: ' . CASHFREE_SECRET_KEY,
+        'x-api-version: 2023-08-01',
+    ]);
+
+    $response  = curl_exec($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($http_code === 200) {
+        $cf_data = json_decode($response, true);
+        $payment_session_id = $cf_data['payment_session_id'] ?? null;
+        if (!$payment_session_id) {
+            error_log("Cashfree: payment_session_id missing. Response: $response");
+            echo json_encode(['success' => false, 'message' => 'Payment session creation failed. Please retry.']);
+            exit;
+        }
+    } else {
+        error_log("Cashfree Order API Failed. HTTP: $http_code. Response: $response");
+        echo json_encode(['success' => false, 'message' => 'Payment gateway error. Please retry.']);
+        exit;
+    }
+
+    // 5. Capture Meta Attribution parameters & register pending order
+    $current_now = date('Y-m-d H:i:s');
+    $client_ip = $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? '';
+    if (strpos($client_ip, ',') !== false) {
+        $client_ip = trim(explode(',', $client_ip)[0]);
+    }
+    $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+    $fbp = trim($_POST['fbp'] ?? $_COOKIE['_fbp'] ?? '');
+    $fbc = trim($_POST['fbc'] ?? $_COOKIE['_fbc'] ?? '');
+    $fbclid = trim($_POST['fbclid'] ?? $_GET['fbclid'] ?? '');
+    if (empty($fbc) && !empty($fbclid)) {
+        $fbc = 'fb.1.' . time() . '.' . $fbclid;
+    }
+    $event_id = 'pur_' . $cf_order_id;
+
+    $order_stmt = $db->prepare("INSERT INTO orders (customer_name, customer_email, customer_phone, product_id, amount, payment_status, razorpay_order_id, created_at, client_ip, user_agent, fbp, fbc, event_id) VALUES (?, ?, ?, ?, ?, 'pending', ?, ?, ?, ?, ?, ?, ?)");
+    $order_stmt->execute([
+        $customer_name,
+        $customer_email,
+        $customer_phone,
+        $product['id'],
+        $amount,
+        $cf_order_id,
+        $current_now,
+        $client_ip,
+        $user_agent,
+        $fbp,
+        $fbc,
+        $event_id,
+    ]);
+
+    // Dispatch Meta CAPI InitiateCheckout
+    try {
+        require_once __DIR__ . '/includes/meta-capi-helper.php';
+        sendMetaCapiEvent('InitiateCheckout', [
+            'email'        => $customer_email,
+            'phone'        => $customer_phone,
+            'name'         => $customer_name,
+            'value'        => $amount,
+            'currency'     => 'INR',
+            'event_id'     => 'ic_' . $cf_order_id,
+            'client_ip'    => $client_ip,
+            'user_agent'   => $user_agent,
+            'fbp'          => $fbp,
+            'fbc'          => $fbc,
+            'content_name' => $product['title']
+        ]);
+    } catch (Exception $e) {
+        error_log("InitiateCheckout CAPI notice: " . $e->getMessage());
+    }
+
+    $db_order_id = $db->lastInsertId();
+
+    echo json_encode([
+        'success'            => true,
+        'sandbox'            => $is_sandbox,
+        'db_order_id'        => $db_order_id,
+        'cf_order_id'        => $cf_order_id,
+        'payment_session_id' => $payment_session_id,
+        'environment'        => defined('CASHFREE_ENV') ? CASHFREE_ENV : 'PRODUCTION',
+        'product_name'       => $product['title'],
+        'customer_name'      => $customer_name,
+        'customer_email'     => $customer_email,
+        'customer_phone'     => $customer_phone,
+        'cover_image'        => $product['cover_image'],
+    ]);
+
+} catch (Exception $e) {
+    echo json_encode(['success' => false, 'message' => 'Execution Error: ' . $e->getMessage()]);
+}
