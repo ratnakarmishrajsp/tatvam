@@ -625,6 +625,9 @@ function updatePagePrices(price, originalPrice) {
 }
 
 function loadDynamicProductPrice() {
+  // Fallback: set price to 199 immediately so it's never blank
+  updatePagePrices(199);
+
   const slug = encodeURIComponent('AI digital product income system ');
   fetch(`get-product.php?slug=${slug}&t=${Date.now()}`)
     .then(res => res.json())
