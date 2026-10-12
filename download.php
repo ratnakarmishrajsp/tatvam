@@ -199,6 +199,7 @@ try {
                 $baseDir . '/files/AI Digital Product Income System - BONUS VAULT.pdf',
                 $baseDir . '/files/AI_Digital_Product_Income_System_BONUS_VAULT.pdf',
                 $baseDir . '/files/bonus_vault.pdf',
+                $baseDir . '/AI Digital Product Income System - BONUS VAULT.pdf',
             ];
             foreach ($candidates as $cand) {
                 if (file_exists($cand)) {
@@ -220,6 +221,8 @@ try {
             $candidates = [
                 $baseDir . '/files/AI Digital Product Income System.pdf',
                 $baseDir . '/files/AI_Digital_Product_Income_System.pdf',
+                $baseDir . '/AI Digital Product Income System.pdf',
+                $baseDir . '/files/uploads/AI Digital Product Income System.pdf',
             ];
             foreach ($candidates as $cand) {
                 if (file_exists($cand)) {
